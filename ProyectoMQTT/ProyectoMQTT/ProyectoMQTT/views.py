@@ -12,19 +12,10 @@ from ProyectoMQTT.mqtt import *
 
 def MQTT(request):
     
-    print("Me llega el mensaje de la temperatura:" + ProyectoMQTT.mqtt.mensaje1)
-    print("Me llega el mensaje de la humedad:" + ProyectoMQTT.mqtt.mensaje2)
+    #print("Me llega el mensaje de la temperatura:" + ProyectoMQTT.mqtt.mensaje1)
+    #print("Me llega el mensaje de la humedad:" + ProyectoMQTT.mqtt.mensaje2)
 
-    documento = """<html>
-    <body>
-    <h2>
-    La temperatura es: %s
-    </h2>
-    <h2>
-    La humedad es: %s
-    <h2/>
-    </body>
-    </html>""" %(ProyectoMQTT.mqtt.mensaje1, ProyectoMQTT.mqtt.mensaje2)
-    
+   
+    #client.publish("esp32/output","on")
 
-    return HttpResponse(documento)
+    return HttpResponse(ProyectoMQTT.mqtt.documento)
