@@ -16,7 +16,6 @@ const char* ssid = "PUTODIGI";
 const char* password = "123tunometescabra!";
 
 // Add your MQTT Broker IP address, example:
-//const char* mqtt_server = "192.168.1.144";
 const char* mqtt_server = "192.168.1.35";
 
 WiFiClient espClient;
@@ -25,8 +24,10 @@ long lastMsg = 0;
 char msg[50];
 int value = 0;
 
+
+#define SEALEVELPRESSURE_HPA (1024) //Presion a nivel del mar Málaga
+
 //uncomment the following lines if you're using SPI
-//#include <SPI.h>
 #define BME_SCK 5 //SCL
 #define BME_MISO 16 //SDO
 #define BME_MOSI 17 //SDA
@@ -38,9 +39,13 @@ int value = 0;
 Adafruit_BME680 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK);
 float temperature = 0;
 float humidity = 0;
+float pressure = 0;
 
 // LED Pin
 const int ledPin = 13;
+
+const int Trigger = 15;   //Pin digital 2 para el Trigger del sensor
+const int Echo = 2;   //Pin digital 3 para el Echo del sensor
 
 void setup() {
   Serial.begin(115200);
@@ -61,6 +66,10 @@ void setup() {
   bme.setPressureOversampling(BME680_OS_4X);  // Ajuste de sobremuestreo de presiçon
   bme.setIIRFilterSize(BME680_FILTER_SIZE_3);  // El sensor BME680 integra un filtro IIR interno para reducir los cambios a corto plazo en los valores de salida del sensor causados ​​por perturbaciones externas.
   bme.setGasHeater(320, 150); // 320*C for 150 ms
+
+  pinMode(Trigger, OUTPUT); //pin como salida
+  pinMode(Echo, INPUT);  //pin como entrada
+  digitalWrite(Trigger, LOW);//Inicializamos el pin con 0
 
   pinMode(ledPin, OUTPUT);
 }
@@ -132,6 +141,35 @@ void reconnect() {
     }
   }
 }
+
+void BME(){
+
+  // Temperature in Celsius
+    temperature = bme.readTemperature();   
+    // Convert the value to a char array
+    char tempString[8];
+    dtostrf(temperature, 1, 2, tempString);
+    Serial.print("Temperature: ");
+    Serial.println(tempString);
+    client.publish("esp32/temperature", tempString);
+    
+    humidity = bme.readHumidity();    
+    // Convert the value to a char array
+    char humString[8];
+    dtostrf(humidity, 1, 2, humString);
+    Serial.print("Humidity: ");
+    Serial.println(humString);
+    client.publish("esp32/humidity", humString);
+
+    pressure = bme.readPressure()/100.0;
+    // Convert the value to a char array
+    char presString[8];
+    dtostrf(pressure, 1, 2, presString);
+    Serial.print("Pressure: ");
+    Serial.println(presString);
+    client.publish("esp32/pressure", presString);
+}
+
 void loop() {
   if (!client.connected()) {
     reconnect();
@@ -142,25 +180,6 @@ void loop() {
   if (now - lastMsg > 5000) {
     lastMsg = now;
     
-    // Temperature in Celsius
-    temperature = bme.readTemperature();   
-    // Uncomment the next line to set temperature in Fahrenheit 
-    // (and comment the previous temperature line)
-    //temperature = 1.8 * bme.readTemperature() + 32; // Temperature in Fahrenheit
-    
-    // Convert the value to a char array
-    char tempString[8];
-    dtostrf(temperature, 1, 2, tempString);
-    Serial.print("Temperature: ");
-    Serial.println(tempString);
-    client.publish("esp32/temperature", tempString);
-    humidity = bme.readHumidity();
-    
-    // Convert the value to a char array
-    char humString[8];
-    dtostrf(humidity, 1, 2, humString);
-    Serial.print("Humidity: ");
-    Serial.println(humString);
-    client.publish("esp32/humidity", humString);
+    BME();
   }
 }
