@@ -37,6 +37,13 @@ int value = 0;
 #define pinLED 13
 #define sensorPIR 18
 
+#define motorPin1 23    // 28BYJ48 In1
+#define motorPin2 22    // 28BYJ48 In2
+#define motorPin3 21   // 28BYJ48 In3
+#define motorPin4 15   // 28BYJ48 In4
+
+#define rainDigital 35
+
 //Adafruit_BME280 bme; // I2C
 //Adafruit_BME280 bme(BME_CS); // hardware SPI
 //Adafruit_BME280 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK); // software SPI
@@ -47,6 +54,15 @@ float pressure = 0;
 
 int PIR = 0;
 int tiempo3 = 0;
+int toldo = 1;
+
+int motorSpeed = 1200;   //variable para fijar la velocidad
+int stepCounter = 0;     // contador para los pasos
+int stepsPerRev = 2048;  // pasos para una vuelta completa
+
+//secuencia media fase
+const int numSteps = 8;
+const int stepsLookup[8] = { B1000, B1100, B0100, B0110, B0010, B0011, B0001, B1001 };
 
 void setup() {
   Serial.begin(115200);
@@ -70,6 +86,13 @@ void setup() {
 
   pinMode(pinLED, OUTPUT);
   pinMode(sensorPIR, INPUT);
+
+  pinMode(motorPin1, OUTPUT);
+  pinMode(motorPin2, OUTPUT);
+  pinMode(motorPin3, OUTPUT);
+  pinMode(motorPin4, OUTPUT);
+
+  pinMode(rainDigital, INPUT);
 }
 
 void setup_wifi() {
@@ -118,7 +141,7 @@ void callback(char* topic, byte* message, unsigned int length) {
       Serial.println("off");
       digitalWrite(pinLED, LOW);
     }
-    }
+  }
 }
 
 void reconnect() {
@@ -140,28 +163,28 @@ void reconnect() {
   }
 }
 
-/*void clockwise()
-  {
+void clockwise()
+{
   stepCounter++;
   if (stepCounter >= numSteps) stepCounter = 0;
   setOutput(stepCounter);
-  }
+}
 
-  void anticlockwise()
-  {
+void anticlockwise()
+{
   stepCounter--;
   if (stepCounter < 0) stepCounter = numSteps - 1;
   setOutput(stepCounter);
-  }
+}
 
-  void setOutput(int step)
-  {
+void setOutput(int step)
+{
   digitalWrite(motorPin1, bitRead(stepsLookup[step], 0));
   digitalWrite(motorPin2, bitRead(stepsLookup[step], 1));
   digitalWrite(motorPin3, bitRead(stepsLookup[step], 2));
   digitalWrite(motorPin4, bitRead(stepsLookup[step], 3));
-  }
-*/
+}
+
 void BME() {
 
   // Temperature in Celsius
@@ -210,16 +233,30 @@ void LED() {
       client.publish("esp32/LED", "Luz apagada");
       PIR = 0;//Asignamos el valor "0" a la variable PIR para que deje de cumplirse la condición
     }
-    
+
   }
 
+}
+
+void lluvia() {
+
+  if ((digitalRead(rainDigital) == LOW) && (toldo == 1)) {
+    Serial.println("Detectada lluvia");
+    client.publish("esp32/toldo", "Toldo recogido");
+    toldo = 0;
+    for (int i = 0; i < stepsPerRev * 2; i++)
+    {
+      clockwise();
+      delayMicroseconds(motorSpeed);
+    }
+  }
 }
 
 void loop() {
   if (!client.connected()) {
     reconnect();
   }
-  
+
 
   long now = millis();
   if (now - lastMsg > 5000) {
@@ -227,7 +264,8 @@ void loop() {
     BME();
   }
   LED();
+  lluvia();
 
   client.loop();
-    
+
 }
