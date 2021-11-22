@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-(r=zef(w1j5=3kgrc7+juoylv^5agzc8k5--gg8456g8__-$98
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.42'] #aqui ip
+ALLOWED_HOSTS = ['192.168.1.45'] #aqui ip
 
 
 # Application definition

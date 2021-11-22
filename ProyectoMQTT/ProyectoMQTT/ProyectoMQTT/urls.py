@@ -17,8 +17,12 @@ from django.contrib import admin
 from django.urls import path
 
 from ProyectoMQTT.views import MQTT
+from ProyectoMQTT.views import subirPersiana
+from ProyectoMQTT.views import bajarPersiana
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('MQTT/', MQTT),
+    path('subirPersiana', subirPersiana),
+    path('bajarPersiana', bajarPersiana),
 ]
