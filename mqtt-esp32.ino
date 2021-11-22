@@ -16,7 +16,7 @@ const char* ssid = "PUTODIGI";
 const char* password = "123tunometescabra!";
 
 // Add your MQTT Broker IP address, example:
-const char* mqtt_server = "192.168.1.35";
+const char* mqtt_server = "192.168.1.46";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -131,15 +131,23 @@ void callback(char* topic, byte* message, unsigned int length) {
 
   // If a message is received on the topic esp32/output, you check if the message is either "on" or "off".
   // Changes the output state according to the message
-  if (String(topic) == "esp32/output") {
+  if (String(topic) == "esp32/persiana") {
     Serial.print("Changing output to ");
-    if (messageTemp == "on") {
-      Serial.println("on");
-      digitalWrite(pinLED, HIGH);
+    if (messageTemp == "up") {
+      Serial.println("up");
+      for (int i = 0; i < stepsPerRev * 2; i++)
+      {
+        clockwise();
+        delayMicroseconds(motorSpeed);
+      }
     }
-    else if (messageTemp == "off") {
-      Serial.println("off");
-      digitalWrite(pinLED, LOW);
+    else if (messageTemp == "down") {
+      Serial.println("down");
+      for (int i = 0; i < stepsPerRev * 2; i++)
+      {
+        anticlockwise();
+        delayMicroseconds(motorSpeed);
+      }
     }
   }
 }
@@ -152,7 +160,7 @@ void reconnect() {
     if (client.connect("ESP8266Client")) {
       Serial.println("connected");
       // Subscribe
-      //client.subscribe("esp32/output");
+      client.subscribe("esp32/persiana");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -257,6 +265,7 @@ void loop() {
     reconnect();
   }
 
+  client.loop();
 
   long now = millis();
   if (now - lastMsg > 5000) {
@@ -264,8 +273,5 @@ void loop() {
     BME();
   }
   LED();
-  lluvia();
-
-  client.loop();
-
+  //lluvia();
 }
