@@ -3,7 +3,7 @@ var ctx = document.getElementById('myChart').getContext('2d');
 var graphData = {
     type: 'line',
     data: {
-        labels: ['jan', 'feb', 'mar', 'apr', 'may', 'jun'],
+        labels: ['', '', '', '', '', ''],
         datasets: [{
             label: 'Temperatura',
             data: [, , , , , , ],
@@ -31,8 +31,13 @@ socket.onmessage = function(e){
     newGraphData.push(djangoData.value);
 
     graphData.data.datasets[0].data = newGraphData;
-    myChart.update();
+    //myChart.update();
 
-    
+    var newGraphLabel = graphData.data.labels;
+    newGraphLabel.shift();
+    newGraphLabel.push(djangoData.hora);
+
+    graphData.data.labels = newGraphLabel;
+    myChart.update();
 
 }
