@@ -5,10 +5,11 @@ import datetime
 from django.template import Template, Context, context
 from django.template import loader
 from django.shortcuts import render
+
 import ProyectoMQTT
 
 from ProyectoMQTT.mqtt import *
-
+from ProyectoMQTT.weather import recogerDatos
 
 def MQTT(request):
 
@@ -23,6 +24,7 @@ def MQTT(request):
         #if request.method == 'POST' and 'run_script' in request.POST:
 
     #client.publish("esp32/output","on")
+    recogerDatos()
 
     
     return HttpResponse(ProyectoMQTT.mqtt.documento)

@@ -10,6 +10,17 @@ documento = ""
 arrayTemperatura = ['', '', '', '', '', '', '', '', '', '', '', '']
 arrayHora = ['', '', '', '', '', '', '', '', '', '', '', '']
 
+
+#def comprobarLluvia():
+
+    #Si la presion es mayor  a X(se esperan lluvias) o  sensor detecta agua, recojo toldo y muestro mensaje en pantalla
+    
+#def comprobarViento():
+
+    #Si me llega peticion MQTT de extender toldo:
+
+    # Compruebo si el viento es mayor a X, no dejo extender toldo y muestro en pagina mensaje
+
 def on_connect(client, userdata, flags, rc):
     print("Se conecto con mqtt" + str(rc))
     client.subscribe("esp32/sensor")
@@ -20,7 +31,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
 
-    global SensorJson; global mensaje4; global mensaje5; global documento; global temperatura
+    global SensorJson; global mensaje4; global mensaje5; global documento; global temperatura; global humedad ; global presion
     
     global arrayTemperatura; global arrayHora
     
@@ -42,7 +53,7 @@ def on_message(client, userdata, msg):
 
     if str(msg.topic) == "esp32/LED":
         mensaje4 = str(msg.payload)[2:][:-1] #elimino los dos primeros caracteres y el ultimo (mensaje original: b'22.22')
-        print(mensaje4)       
+        #print(mensaje4)       
         #print(msg.topic+ " "+str(msg.payload))
 
     if str(msg.topic) == "esp32/toldo":

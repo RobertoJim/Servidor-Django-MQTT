@@ -22,8 +22,8 @@ from ProyectoMQTT.views import bajarPersiana
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('Sensores.urls')),
-    path('MQTT/', MQTT),
+    path('Grafica/', include('Sensores.urls')),
+    path('', MQTT),
     path('subirPersiana', subirPersiana),
     path('bajarPersiana', bajarPersiana),
 ]
