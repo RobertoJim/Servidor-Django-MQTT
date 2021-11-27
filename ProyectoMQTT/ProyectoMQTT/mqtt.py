@@ -1,10 +1,14 @@
 import paho.mqtt.client as mqtt
 import json
 
-#from Sensores.models import Temperatura
+
+from datetime import datetime
 
 SensorJson={};temperatura="";humedad="";presion="";mensaje4=""; mensaje5 = ""
 documento = ""
+
+arrayTemperatura = ['' , '', '', '', '', '']
+arrayHora = ['', '', '', '', '', '']
 
 def on_connect(client, userdata, flags, rc):
     print("Se conecto con mqtt" + str(rc))
@@ -16,21 +20,25 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
 
-    global SensorJson
-    global mensaje4
-    global mensaje5
-    global documento
-    global temperatura
+    global SensorJson; global mensaje4; global mensaje5; global documento; global temperatura
+    
+    global arrayTemperatura; global arrayHora
+    
     if str(msg.topic) == "esp32/sensor":
 
         SensorJson = json.loads(msg.payload)
         temperatura = SensorJson['temperature']
         humedad = SensorJson['humidity']
         presion = SensorJson['pressure']
-        #print( SensorJson['temperature'])        
-       # print(msg.topic+ " "+str(msg.payload))
-        
-    
+
+        #Monto array de temperatura y hora para la gráfica
+        arrayTemperatura.pop(0) # Similar a shift en javascript 
+        arrayTemperatura.append(temperatura) # Similar a push en javascript
+
+        arrayHora.pop(0) # Similar a shift en javascript 
+        arrayHora.append((str(datetime.now().hour) + ":" + str(datetime.now().minute) + ":" + str(datetime.now().second))) # Similar a push en javascript
+        #print("Esta es mi array de horas: " + str(arrayHora))
+
 
     if str(msg.topic) == "esp32/LED":
         mensaje4 = str(msg.payload)[2:][:-1] #elimino los dos primeros caracteres y el ultimo (mensaje original: b'22.22')
@@ -91,6 +99,13 @@ def on_message(client, userdata, msg):
     </script>
 
 
+
+
+        <form action="/Grafica/" method="GET">
+            <input type="submit" value="Mostrar gráfica">
+        </form>
+
+
     </body>
     </html>""" %(temperatura, humedad, presion, mensaje4, mensaje5)
 
@@ -100,6 +115,6 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("192.168.1.36", 1883, 60)
+client.connect("192.168.1.37", 1883, 60)
 #client.loop_start()
 #client.loop_start()
