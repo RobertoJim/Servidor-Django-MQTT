@@ -6,7 +6,7 @@ var graphData = {
         labels: ['', '', '', '', '', ''],
         datasets: [{
             label: 'Temperatura',
-            data: [, , , , , , ],
+            data: [ , , , , , ],
             backgroundColor: [
                 'rgba(73, 198, 230, 0.5)',
             ],
@@ -26,18 +26,18 @@ socket.onmessage = function(e){
     var djangoData = JSON.parse(e.data);
     console.log(djangoData);
 
-    var newGraphData = graphData.data.datasets[0].data;
-    newGraphData.shift();
-    newGraphData.push(djangoData.value);
-
-    graphData.data.datasets[0].data = newGraphData;
+    //var newGraphData = graphData.data.datasets[0].data;
+    //newGraphData = djangoData.value;
+    //newGraphData.shift(); // Elimina primera posicion del array ( valor mas antiguo de temperatura)
+    //newGraphData.push(djangoData.value); //Añado el valor ¿en ultima posicion?
+    graphData.data.datasets[0].data = djangoData.value;
     //myChart.update();
 
-    var newGraphLabel = graphData.data.labels;
-    newGraphLabel.shift();
-    newGraphLabel.push(djangoData.hora);
-
-    graphData.data.labels = newGraphLabel;
+    //var newGraphLabel = graphData.data.labels;
+    //newGraphLabel.shift();
+    //newGraphLabel.push(djangoData.hora);
+    graphData.data.labels = djangoData.hora;
+    //graphData.data.labels = newGraphLabel;
     myChart.update();
 
 }
