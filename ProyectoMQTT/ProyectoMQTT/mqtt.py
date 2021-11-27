@@ -7,8 +7,8 @@ from datetime import datetime
 SensorJson={};temperatura="";humedad="";presion="";mensaje4=""; mensaje5 = ""
 documento = ""
 
-arrayTemperatura = ['' , '', '', '', '', '']
-arrayHora = ['', '', '', '', '', '']
+arrayTemperatura = ['', '', '', '', '', '', '', '', '', '', '', '']
+arrayHora = ['', '', '', '', '', '', '', '', '', '', '', '']
 
 def on_connect(client, userdata, flags, rc):
     print("Se conecto con mqtt" + str(rc))

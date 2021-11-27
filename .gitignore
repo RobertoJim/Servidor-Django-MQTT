@@ -1,0 +1,14 @@
+ProyectoMQTT/ProyectoMQTT/__pycache__/__init__.cpython-310.pyc
+ProyectoMQTT/ProyectoMQTT/__pycache__/asgi.cpython-310.pyc
+ProyectoMQTT/ProyectoMQTT/__pycache__/mqtt.cpython-310.pyc
+ProyectoMQTT/ProyectoMQTT/__pycache__/settings.cpython-310.pyc
+ProyectoMQTT/ProyectoMQTT/__pycache__/urls.cpython-310.pyc
+ProyectoMQTT/ProyectoMQTT/__pycache__/views.cpython-310.pyc
+ProyectoMQTT/Sensores/__pycache__/admin.cpython-310.pyc
+ProyectoMQTT/Sensores/__pycache__/apps.cpython-310.pyc
+ProyectoMQTT/Sensores/__pycache__/consumers.cpython-310.pyc
+ProyectoMQTT/Sensores/__pycache__/models.cpython-310.pyc
+ProyectoMQTT/Sensores/__pycache__/routing.cpython-310.pyc
+ProyectoMQTT/Sensores/__pycache__/urls.cpython-310.pyc
+ProyectoMQTT/Sensores/__pycache__/views.cpython-310.pyc
+ProyectoMQTT/Sensores/migrations/0001_initial.py
