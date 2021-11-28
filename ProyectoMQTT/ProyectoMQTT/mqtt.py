@@ -27,6 +27,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("esp32/humidity")
     client.subscribe("esp32/pressure")
     client.subscribe("esp32/LED")
+    
 
 def on_message(client, userdata, msg):
 

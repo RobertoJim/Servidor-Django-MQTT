@@ -64,6 +64,7 @@ def recogerDatos():
             client.publish("esp32/toldo","down")
 
         #current = data["hourly"][0]["pressure"]
+        
 
         sleep(1800)
 

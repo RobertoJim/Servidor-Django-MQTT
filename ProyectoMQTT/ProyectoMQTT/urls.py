@@ -18,7 +18,6 @@ from django.urls import path, include
 
 from ProyectoMQTT.views import *
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('Grafica/', include('Sensores.urls')),

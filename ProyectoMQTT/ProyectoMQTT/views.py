@@ -12,6 +12,7 @@ from ProyectoMQTT.mqtt import *
 from ProyectoMQTT.weather import comprobarViento
 
 def MQTT(request):
+    
     return render(request, 'inicio.html', context={'temperatura' : ProyectoMQTT.mqtt.temperatura, 'humedad' : ProyectoMQTT.mqtt.humedad, 'presion' : ProyectoMQTT.mqtt.presion, 'toldo' : ProyectoMQTT.mqtt.mensaje5})
 
 
