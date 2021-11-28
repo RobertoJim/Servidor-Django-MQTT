@@ -13,20 +13,6 @@ from ProyectoMQTT.weather import recogerDatos
 
 def MQTT(request):
 
-    
-    
-    #if ProyectoMQTT.mqtt.documento == "":
-    #    ProyectoMQTT.mqtt.documento = "No se ha encontrado servidor MQTT" #Solo funciona cuando se arranca y no hay MQTT, si se han recibido datos antes
-                                                                        # documento ya no es igual a """
-   
-    #client.publish("esp32/output","on")
-
-        #if request.method == 'POST' and 'run_script' in request.POST:
-
-    #client.publish("esp32/output","on")
-    recogerDatos()
-
-    
     return HttpResponse(ProyectoMQTT.mqtt.documento)
 
 def subirPersiana(request):

@@ -9,6 +9,7 @@
 #include <Adafruit_Sensor.h>
 #include "Adafruit_BME680.h"
 #include <PubSubClient.h>
+#include <ArduinoJson.h>
 
 
 // Replace the next variables with your SSID/Password combination
@@ -16,13 +17,15 @@ const char* ssid = "PUTODIGI";
 const char* password = "123tunometescabra!";
 
 // Add your MQTT Broker IP address, example:
-const char* mqtt_server = "192.168.1.46";
+const char* mqtt_server = "192.168.1.36";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 long lastMsg = 0;
 char msg[50];
 int value = 0;
+StaticJsonDocument <256> doc;
+char out[256];
 
 
 #define SEALEVELPRESSURE_HPA (1024) //Presion a nivel del mar Málaga
@@ -37,12 +40,19 @@ int value = 0;
 #define pinLED 13
 #define sensorPIR 18
 
-#define motorPin1 23    // 28BYJ48 In1
-#define motorPin2 22    // 28BYJ48 In2
-#define motorPin3 21   // 28BYJ48 In3
-#define motorPin4 15   // 28BYJ48 In4
+//Persiana
+#define motor1Pin1 23    // 28BYJ48 In1
+#define motor1Pin2 22    // 28BYJ48 In2
+#define motor1Pin3 21   // 28BYJ48 In3
+#define motor1Pin4 15   // 28BYJ48 In4
 
-#define rainDigital 35
+//Toldo
+#define motor2Pin1 19    // 28BYJ48 In1
+#define motor2Pin2 0    // 28BYJ48 In2
+#define motor2Pin3 3   // 28BYJ48 In3
+#define motor2Pin4 32   // 28BYJ48 In4
+
+#define rainAnalog 35
 
 //Adafruit_BME280 bme; // I2C
 //Adafruit_BME280 bme(BME_CS); // hardware SPI
@@ -87,12 +97,17 @@ void setup() {
   pinMode(pinLED, OUTPUT);
   pinMode(sensorPIR, INPUT);
 
-  pinMode(motorPin1, OUTPUT);
-  pinMode(motorPin2, OUTPUT);
-  pinMode(motorPin3, OUTPUT);
-  pinMode(motorPin4, OUTPUT);
+  pinMode(motor1Pin1, OUTPUT); // Persiana
+  pinMode(motor1Pin2, OUTPUT);
+  pinMode(motor1Pin3, OUTPUT);
+  pinMode(motor1Pin4, OUTPUT);
 
-  pinMode(rainDigital, INPUT);
+  pinMode(motor2Pin1, OUTPUT); // Toldo
+  pinMode(motor2Pin2, OUTPUT);
+  pinMode(motor2Pin3, OUTPUT);
+  pinMode(motor2Pin4, OUTPUT);
+
+  //pinMode(rainDigital, INPUT);
 }
 
 void setup_wifi() {
@@ -134,18 +149,38 @@ void callback(char* topic, byte* message, unsigned int length) {
   if (String(topic) == "esp32/persiana") {
     Serial.print("Changing output to ");
     if (messageTemp == "up") {
-      Serial.println("up");
+      Serial.println("up persiana");
       for (int i = 0; i < stepsPerRev * 2; i++)
       {
-        clockwise();
+        clockwise1();
         delayMicroseconds(motorSpeed);
       }
     }
     else if (messageTemp == "down") {
-      Serial.println("down");
+      Serial.println("down persiana");
       for (int i = 0; i < stepsPerRev * 2; i++)
       {
-        anticlockwise();
+        anticlockwise1();
+        delayMicroseconds(motorSpeed);
+      }
+    }
+  }
+
+  if (String(topic) == "esp32/toldo") {
+    Serial.print("Changing output to ");
+    if (messageTemp == "up") {
+      Serial.println("up toldo");
+      for (int i = 0; i < stepsPerRev * 2; i++)
+      {
+        clockwise2();
+        delayMicroseconds(motorSpeed);
+      }
+    }
+    else if (messageTemp == "down") {
+      Serial.println("down toldo");
+      for (int i = 0; i < stepsPerRev * 2; i++)
+      {
+        anticlockwise2();
         delayMicroseconds(motorSpeed);
       }
     }
@@ -161,6 +196,7 @@ void reconnect() {
       Serial.println("connected");
       // Subscribe
       client.subscribe("esp32/persiana");
+      client.subscribe("esp32/toldo");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -171,54 +207,83 @@ void reconnect() {
   }
 }
 
-void clockwise()
+void clockwise1()
 {
   stepCounter++;
   if (stepCounter >= numSteps) stepCounter = 0;
-  setOutput(stepCounter);
+  setOutput1(stepCounter);
 }
 
-void anticlockwise()
+void anticlockwise1()
 {
   stepCounter--;
   if (stepCounter < 0) stepCounter = numSteps - 1;
-  setOutput(stepCounter);
+  setOutput1(stepCounter);
 }
 
-void setOutput(int step)
+void setOutput1(int step)
 {
-  digitalWrite(motorPin1, bitRead(stepsLookup[step], 0));
-  digitalWrite(motorPin2, bitRead(stepsLookup[step], 1));
-  digitalWrite(motorPin3, bitRead(stepsLookup[step], 2));
-  digitalWrite(motorPin4, bitRead(stepsLookup[step], 3));
+  digitalWrite(motor1Pin1, bitRead(stepsLookup[step], 0));
+  digitalWrite(motor1Pin2, bitRead(stepsLookup[step], 1));
+  digitalWrite(motor1Pin3, bitRead(stepsLookup[step], 2));
+  digitalWrite(motor1Pin4, bitRead(stepsLookup[step], 3));
 }
 
-void BME() {
+void clockwise2()
+{
+  stepCounter++;
+  if (stepCounter >= numSteps) stepCounter = 0;
+  setOutput2(stepCounter);
+}
+
+void anticlockwise2()
+{
+  stepCounter--;
+  if (stepCounter < 0) stepCounter = numSteps - 1;
+  setOutput2(stepCounter);
+}
+
+void setOutput2(int step)
+{
+  digitalWrite(motor2Pin1, bitRead(stepsLookup[step], 0));
+  digitalWrite(motor2Pin2, bitRead(stepsLookup[step], 1));
+  digitalWrite(motor2Pin3, bitRead(stepsLookup[step], 2));
+  digitalWrite(motor2Pin4, bitRead(stepsLookup[step], 3));
+}
+
+void Sensores() {
 
   // Temperature in Celsius
   temperature = bme.readTemperature();
   // Convert the value to a char array
   char tempString[8];
   dtostrf(temperature, 1, 2, tempString);
-  Serial.print("Temperature: ");
-  Serial.println(tempString);
-  client.publish("esp32/temperature", tempString);
+  /*Serial.print("Temperature: ");
+    Serial.println(tempString);
+    client.publish("esp32/temperature", tempString);*/
+  doc["temperature"] = temperature;
 
   humidity = bme.readHumidity();
   // Convert the value to a char array
   char humString[8];
   dtostrf(humidity, 1, 2, humString);
-  Serial.print("Humidity: ");
-  Serial.println(humString);
-  client.publish("esp32/humidity", humString);
+  /*Serial.print("Humidity: ");
+    Serial.println(humString);
+    client.publish("esp32/humidity", humString);*/
+  doc["humidity"] = humidity;
 
   pressure = bme.readPressure() / 100.0;
   // Convert the value to a char array
   char presString[8];
   dtostrf(pressure, 1, 2, presString);
-  Serial.print("Pressure: ");
-  Serial.println(presString);
-  client.publish("esp32/pressure", presString);
+  /*Serial.print("Pressure: ");
+    Serial.println(presString);
+    client.publish("esp32/pressure", presString);*/
+  doc["pressure"] = pressure;
+
+  serializeJson(doc, out);
+  client.publish("esp32/sensor", out);
+  Serial.println(out);
 }
 
 void LED() {
@@ -248,7 +313,10 @@ void LED() {
 
 void lluvia() {
 
-  if ((digitalRead(rainDigital) == LOW) && (toldo == 1)) {
+  Serial.print("LLuvia: ");
+  Serial.println(analogRead(rainAnalog));
+
+  /*if ((digitalRead(rainDigital) == LOW) && (toldo == 1)) {
     Serial.println("Detectada lluvia");
     client.publish("esp32/toldo", "Toldo recogido");
     toldo = 0;
@@ -257,7 +325,7 @@ void lluvia() {
       clockwise();
       delayMicroseconds(motorSpeed);
     }
-  }
+    }*/
 }
 
 void loop() {
@@ -270,8 +338,11 @@ void loop() {
   long now = millis();
   if (now - lastMsg > 5000) {
     lastMsg = now;
-    BME();
+    Sensores();
+
+    lluvia();
+
   }
   LED();
-  //lluvia();
+
 }

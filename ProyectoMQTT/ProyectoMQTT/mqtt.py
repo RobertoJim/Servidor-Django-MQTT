@@ -56,10 +56,6 @@ def on_message(client, userdata, msg):
         #print(mensaje4)       
         #print(msg.topic+ " "+str(msg.payload))
 
-    if str(msg.topic) == "esp32/toldo":
-        mensaje4 = str(msg.payload)[2:][:-1] #elimino los dos primeros caracteres y el ultimo (mensaje original: b'22.22')
-        print(mensaje5)       
-        #print(msg.topic+ " "+str(msg.payload))
 
     documento = """<html>
     <meta http-equiv="refresh" content="5" / 
@@ -126,6 +122,6 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("192.168.1.37", 1883, 60)
+client.connect("192.168.1.36", 1883, 60)
 #client.loop_start()
 #client.loop_start()
