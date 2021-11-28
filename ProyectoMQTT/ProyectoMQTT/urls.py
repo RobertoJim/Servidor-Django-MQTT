@@ -16,9 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from ProyectoMQTT.views import MQTT
-from ProyectoMQTT.views import subirPersiana
-from ProyectoMQTT.views import bajarPersiana
+from ProyectoMQTT.views import *
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +25,6 @@ urlpatterns = [
     path('', MQTT),
     path('subirPersiana', subirPersiana),
     path('bajarPersiana', bajarPersiana),
+    path('subirToldo', subirToldo),
+    path('bajarToldo', bajarToldo),
 ]

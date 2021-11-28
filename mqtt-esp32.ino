@@ -27,9 +27,6 @@ int value = 0;
 StaticJsonDocument <256> doc;
 char out[256];
 
-
-#define SEALEVELPRESSURE_HPA (1024) //Presion a nivel del mar Málaga
-
 //uncomment the following lines if you're using SPI
 #define BME_SCK 5 //SCL
 #define BME_MISO 16 //SDO
@@ -48,8 +45,8 @@ char out[256];
 
 //Toldo
 #define motor2Pin1 19    // 28BYJ48 In1
-#define motor2Pin2 0    // 28BYJ48 In2
-#define motor2Pin3 3   // 28BYJ48 In3
+#define motor2Pin2 12    // 28BYJ48 In2
+#define motor2Pin3 2   // 28BYJ48 In3
 #define motor2Pin4 32   // 28BYJ48 In4
 
 #define rainAnalog 35
@@ -66,9 +63,10 @@ int PIR = 0;
 int tiempo3 = 0;
 int toldo = 1;
 
-int motorSpeed = 1200;   //variable para fijar la velocidad
-int stepCounter = 0;     // contador para los pasos
-int stepsPerRev = 2048;  // pasos para una vuelta completa
+const int motorSpeed = 1200;   //variable para fijar la velocidad
+int stepCounter1 = 0;     // contador para los pasos
+int stepCounter2 = 0;     // contador para los pasos
+const int stepsPerRev = 2048;  // pasos para una vuelta completa
 
 //secuencia media fase
 const int numSteps = 8;
@@ -209,16 +207,16 @@ void reconnect() {
 
 void clockwise1()
 {
-  stepCounter++;
-  if (stepCounter >= numSteps) stepCounter = 0;
-  setOutput1(stepCounter);
+  stepCounter1++;
+  if (stepCounter1 >= numSteps) stepCounter1 = 0;
+  setOutput1(stepCounter1);
 }
 
 void anticlockwise1()
 {
-  stepCounter--;
-  if (stepCounter < 0) stepCounter = numSteps - 1;
-  setOutput1(stepCounter);
+  stepCounter1--;
+  if (stepCounter1 < 0) stepCounter1 = numSteps - 1;
+  setOutput1(stepCounter1);
 }
 
 void setOutput1(int step)
@@ -231,16 +229,16 @@ void setOutput1(int step)
 
 void clockwise2()
 {
-  stepCounter++;
-  if (stepCounter >= numSteps) stepCounter = 0;
-  setOutput2(stepCounter);
+  stepCounter2++;
+  if (stepCounter2 >= numSteps) stepCounter2 = 0;
+  setOutput2(stepCounter2);
 }
 
 void anticlockwise2()
 {
-  stepCounter--;
-  if (stepCounter < 0) stepCounter = numSteps - 1;
-  setOutput2(stepCounter);
+  stepCounter2--;
+  if (stepCounter2 < 0) stepCounter2 = numSteps - 1;
+  setOutput2(stepCounter2);
 }
 
 void setOutput2(int step)
