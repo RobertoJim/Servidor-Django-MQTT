@@ -17,7 +17,7 @@ const char* ssid = "PUTODIGI";
 const char* password = "123tunometescabra!";
 
 // Add your MQTT Broker IP address, example:
-const char* mqtt_server = "192.168.1.36";
+const char* mqtt_server = "192.168.1.37";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -104,6 +104,8 @@ void setup() {
   pinMode(motor2Pin2, OUTPUT);
   pinMode(motor2Pin3, OUTPUT);
   pinMode(motor2Pin4, OUTPUT);
+
+  client.publish("esp32/LED", "0"); //Para que aparezca la imagen de bombilla apagada en la interfaz al iniciar la aplicacion
 
   //pinMode(rainDigital, INPUT);
 }
@@ -290,9 +292,9 @@ void LED() {
   if ((PIR == 1) && (analogRead(pinLDR) < 600))
   {
     digitalWrite(pinLED, HIGH);//Encendemos la luz
-    client.publish("esp32/LED", "Luz encendida");
+    client.publish("esp32/LED", "1");
   }
-  if (millis() > tiempo3 + 2000) {
+  if (millis() > tiempo3 + 10000) {
 
     tiempo3 = millis();
     Serial.print("Luz: ");
@@ -301,7 +303,8 @@ void LED() {
     Serial.println(analogRead(pinLDR));
     if (digitalRead(pinLED) == 1) {
       digitalWrite(pinLED, LOW);//Luego la apagamos
-      client.publish("esp32/LED", "Luz apagada");
+
+      client.publish("esp32/LED", "0");
       PIR = 0;//Asignamos el valor "0" a la variable PIR para que deje de cumplirse la condición
     }
 
@@ -342,4 +345,5 @@ void loop() {
 
   }
   LED();
+
 }

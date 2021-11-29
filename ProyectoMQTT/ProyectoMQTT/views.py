@@ -11,9 +11,16 @@ import ProyectoMQTT
 from ProyectoMQTT.mqtt import *
 from ProyectoMQTT.weather import comprobarViento
 
-def MQTT(request):
+'''def MQTT(request):
     
-    return render(request, 'inicio.html', context={'temperatura' : ProyectoMQTT.mqtt.temperatura, 'humedad' : ProyectoMQTT.mqtt.humedad, 'presion' : ProyectoMQTT.mqtt.presion, 'toldo' : ProyectoMQTT.mqtt.mensaje5})
+    return render(request, 'inicioAntiguo.html',
+     context={'temperatura' : ProyectoMQTT.mqtt.temperatura, 
+     'humedad' : ProyectoMQTT.mqtt.humedad, 'presion' : ProyectoMQTT.mqtt.presion, 'toldo' : ProyectoMQTT.mqtt.mensaje5})'''
+
+def MQTT(request):
+
+    
+    return render(request, 'inicio.html', context={'bombilla': ProyectoMQTT.mqtt.mensajeLed})
 
 
 def subirPersiana(request):

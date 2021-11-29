@@ -4,7 +4,7 @@ import json
 
 from datetime import datetime
 
-SensorJson={};temperatura="";humedad="";presion="";mensaje4=""; mensaje5 = ""
+SensorJson={};temperatura="";humedad="";presion="";mensajeLed=""; mensaje5 = ""
 
 arrayTemperatura = ['', '', '', '', '', '', '', '', '', '', '', '']
 arrayHora = ['', '', '', '', '', '', '', '', '', '', '', '']
@@ -31,7 +31,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
 
-    global SensorJson; global mensaje4; global mensaje5; global temperatura; global humedad ; global presion
+    global SensorJson; global mensajeLed; global mensaje5; global temperatura; global humedad ; global presion
     
     global arrayTemperatura; global arrayHora
     
@@ -53,7 +53,8 @@ def on_message(client, userdata, msg):
 
 
     if str(msg.topic) == "esp32/LED":
-        mensaje4 = str(msg.payload)[2:][:-1] #elimino los dos primeros caracteres y el ultimo (mensaje original: b'22.22')
+        mensajeLed = str(msg.payload)[2:][:-1] #elimino los dos primeros caracteres y el ultimo (mensaje original: b'22.22')
+        print("Mi mensaje led es: " + mensajeLed)
         #print(mensaje4)       
         #print(msg.topic+ " "+str(msg.payload))
 
@@ -62,6 +63,6 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("192.168.1.36", 1883, 60)
+client.connect("192.168.1.37", 1883, 60)
 #client.loop_start()
 #client.loop_start()

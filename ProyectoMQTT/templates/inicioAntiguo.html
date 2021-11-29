@@ -1,0 +1,80 @@
+<html>
+<meta http-equiv="refresh" content="5" /
+
+    <body>
+        <h2>
+        La temperatura es: {{temperatura}}
+        </h2>
+        <h2>
+        La humedad es: {{humedad}}
+        </h2>
+        <h2>
+        La presion es: {{presion}}
+        </h2>
+        
+
+        <input type="button" id='script' name="Subir persiana" value=" Subir persiana " onclick="subirPersiana()">
+
+        <input type="button" id='script' name="Bajar persiana" value=" Bajar persiana " onclick="bajarPersiana()">
+
+        <input type="button" id='script' name="Subir toldo" value=" Subir toldo " onclick="subirToldo()">
+
+        <input type="button" id='script' name="Bajar toldo" value=" Bajar toldo " onclick="bajarToldo()">
+
+
+        <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+        <script>
+            function subirPersiana(){
+                $.ajax({
+                url: "/subirPersiana",
+                context: document.body
+                }).done(function() {
+                alert('Subiendo persiana');;
+                });
+            }
+        </script>
+
+        <script>
+            function bajarPersiana(){
+                $.ajax({
+                url: "/bajarPersiana",
+                context: document.body
+                }).done(function() {
+                alert('Bajando persiana');;
+                });
+            }
+        </script>
+
+        <script>
+            function subirToldo(){
+                $.ajax({
+                url: "/subirToldo",
+                context: document.body
+                }).done(function() {
+                alert('{{toldo}}');;
+                });
+            }
+        </script>
+
+        <script>
+            function bajarToldo(){
+                $.ajax({
+                url: "/bajarToldo",
+                context: document.body
+                }).done(function() {
+                alert('Bajando toldo');;
+                });
+            }
+        </script>
+
+
+
+
+            <form action="/Grafica/" method="GET">
+                <input type="submit" value="Mostrar gráfica">
+            </form>
+
+
+    </body>
+</html>

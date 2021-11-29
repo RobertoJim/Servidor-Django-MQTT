@@ -1,79 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
 <html>
-<meta http-equiv="refresh" content="5" /
-
+    <head>
+        <meta charset="utf-8" />
+        <title>Sistema dómotico</title>
+        <link rel="stylesheet" href="{% static 'inicio.css' %}" />
+    </head>
     <body>
-        <h2>
-        La temperatura es: {{temperatura}}
-        </h2>
-        <h2>
-        La humedad es: {{humedad}}
-        </h2>
-        <h2>
-        La presion es: {{presion}}
-        </h2>
+       
+
+        <div id="container">
+            
+            <header>
+                <h1>Sistema domótico</h1>
+                <!--<img id="casa" src="images/controlador-de-la-tableta.png">-->
+                <!--<img src="images/controlador-de-la-tableta.png"
+                    alt="Imagen casa domótica"
+                    widht="100"
+                    height="100"> -->
+                
+                    <!--<img id="casa" src="images/controlador-de-la-tableta.png">-->
+                
+                </header>
+
+
+            <section id="entrada">       
+                <h1>Entrada</h1>  
+                {% if bombilla %}
+  
+                    <img id="bombilla" src="{% static 'bombillaencendida.png' %}">
+
+                {% else %}   
+                    
+                    <img id="bombilla" src="{% static 'bombillaapagada.png' %}">
+                
+                {% endif %} 
+                
+            </section>
+            <section id="salon">
+                <!--<img id="bombillaencendida" src="images/bombilla encendida.png">-->
+                <h1>Salón</h1>
+            </section>
+            <section id="terraza">
         
-
-        <input type="button" id='script' name="Subir persiana" value=" Subir persiana " onclick="subirPersiana()">
-
-        <input type="button" id='script' name="Bajar persiana" value=" Bajar persiana " onclick="bajarPersiana()">
-
-        <input type="button" id='script' name="Subir toldo" value=" Subir toldo " onclick="subirToldo()">
-
-        <input type="button" id='script' name="Bajar toldo" value=" Bajar toldo " onclick="bajarToldo()">
-
-
-        <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-
-        <script>
-            function subirPersiana(){
-                $.ajax({
-                url: "/subirPersiana",
-                context: document.body
-                }).done(function() {
-                alert('Subiendo persiana');;
-                });
-            }
-        </script>
-
-        <script>
-            function bajarPersiana(){
-                $.ajax({
-                url: "/bajarPersiana",
-                context: document.body
-                }).done(function() {
-                alert('Bajando persiana');;
-                });
-            }
-        </script>
-
-        <script>
-            function subirToldo(){
-                $.ajax({
-                url: "/subirToldo",
-                context: document.body
-                }).done(function() {
-                alert('{{toldo}}');;
-                });
-            }
-        </script>
-
-        <script>
-            function bajarToldo(){
-                $.ajax({
-                url: "/bajarToldo",
-                context: document.body
-                }).done(function() {
-                alert('Bajando toldo');;
-                });
-            }
-        </script>
-
-
-
-
-            <form action="/Grafica/" method="GET">
-                <input type="submit" value="Mostrar gráfica">
-            </form>
+                <h1>Terraza</h1>
+            </section>
+            
+            <footer>
+                Roberto Jiménez &copy; 2021
+            </footer>
+        </div>
 
 
     </body>
