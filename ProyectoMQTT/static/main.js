@@ -1,5 +1,6 @@
 var ctx = document.getElementById('myChart').getContext('2d');
 
+
 var graphData = {
     type: 'line',
     data: {
@@ -18,6 +19,8 @@ var graphData = {
 }
 
 var myChart = new Chart(ctx, graphData);
+
+
 
 
 var socket = new WebSocket('ws://localhost:8000/ws/Sensores/')
@@ -39,5 +42,21 @@ socket.onmessage = function(e){
     graphData.data.labels = djangoData.hora;
     //graphData.data.labels = newGraphLabel;
     myChart.update();
+
+    if(djangoData.bombilla == 0)
+    {
+        imagenBombilla.src = 'static/bombillaapagada.png';
+    } else if (djangoData.bombilla == 1)
+    {
+        imagenBombilla.src = 'static/bombillaencendida.png';
+    }
+    else {
+        imagenBombilla.src = 'static/bombillaapagada.png';
+    }
+    /*print("djangoData.bombilla");*/
+    
+    
+    console.log(imagenBombilla);
+    imagenBombilla.update();
 
 }
