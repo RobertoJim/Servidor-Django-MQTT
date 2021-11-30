@@ -16,8 +16,11 @@ class SensoresConsumer(AsyncWebsocketConsumer):
         
         while 1:
             
-            await self.send(json.dumps({'value': ProyectoMQTT.mqtt.arrayTemperatura, 'hora': ProyectoMQTT.mqtt.arrayHora}))
+            await self.send(json.dumps({'value': ProyectoMQTT.mqtt.arrayTemperatura, 'hora': ProyectoMQTT.mqtt.arrayHora, 'bombilla': ProyectoMQTT.mqtt.mensajeLed}))
             #await self.send(json.dumps({'label': str(datetime.now().hour) + ":" + str(datetime.now().minute) + ":" + str(datetime.now().second) }))
             #print("Es la hora " + str(datetime.now().hour) + ":" + str(datetime.now().minute) + ":" + str(datetime.now().second))
             #print("El array que me llega a CONSUMER es: " + str(ProyectoMQTT.mqtt.arrayTemperatura))
-            await sleep(5)
+            #print("Mi mensaje bombilla es: " + str(ProyectoMQTT.mqtt.mensajeLed))
+            #await self.send(json.dumps({'bombilla': ProyectoMQTT.mqtt.mensajeLed}))
+            await sleep(1)
+

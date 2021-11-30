@@ -13,3 +13,5 @@ ProyectoMQTT/ProyectoMQTT/__pycache__/mqtt.cpython-310.pyc
 ProyectoMQTT/ProyectoMQTT/__pycache__/urls.cpython-310.pyc
 ProyectoMQTT/ProyectoMQTT/__pycache__/views.cpython-310.pyc
 ProyectoMQTT/ProyectoMQTT/__pycache__/weather.cpython-310.pyc
+.vscode/arduino.json
+.vscode/c_cpp_properties.json

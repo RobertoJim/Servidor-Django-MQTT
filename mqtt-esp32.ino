@@ -1,8 +1,3 @@
-/*********
-  Rui Santos
-  Complete project details at https://randomnerdtutorials.com
-*********/
-
 #include <Wire.h>
 #include <WiFi.h>
 #include <SPI.h>
@@ -17,7 +12,7 @@ const char* ssid = "PUTODIGI";
 const char* password = "123tunometescabra!";
 
 // Add your MQTT Broker IP address, example:
-const char* mqtt_server = "192.168.1.37";
+const char* mqtt_server = "192.168.1.35";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -61,7 +56,7 @@ float pressure = 0;
 
 int PIR = 0;
 int tiempo3 = 0;
-int toldo = 1;
+int led = 0;
 
 const int motorSpeed = 1200;   //variable para fijar la velocidad
 int stepCounter1 = 0;     // contador para los pasos
@@ -105,7 +100,6 @@ void setup() {
   pinMode(motor2Pin3, OUTPUT);
   pinMode(motor2Pin4, OUTPUT);
 
-  client.publish("esp32/LED", "0"); //Para que aparezca la imagen de bombilla apagada en la interfaz al iniciar la aplicacion
 
   //pinMode(rainDigital, INPUT);
 }
@@ -192,11 +186,15 @@ void reconnect() {
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    if (client.connect("ESP8266Client")) {
+    if (client.connect("ESP32Client")) {
       Serial.println("connected");
       // Subscribe
       client.subscribe("esp32/persiana");
       client.subscribe("esp32/toldo");
+      //Mando primer mensaje que para el led aparezca en la inerfaz apagado
+      client.publish("esp32/LED", "0"); //Para que aparezca la imagen de bombilla apagada en la interfaz al iniciar la aplicacion
+      Serial.println("Mando este primre mensaje");
+      led = 0; //Quizas innecesario, ya que el led se inicializa a 0
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -289,10 +287,13 @@ void Sensores() {
 void LED() {
 
   PIR = digitalRead(sensorPIR);//Leemos el estado del del sensor PIR
-  if ((PIR == 1) && (analogRead(pinLDR) < 600))
-  {
-    digitalWrite(pinLED, HIGH);//Encendemos la luz
-    client.publish("esp32/LED", "1");
+  if(led==0){ //Este if hace que no se mande el topic led = 1 todas las veces que entra en el bucle durante los 10s
+    if ((PIR == 1) && (analogRead(pinLDR) < 600))
+    {
+      digitalWrite(pinLED, HIGH);//Encendemos la luz
+      client.publish("esp32/LED", "1");
+      led = 1;
+    }
   }
   if (millis() > tiempo3 + 10000) {
 
@@ -305,6 +306,7 @@ void LED() {
       digitalWrite(pinLED, LOW);//Luego la apagamos
 
       client.publish("esp32/LED", "0");
+      led = 0;
       PIR = 0;//Asignamos el valor "0" a la variable PIR para que deje de cumplirse la condición
     }
 

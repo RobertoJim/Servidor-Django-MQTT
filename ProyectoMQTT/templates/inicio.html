@@ -1,12 +1,15 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+    <!--<meta http-equiv="refresh" content="2" />-->
     <head>
         <meta charset="utf-8" />
+        <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js></script>
         <title>Sistema dómotico</title>
         <link rel="stylesheet" href="{% static 'inicio.css' %}" />
-    </head>
-    <body>
+
+        </head>
+        <body>
        
 
         <div id="container">
@@ -23,23 +26,38 @@
                 
                 </header>
 
-
-            <section id="entrada">       
-                <h1>Entrada</h1>  
-                {% if bombilla %}
-  
-                    <img id="bombilla" src="{% static 'bombillaencendida.png' %}">
-
-                {% else %}   
+            
+                <section id="entrada">       
+                    <h1>Entrada</h1>  
+                    <img id="imagenBombilla"></img>
                     
-                    <img id="bombilla" src="{% static 'bombillaapagada.png' %}">
-                
-                {% endif %} 
-                
-            </section>
+                   <!-- {% if bombilla == "1" %}
+
+                    
+                        <img id="bombilla" src="{% static 'bombillaencendida.png' %}">
+                        <p>Presencia detectada, luz encendida</p>
+
+                    {% elif bombilla == "0" %}   
+                        
+                        <img id="bombilla" src="{% static 'bombillaapagada.png' %}">
+                        <h5>Luz apagada</h5>
+                        
+                    {% else %}-->
+                    <!-- Este caso es por si la variable bombilla esta vacia porque aun no ha mandado nada el ESP32-->
+                     <!--   <img id="bombilla" src="{% static 'bombillaapagada.png' %}">
+                        <h5>Luz apagada</h5>
+
+                    {% endif %} -->
+                    
+                </section>
+            
             <section id="salon">
                 <!--<img id="bombillaencendida" src="images/bombilla encendida.png">-->
                 <h1>Salón</h1>
+                <section id="grafica"> 
+                    <canvas id="myChart"></canvas>
+                </section>
+    
             </section>
             <section id="terraza">
         
@@ -51,6 +69,7 @@
             </footer>
         </div>
 
-
+        <script src="{% static 'main.js' %}"></script>
+       
     </body>
 </html>
