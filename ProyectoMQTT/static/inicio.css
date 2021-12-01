@@ -35,7 +35,7 @@ header{
 
 footer{
     clear:both;
-    background: black;
+    background: gray;
     color:white;
 }
 
@@ -61,15 +61,6 @@ footer{
     background-position-y: center;*/
 }
 
-#imagenBombilla{
-    float: left;
-    padding-left: 10%;
-    padding-top: 20px; 
-    
-    
-
-    /*float: left;*/
-}
 
 #terraza{
     text-align: center;
@@ -93,7 +84,7 @@ footer{
     border-right: 2px solid white;
     border-left: 2px solid white;
     border-bottom: 2px solid white;*/
-    
+    background: lightcoral;
     border-top: 4px solid gray;
     border-right: 4px solid gray;
     border-bottom: 4px solid gray;
@@ -104,18 +95,103 @@ footer{
     width: calc(80% - 4px);
 
     border-radius: 20px;
+    
+}
+
+
+#imagenBombilla{
+    float: left;
+    padding-left: 10%;
+    padding-top: 20px; 
+    
+    
+
+    /*float: left;*/
+}
+
+
+#TextoEntrada{    
+    padding-top: 80px; 
+    /*float: left;*/
 }
 
 #grafica{
     float:right;
-    padding-right: 30px;
+    clear:none;
+    background:gray;
+    padding-right: 2%;
+    width: 70%;
+
 }
+
+
 
 #myChart{
 
-    /*float:right;*/
-    width: 1000px;
+    float:right;
+    
     height:auto;
 
 }
 
+#Datos{
+    width: 27%;
+    min-height: 550px;
+    background: lightgreen;
+    float:left;
+}
+
+/*.Icono{
+    width: 20%;
+    min-height: 150px;
+    background: green;
+    float:left;
+
+}*/
+
+
+#termometro{
+    width: 150px; 
+    height: 150px; 
+    float:left
+    
+}
+
+#textoTemperatura{
+    float: left;
+    margin-top: 19%;
+    background: red;
+}
+
+
+
+#humedad{
+    
+    width: 150px; 
+    height: 150px; 
+    padding-top: 2%;
+    float:left;
+    clear:both;
+    
+}
+
+#textoHumedad{
+    float: left;
+    margin-top: 20%;
+    background: red;
+}
+
+#co2{
+    
+    width: 125px; 
+    height: 125px; 
+    padding-top: 2%;
+    padding-left: 4%;
+    float:left;
+    clear:both;
+    
+}
+
+#SubirPersiana{
+    margin-top:120%;
+}

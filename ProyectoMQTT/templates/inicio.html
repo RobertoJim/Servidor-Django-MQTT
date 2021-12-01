@@ -30,6 +30,7 @@
                 <section id="entrada">       
                     <h1>Entrada</h1>  
                     <img id="imagenBombilla"></img>
+                    <div id="TextoEntrada"></div>
                     
                    <!-- {% if bombilla == "1" %}
 
@@ -54,9 +55,26 @@
             <section id="salon">
                 <!--<img id="bombillaencendida" src="images/bombilla encendida.png">-->
                 <h1>Salón</h1>
-                <section id="grafica"> 
+                <div id="Datos">
+                    <class id="Icono">
+                        <img id="termometro" src="{% static 'Termometro.png' %}">
+                        <div id="textoTemperatura"></div>
+                    </class>
+                    <class id="Icono"> <!-- ESTOS CLASS CREO QUE SE PUEDEN QUITAR-->
+                        <img id="humedad" src="{% static 'gota-agua.png' %}">
+                        <div id="textoHumedad"></div>
+                    </class>
+                    <class id="Icono"> <!-- ESTOS CLASS CREO QUE SE PUEDEN QUITAR-->
+                        <img id="co2" src="{% static 'co2.png' %}">
+                        <div id="textoCo2"></div>
+                    </class>
+
+                    <input type="button" id='SubirPersiana' name="Subir persiana" value=" Subir persiana " onclick="subirPersiana()">
+
+                 </div>
+                <div id="grafica"> 
                     <canvas id="myChart"></canvas>
-                </section>
+                </div>
     
             </section>
             <section id="terraza">
@@ -70,6 +88,19 @@
         </div>
 
         <script src="{% static 'main.js' %}"></script>
+
+        <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+        <script>
+            function subirPersiana(){
+                $.ajax({
+                url: "/subirPersiana",
+                context: document.body
+                }).done(function() {
+                alert('Subiendo persiana');;
+                });
+            }
+        </script>
        
     </body>
 </html>

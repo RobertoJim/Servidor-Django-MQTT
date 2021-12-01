@@ -46,14 +46,21 @@ socket.onmessage = function(e){
     if(djangoData.bombilla == 0)
     {
         imagenBombilla.src = 'static/bombillaapagada.png';
+        document.getElementById('TextoEntrada').innerHTML='Luz apagada';
     } else if (djangoData.bombilla == 1)
     {
         imagenBombilla.src = 'static/bombillaencendida.png';
+        document.getElementById('TextoEntrada').innerHTML='Presencia detectada. Luz encendida';
+
     }
     else {
         imagenBombilla.src = 'static/bombillaapagada.png';
+        document.getElementById('TextoEntrada').innerHTML='Luz apagada';
     }
     /*print("djangoData.bombilla");*/
+
+    document.getElementById('textoTemperatura').innerHTML= String(djangoData.temperatura) + " ºC";
+    document.getElementById('textoHumedad').innerHTML= String(djangoData.humedad) + " %";
     
     
     console.log(imagenBombilla);
