@@ -4,7 +4,7 @@ import json
 
 from datetime import datetime
 
-SensorJson={};temperatura="";humedad="";presion="";mensajeLed=""; mensaje5 = ""
+SensorJson={};temperatura="";humedad="";presion="";co2="";mensajeLed=""; mensaje5 = ""
 
 arrayTemperatura = ['', '', '', '', '', '', '', '', '', '', '', '']
 arrayHora = ['', '', '', '', '', '', '', '', '', '', '', '']
@@ -23,15 +23,12 @@ arrayHora = ['', '', '', '', '', '', '', '', '', '', '', '']
 def on_connect(client, userdata, flags, rc):
     print("Se conecto con mqtt" + str(rc))
     client.subscribe("esp32/sensor")
-    client.subscribe("esp32/temperature")
-    client.subscribe("esp32/humidity")
-    client.subscribe("esp32/pressure")
     client.subscribe("esp32/LED")
     
 
 def on_message(client, userdata, msg):
 
-    global SensorJson; global mensajeLed; global mensaje5; global temperatura; global humedad ; global presion
+    global SensorJson; global mensajeLed; global mensaje5; global temperatura; global humedad ; global presion ; global co2
     
     global arrayTemperatura; global arrayHora
     
@@ -41,6 +38,7 @@ def on_message(client, userdata, msg):
         temperatura = SensorJson['temperature']
         humedad = SensorJson['humidity']
         presion = SensorJson['pressure']
+        co2 = SensorJson['co2']
 
         #Monto array de temperatura y hora para la gráfica
         arrayTemperatura.pop(0) # Similar a shift en javascript 

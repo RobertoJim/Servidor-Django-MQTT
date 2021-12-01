@@ -3,6 +3,7 @@
 #include <SPI.h>
 #include <Adafruit_Sensor.h>
 #include "Adafruit_BME680.h"
+#include "Adafruit_CCS811.h"
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 
@@ -23,10 +24,10 @@ StaticJsonDocument <256> doc;
 char out[256];
 
 //uncomment the following lines if you're using SPI
-#define BME_SCK 5 //SCL
+/*#define BME_SCK 5 //SCL
 #define BME_MISO 16 //SDO
 #define BME_MOSI 17 //SDA
-#define BME_CS 4 //CS
+#define BME_CS 4 //CS*/
 
 #define pinLDR 34
 #define pinLED 13
@@ -34,8 +35,8 @@ char out[256];
 
 //Persiana
 #define motor1Pin1 23    // 28BYJ48 In1
-#define motor1Pin2 22    // 28BYJ48 In2
-#define motor1Pin3 21   // 28BYJ48 In3
+#define motor1Pin2 35    // 28BYJ48 In2
+#define motor1Pin3 0   // 28BYJ48 In3
 #define motor1Pin4 15   // 28BYJ48 In4
 
 //Toldo
@@ -46,13 +47,17 @@ char out[256];
 
 #define rainAnalog 35
 
-//Adafruit_BME280 bme; // I2C
+Adafruit_BME680 bme; // I2C
 //Adafruit_BME280 bme(BME_CS); // hardware SPI
 //Adafruit_BME280 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK); // software SPI
-Adafruit_BME680 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK);
+//Adafruit_BME680 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK);
+
+Adafruit_CCS811 ccs;
+
 float temperature = 0;
 float humidity = 0;
 float pressure = 0;
+float CO2 = 0;
 
 int PIR = 0;
 int tiempo3 = 0;
@@ -76,6 +81,11 @@ void setup() {
     Serial.println("Could not find a valid BME680 sensor, check wiring!");
     while (1);
   }
+  if(!ccs.begin()){
+    Serial.println("Failed to start sensor! Please check your wiring.");
+    while(1);
+  }
+
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
@@ -278,6 +288,16 @@ void Sensores() {
     Serial.println(presString);
     client.publish("esp32/pressure", presString);*/
   doc["pressure"] = pressure;
+
+  if(ccs.available()){
+    if(!ccs.readData()){
+      CO2 = ccs.geteCO2();
+      // Convert the value to a char array
+      char co2String[8];
+      dtostrf(CO2, 1, 2, co2String);
+      doc["co2"] = CO2;
+    }
+  }
 
   serializeJson(doc, out);
   client.publish("esp32/sensor", out);

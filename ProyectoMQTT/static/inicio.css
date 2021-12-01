@@ -84,7 +84,7 @@ footer{
     border-right: 2px solid white;
     border-left: 2px solid white;
     border-bottom: 2px solid white;*/
-    background: lightcoral;
+   /* background: lightcoral;*/
     border-top: 4px solid gray;
     border-right: 4px solid gray;
     border-bottom: 4px solid gray;
@@ -118,7 +118,7 @@ footer{
 #grafica{
     float:right;
     clear:none;
-    background:gray;
+    /*background:gray;*/
     padding-right: 2%;
     width: 70%;
 
@@ -137,7 +137,7 @@ footer{
 #Datos{
     width: 27%;
     min-height: 550px;
-    background: lightgreen;
+   /* background: lightgreen;*/
     float:left;
 }
 
@@ -160,7 +160,7 @@ footer{
 #textoTemperatura{
     float: left;
     margin-top: 19%;
-    background: red;
+    /*background: red;*/
 }
 
 
@@ -178,7 +178,7 @@ footer{
 #textoHumedad{
     float: left;
     margin-top: 20%;
-    background: red;
+    /*background: red;*/
 }
 
 #co2{
@@ -192,6 +192,55 @@ footer{
     
 }
 
-#SubirPersiana{
+#textoCo2{
+    float: left;
+    padding-left: 5%;
+    margin-top: 18%;
+    /*background: red;*/
+}
+
+
+.switch-button{
     margin-top:120%;
+}
+
+
+/* CODIGO BOTON PERSIANA */
+
+:root {
+    --color-green: #00a878;
+    --color-red: #fe5e41;
+    --color-button: #fdffff;
+    --color-black: #000;
+}
+.switch-button {
+    display: inline-block;
+}
+.switch-button .switch-button__checkbox {
+    display: none;
+}
+.switch-button .switch-button__label {
+    background-color: var(--color-red);
+    width: 5rem;
+    height: 3rem;
+    border-radius: 3rem;
+    display: inline-block;
+    position: relative;
+}
+.switch-button .switch-button__label:before {
+    transition: .2s;
+    display: block;
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--color-button);
+    content: '';
+    border-radius: 50%;
+    box-shadow: inset 0px 0px 0px 1px var(--color-black);
+}
+.switch-button .switch-button__checkbox:checked + .switch-button__label {
+    background-color: var(--color-green);
+}
+.switch-button .switch-button__checkbox:checked + .switch-button__label:before {
+    transform: translateX(2rem);
 }

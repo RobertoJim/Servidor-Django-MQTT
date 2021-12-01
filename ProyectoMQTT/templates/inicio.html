@@ -69,7 +69,13 @@
                         <div id="textoCo2"></div>
                     </class>
 
-                    <input type="button" id='SubirPersiana' name="Subir persiana" value=" Subir persiana " onclick="subirPersiana()">
+                    
+                    <div class="switch-button">
+                        <!-- Checkbox -->
+                        <input type="checkbox" name="switch-button" id="switch-label" class="switch-button__checkbox"  value=" Subir persiana " onclick="Persiana()">
+                        <!-- Botón -->
+                        <label for="switch-label" class="switch-button__label"></label>
+                    </div>
 
                  </div>
                 <div id="grafica"> 
@@ -80,6 +86,9 @@
             <section id="terraza">
         
                 <h1>Terraza</h1>
+                <div id="textoLluvia"></div>
+                <div id="textoViento"></div>
+                <div id="textoRafaga"></div>
             </section>
             
             <footer>
@@ -92,13 +101,23 @@
         <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
         <script>
-            function subirPersiana(){
+            function Persiana(){
+                check = document.getElementById("switch-label");
+                if(check.checked){
+                    $.ajax({
+                    url: "/subirPersiana",
+                    context: document.body
+                    }).done(function() {
+                    alert('Subiendo persiana');;
+                    });
+            } else{
                 $.ajax({
-                url: "/subirPersiana",
+                url: "/bajarPersiana",
                 context: document.body
                 }).done(function() {
-                alert('Subiendo persiana');;
+                alert('Bajando persiana');;
                 });
+            }
             }
         </script>
        

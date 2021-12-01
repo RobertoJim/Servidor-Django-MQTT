@@ -29,7 +29,7 @@ def openWeatherMap():
 
 def recogerDatos():
 
-    global velocidadViento; global rafagaViento
+    global velocidadViento; global rafagaViento; global precipitacion; global hora
 
     while 1:
 
@@ -40,9 +40,10 @@ def recogerDatos():
 
         #dt = data["minutely"][60]["dt"]
         dt = data["hourly"][1]["dt"]
-        hora = str(datetime.fromtimestamp(dt))[11:] #Convierto la fecha a formato conocido y elimino 11 primeros caracteres (elimino fecha) 
+        
+        hora = str(datetime.fromtimestamp(dt))[11:]  #Convierto la fecha a formato conocido y elimino 11 primeros caracteres (elimino fecha) 
                                                     #para obtener solo la hora
-                                        
+        
         #prevision = data["hourly"][1]["weather"][0]['description'] #Ejemplo, cielo despejado
 
         #precipitacion = data["minutely"][60]["precipitation"] #Prevision precipitacion para dentro de una hora desde el momento en el que se mira
