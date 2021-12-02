@@ -4,7 +4,7 @@ import json
 
 from datetime import datetime
 
-SensorJson={};temperatura="";humedad="";presion="";co2="";mensajeLed=""; mensaje5 = ""
+SensorJson={};temperatura="";humedad="";presion="";mensajeLed=""; mensaje5 = ""
 
 arrayTemperatura = ['', '', '', '', '', '', '', '', '', '', '', '']
 arrayHora = ['', '', '', '', '', '', '', '', '', '', '', '']
@@ -28,7 +28,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
 
-    global SensorJson; global mensajeLed; global mensaje5; global temperatura; global humedad ; global presion ; global co2
+    global SensorJson; global mensajeLed; global mensaje5; global temperatura; global humedad ; global presion 
     
     global arrayTemperatura; global arrayHora
     
@@ -38,7 +38,7 @@ def on_message(client, userdata, msg):
         temperatura = SensorJson['temperature']
         humedad = SensorJson['humidity']
         presion = SensorJson['pressure']
-        co2 = SensorJson['co2']
+        
 
         #Monto array de temperatura y hora para la gráfica
         arrayTemperatura.pop(0) # Similar a shift en javascript 
@@ -61,6 +61,6 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("192.168.1.35", 1883, 60)
+client.connect("192.168.1.33", 1883, 60)
 #client.loop_start()
 #client.loop_start()

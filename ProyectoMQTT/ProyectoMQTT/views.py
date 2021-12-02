@@ -20,7 +20,7 @@ from ProyectoMQTT.weather import comprobarViento
 def MQTT(request):
 
     
-    return render(request, 'inicio.html', context={'bombilla': ProyectoMQTT.mqtt.mensajeLed})
+    return render(request, 'inicio.html', context={'bombilla': ProyectoMQTT.mqtt.mensajeLed,  'toldo' : ProyectoMQTT.mqtt.mensaje5})
 
 
 def subirPersiana(request):

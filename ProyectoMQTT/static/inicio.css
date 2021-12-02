@@ -7,15 +7,28 @@
 body{
 
     background:white;
+    /*height: 100px;*/
+    
+    
+    
+    
 
 }
 
-#container{
-    width: 100%;
+/*#container{*/
+    
+    /*background: red;*/
+    /*position:absolute;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    height:100%;
+    width:100%;*/
    /*margin: 0px auto;*/
     
     
-}
+/*}*/
 
 header{
     background: lightblue;
@@ -75,6 +88,9 @@ footer{
     padding-top: 20px;
 
     border-radius: 20px;
+
+
+    
 }
 
 #salon{
@@ -136,7 +152,7 @@ footer{
 
 #Datos{
     width: 27%;
-    min-height: 550px;
+   /* min-height: 550px;*/
    /* background: lightgreen;*/
     float:left;
 }
@@ -200,8 +216,12 @@ footer{
 }
 
 
-.switch-button{
-    margin-top:120%;
+#boton1{
+    margin-top:600%;
+}
+
+#boton2{
+    margin-top:100%;
 }
 
 

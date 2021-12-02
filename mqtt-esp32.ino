@@ -3,7 +3,6 @@
 #include <SPI.h>
 #include <Adafruit_Sensor.h>
 #include "Adafruit_BME680.h"
-#include "Adafruit_CCS811.h"
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 
@@ -13,7 +12,7 @@ const char* ssid = "PUTODIGI";
 const char* password = "123tunometescabra!";
 
 // Add your MQTT Broker IP address, example:
-const char* mqtt_server = "192.168.1.35";
+const char* mqtt_server = "192.168.1.33";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -36,14 +35,14 @@ char out[256];
 //Persiana
 #define motor1Pin1 23    // 28BYJ48 In1
 #define motor1Pin2 35    // 28BYJ48 In2
-#define motor1Pin3 0   // 28BYJ48 In3
-#define motor1Pin4 15   // 28BYJ48 In4
+#define motor1Pin3 19   // 28BYJ48 In3
+#define motor1Pin4 5   // 28BYJ48 In4
 
 //Toldo
-#define motor2Pin1 19    // 28BYJ48 In1
-#define motor2Pin2 12    // 28BYJ48 In2
-#define motor2Pin3 2   // 28BYJ48 In3
-#define motor2Pin4 32   // 28BYJ48 In4
+#define motor2Pin1 16    // 28BYJ48 In1
+#define motor2Pin2 4    // 28BYJ48 In2
+#define motor2Pin3 0   // 28BYJ48 In3
+#define motor2Pin4 2   // 28BYJ48 In4
 
 #define rainAnalog 35
 
@@ -52,7 +51,7 @@ Adafruit_BME680 bme; // I2C
 //Adafruit_BME280 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK); // software SPI
 //Adafruit_BME680 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK);
 
-Adafruit_CCS811 ccs;
+
 
 float temperature = 0;
 float humidity = 0;
@@ -81,11 +80,7 @@ void setup() {
     Serial.println("Could not find a valid BME680 sensor, check wiring!");
     while (1);
   }
-  if(!ccs.begin()){
-    Serial.println("Failed to start sensor! Please check your wiring.");
-    while(1);
-  }
-
+  
   setup_wifi();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
@@ -95,7 +90,6 @@ void setup() {
   bme.setHumidityOversampling(BME680_OS_2X);  // Establece el sobremuestreo de humedad
   bme.setPressureOversampling(BME680_OS_4X);  // Ajuste de sobremuestreo de presiçon
   bme.setIIRFilterSize(BME680_FILTER_SIZE_3);  // El sensor BME680 integra un filtro IIR interno para reducir los cambios a corto plazo en los valores de salida del sensor causados ​​por perturbaciones externas.
-  bme.setGasHeater(320, 150); // 320*C for 150 ms
 
   pinMode(pinLED, OUTPUT);
   pinMode(sensorPIR, INPUT);
@@ -288,16 +282,6 @@ void Sensores() {
     Serial.println(presString);
     client.publish("esp32/pressure", presString);*/
   doc["pressure"] = pressure;
-
-  if(ccs.available()){
-    if(!ccs.readData()){
-      CO2 = ccs.geteCO2();
-      // Convert the value to a char array
-      char co2String[8];
-      dtostrf(CO2, 1, 2, co2String);
-      doc["co2"] = CO2;
-    }
-  }
 
   serializeJson(doc, out);
   client.publish("esp32/sensor", out);

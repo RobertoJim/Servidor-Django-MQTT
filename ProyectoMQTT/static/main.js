@@ -61,7 +61,7 @@ socket.onmessage = function(e){
 
     document.getElementById('textoTemperatura').innerHTML= String(djangoData.temperatura) + " ºC";
     document.getElementById('textoHumedad').innerHTML= String(djangoData.humedad) + " %";
-    document.getElementById('textoCo2').innerHTML= String(djangoData.co2) + " ppm";
+    //document.getElementById('textoCo2').innerHTML= String(djangoData.co2) + " ppm";
     document.getElementById('textoLluvia').innerHTML= "Lluvia a las " + String(djangoData.horaLluvia) + ": " + String(djangoData.lluvia) + " %";
     document.getElementById('textoViento').innerHTML= "Velocidad viento a las " + String(djangoData.horaLluvia) + ": " + + String(djangoData.velocidadViento) + " m/s";
     document.getElementById('textoRafaga').innerHTML= "Rafaga viento a las " + String(djangoData.horaLluvia) + ": " + String(djangoData.rafagaViento) + " m/s";

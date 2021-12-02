@@ -71,10 +71,12 @@
 
                     
                     <div class="switch-button">
-                        <!-- Checkbox -->
-                        <input type="checkbox" name="switch-button" id="switch-label" class="switch-button__checkbox"  value=" Subir persiana " onclick="Persiana()">
-                        <!-- Botón -->
-                        <label for="switch-label" class="switch-button__label"></label>
+                        <div id="boton1">
+                            <!-- Checkbox -->
+                            <input type="checkbox" name="switch-button" id="switch-label1" class="switch-button__checkbox"  value="Persiana " onclick="Persiana()">
+                            <!-- Botón -->
+                            <label for="switch-label1" class="switch-button__label"></label>
+                        </div>
                     </div>
 
                  </div>
@@ -89,6 +91,14 @@
                 <div id="textoLluvia"></div>
                 <div id="textoViento"></div>
                 <div id="textoRafaga"></div>
+                <div class="switch-button">
+                    <div id="boton2">
+                        <!-- Checkbox -->
+                        <input type="checkbox" name="switch-button" id="switch-label2" class="switch-button__checkbox"  value="Toldo " onclick="Toldo()">
+                        <!-- Botón -->
+                        <label for="switch-label2" class="switch-button__label"></label>
+                    </div>
+                </div>
             </section>
             
             <footer>
@@ -102,7 +112,7 @@
 
         <script>
             function Persiana(){
-                check = document.getElementById("switch-label");
+                check = document.getElementById("switch-label1");
                 if(check.checked){
                     $.ajax({
                     url: "/subirPersiana",
@@ -120,6 +130,33 @@
             }
             }
         </script>
+
+<script>
+    function Toldo(){
+        check = document.getElementById("switch-label2");
+        
+        if(check.checked){
+            $.ajax({
+            url: "/subirToldo",
+            context: document.body
+            }).done(function() {
+            alert('{{toldo}}');;
+            if('{{toldo}}' == "Hace mucho viento, peligro de que se rompa el toldo")
+            {
+                check.checked = 0;
+            }
+            });
+    } else{
+        $.ajax({
+        url: "/bajarToldo",
+        context: document.body
+        }).done(function() {
+        alert('Bajando toldo');;
+        });
+    }
+
+    }
+</script>
        
     </body>
 </html>
