@@ -18,7 +18,7 @@ api_key = "6159431fde89157c2c7bb8ff8a7e841a"
 lat = "36.720969"
 lon = "-4.474427"
 
-velocidadViento = 0; rafagaViento = 0
+velocidadViento = 0; rafagaViento = 0; estadoToldo = 0 #Cuando arranca el sistema el toldo esta cerrado
 
 
 def openWeatherMap():
@@ -29,7 +29,7 @@ def openWeatherMap():
 
 def recogerDatos():
 
-    global velocidadViento; global rafagaViento; global precipitacion; global hora
+    global velocidadViento; global rafagaViento; global precipitacion; global hora; global mensajeViento; global estadoToldo
 
     while 1:
 
@@ -54,24 +54,31 @@ def recogerDatos():
         rafagaViento = data["hourly"][1]["wind_gust"]
 
         if (velocidadViento < 5) and (rafagaViento < 8): #Guardo el mensaje para que aparezca en la alerta al pulsar el boton
-            ProyectoMQTT.mqtt.mensaje5 = "Subiendo toldo"
+            mensajeViento = "Subiendo toldo"
+            
         else:          
-            ProyectoMQTT.mqtt.mensaje5 = "Hace mucho viento, peligro de que se rompa el toldo"
+            mensajeViento = "Hace mucho viento, peligro de que se rompa el toldo"
 
         print("La prevision de viento  para las " + hora + " es Velocidad:  " + str(velocidadViento) + " y Rafaga: " + str(rafagaViento))
-
-        if precipitacion > 0:
+        
+        precipitacion=1
+        if ((precipitacion > 0) and (estadoToldo == 1)):
 
             client.publish("esp32/toldo","down")
+            estadoToldo = 0
 
         #current = data["hourly"][0]["pressure"]
         
 
-        sleep(1800)
+        sleep(18)
 
 def comprobarViento():
 
+    global estadoToldo
+    
     if (velocidadViento < 5) and (rafagaViento < 8):
+        estadoToldo = 1
         client.publish("esp32/toldo","up")
+        
     
        

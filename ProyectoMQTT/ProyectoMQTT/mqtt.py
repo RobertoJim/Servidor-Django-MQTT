@@ -4,7 +4,7 @@ import json
 
 from datetime import datetime
 
-SensorJson={};temperatura="";humedad="";presion="";mensajeLed=""; mensaje5 = ""
+SensorJson={};temperatura="";humedad="";presion="";mensajeLed=""
 
 arrayTemperatura = ['', '', '', '', '', '', '', '', '', '', '', '']
 arrayHora = ['', '', '', '', '', '', '', '', '', '', '', '']
@@ -28,7 +28,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
 
-    global SensorJson; global mensajeLed; global mensaje5; global temperatura; global humedad ; global presion 
+    global SensorJson; global mensajeLed; global temperatura; global humedad ; global presion 
     
     global arrayTemperatura; global arrayHora
     

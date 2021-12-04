@@ -93,6 +93,18 @@ footer{
     
 }
 
+#textoToldo{
+    float: left;
+    margin-left: 10%;
+    margin-top: 25%;
+}
+
+#boton2{
+    float:right;
+    margin-top: 100%;
+    margin-right: 15%;
+}
+
 #salon{
     
     /*margin: 0px auto;*/
@@ -130,6 +142,8 @@ footer{
     padding-top: 80px; 
     /*float: left;*/
 }
+
+
 
 #grafica{
     float:right;
@@ -194,7 +208,7 @@ footer{
 #textoHumedad{
     float: left;
     margin-top: 20%;
-    /*background: red;*/
+    
 }
 
 #co2{
@@ -206,23 +220,30 @@ footer{
     float:left;
     clear:both;
     
+    
 }
 
 #textoCo2{
     float: left;
     padding-left: 5%;
     margin-top: 18%;
-    /*background: red;*/
+    
 }
 
+#textoPersiana{
+    float:left;
+    clear:both;
+    margin-top: 12%;
+    margin-left: 4%;
+    
+}
 
 #boton1{
     margin-top:600%;
+    
 }
 
-#boton2{
-    margin-top:100%;
-}
+
 
 
 /* CODIGO BOTON PERSIANA */

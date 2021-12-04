@@ -44,7 +44,7 @@ char out[256];
 #define motor2Pin3 0   // 28BYJ48 In3
 #define motor2Pin4 2   // 28BYJ48 In4
 
-#define rainAnalog 35
+#define rainAnalog 12
 
 Adafruit_BME680 bme; // I2C
 //Adafruit_BME280 bme(BME_CS); // hardware SPI
@@ -59,7 +59,7 @@ float pressure = 0;
 float CO2 = 0;
 
 int PIR = 0;
-int tiempo3 = 0;
+int tiempo3 = 0, tiempo4=0;
 int led = 0;
 
 const int motorSpeed = 1200;   //variable para fijar la velocidad
@@ -320,8 +320,13 @@ void LED() {
 
 void lluvia() {
 
-  Serial.print("LLuvia: ");
-  Serial.println(analogRead(rainAnalog));
+
+  if (millis() > tiempo4 + 2000) {
+
+    tiempo4 = millis();
+    Serial.print("LLuvia: ");
+    Serial.println(analogRead(rainAnalog));
+  }
 
   /*if ((digitalRead(rainDigital) == LOW) && (toldo == 1)) {
     Serial.println("Detectada lluvia");
@@ -347,9 +352,10 @@ void loop() {
     lastMsg = now;
     Sensores();
 
-    lluvia();
+    
 
   }
   LED();
+  lluvia();
 
 }

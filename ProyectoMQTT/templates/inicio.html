@@ -66,11 +66,17 @@
                     </class>
                     <class id="Icono"> <!-- ESTOS CLASS CREO QUE SE PUEDEN QUITAR-->
                         <img id="co2" src="{% static 'co2.png' %}">
-                        <div id="textoCo2"></div>
+                        <div id="textoCo2">
+                            <p>xxx ppm</p>
+                        </div>
                     </class>
 
-                    
+                    <div id="textoPersiana">
+
+                        <h3>Control persiana: </h3>
+                    </div>
                     <div class="switch-button">
+                        
                         <div id="boton1">
                             <!-- Checkbox -->
                             <input type="checkbox" name="switch-button" id="switch-label1" class="switch-button__checkbox"  value="Persiana " onclick="Persiana()">
@@ -91,6 +97,11 @@
                 <div id="textoLluvia"></div>
                 <div id="textoViento"></div>
                 <div id="textoRafaga"></div>
+
+                <div id="textoToldo">
+
+                    <h3>Control toldo: </h3>
+                </div>
                 <div class="switch-button">
                     <div id="boton2">
                         <!-- Checkbox -->
@@ -135,16 +146,18 @@
     function Toldo(){
         check = document.getElementById("switch-label2");
         
+        
         if(check.checked){
             $.ajax({
             url: "/subirToldo",
             context: document.body
             }).done(function() {
-            alert('{{toldo}}');;
-            if('{{toldo}}' == "Hace mucho viento, peligro de que se rompa el toldo")
+            alert('{{mensajeViento}}');;
+            if('{{mensajeViento}}' == "Hace mucho viento, peligro de que se rompa el toldo")
             {
                 check.checked = 0;
             }
+            /*'{{estadoToldo}}' = 1;*/
             });
     } else{
         $.ajax({
@@ -152,6 +165,7 @@
         context: document.body
         }).done(function() {
         alert('Bajando toldo');;
+        /*'{{estadoToldo}}' = 0;*/
         });
     }
 
