@@ -9,7 +9,7 @@ from django.shortcuts import render
 import ProyectoMQTT
 
 from ProyectoMQTT.mqtt import *
-from ProyectoMQTT.weather import comprobarViento, mensajeViento, estadoToldo
+from ProyectoMQTT.weather import comprobarViento, bajarToldo,  mensajeViento
 
 '''def MQTT(request):
     
@@ -45,8 +45,7 @@ def subirToldo(request):
 
 def bajarToldo(request):
 
-    ProyectoMQTT.weather.estadoToldo = 0
-    client.publish("esp32/toldo","down")
+    bajarToldo()
 
     return HttpResponse()
     

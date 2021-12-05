@@ -63,6 +63,14 @@ socket.onmessage = function(e){
         document.getElementById("switch-label2").checked = 0;
     } else if (djangoData.estadoToldo == "1"){
         document.getElementById("switch-label2").checked = 1;
+        if(djangoData.alertaToldo == 1)
+        {
+            alert("Se espera lluvia, bajando toldo");
+        }
+        if(djangoData.mensajeLluvia == 1)
+        {
+            alert("Ha empezado a llover, bajando toldo");
+        }
     }
 
 

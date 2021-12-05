@@ -18,8 +18,8 @@ api_key = "6159431fde89157c2c7bb8ff8a7e841a"
 lat = "36.720969"
 lon = "-4.474427"
 
-velocidadViento = 0; rafagaViento = 0; estadoToldo = 0 #Cuando arranca el sistema el toldo esta cerrado
-
+velocidadViento = 0; rafagaViento = 0; precipitacion = 0 #Cuando arranca el sistema el toldo esta cerrado
+mensajeViento = ""
 
 def openWeatherMap():
 
@@ -29,7 +29,7 @@ def openWeatherMap():
 
 def recogerDatos():
 
-    global velocidadViento; global rafagaViento; global precipitacion; global hora; global mensajeViento; global estadoToldo
+    global velocidadViento; global rafagaViento; global precipitacion; global hora; global mensajeViento
 
     while 1:
 
@@ -48,12 +48,13 @@ def recogerDatos():
 
         #precipitacion = data["minutely"][60]["precipitation"] #Prevision precipitacion para dentro de una hora desde el momento en el que se mira
         precipitacion = data["hourly"][1]["pop"]
+        precipitacion=1
         print("La prevision para las " + hora + " es " + str(precipitacion))
 
         velocidadViento = data["hourly"][1]["wind_speed"] # Estoy comprobando la velocidad del viento dentro de una hora, quizas seria mejor comprobar la actual
         rafagaViento = data["hourly"][1]["wind_gust"]
 
-        if (velocidadViento < 5) and (rafagaViento < 8): #Guardo el mensaje para que aparezca en la alerta al pulsar el boton
+        if (velocidadViento < 7) and (rafagaViento < 11): #Guardo el mensaje para que aparezca en la alerta al pulsar el boton
             mensajeViento = "Subiendo toldo"
             
         else:          
@@ -61,11 +62,14 @@ def recogerDatos():
 
         print("La prevision de viento  para las " + hora + " es Velocidad:  " + str(velocidadViento) + " y Rafaga: " + str(rafagaViento))
         
-        precipitacion=1
-        if ((precipitacion > 0) and (estadoToldo == 1)):
-
-            client.publish("esp32/toldo","down")
-            estadoToldo = 0
+        
+        #Precipitacion es el dato que obtengo de OpenWeatherMap
+        if ((precipitacion > 0) and (ProyectoMQTT.mqtt.estadoToldo == 1)): #Esta condicion creo que no deberia estar aqui, ya que al empezar la aplicacion
+                                                        #estado estadoToldo nunca va estar a 1 y no se va a ejecutar
+            client.publish("esp32/toldo","down") #Cambio la variable estadoToldo en consumers.py, alli explicacion
+            ##estadoToldo = 0
+            ProyectoMQTT.mqtt.bajaToldoLluvia = 1 #Quizas pueda ahorrarme esta variable utilizando la variable precipitacion
+            
 
         #current = data["hourly"][0]["pressure"]
         
@@ -74,11 +78,16 @@ def recogerDatos():
 
 def comprobarViento():
 
-    global estadoToldo
     
-    if (velocidadViento < 5) and (rafagaViento < 8):
-        estadoToldo = 1
+    if (velocidadViento < 7) and (rafagaViento < 11):
+
+        ProyectoMQTT.mqtt.estadoToldo = 1
         client.publish("esp32/toldo","up")
-        
+
+
+def bajarToldo():
+
+    ProyectoMQTT.mqtt.estadoToldo = 0
+    client.publish("esp32/toldo","down")        
     
        

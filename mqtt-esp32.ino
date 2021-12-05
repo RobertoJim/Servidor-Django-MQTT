@@ -12,7 +12,7 @@ const char* ssid = "PUTODIGI";
 const char* password = "123tunometescabra!";
 
 // Add your MQTT Broker IP address, example:
-const char* mqtt_server = "192.168.1.33";
+const char* mqtt_server = "192.168.1.35";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -34,7 +34,7 @@ char out[256];
 
 //Persiana
 #define motor1Pin1 23    // 28BYJ48 In1
-#define motor1Pin2 35    // 28BYJ48 In2
+#define motor1Pin2 15    // 28BYJ48 In2
 #define motor1Pin3 19   // 28BYJ48 In3
 #define motor1Pin4 5   // 28BYJ48 In4
 
@@ -44,7 +44,7 @@ char out[256];
 #define motor2Pin3 0   // 28BYJ48 In3
 #define motor2Pin4 2   // 28BYJ48 In4
 
-#define rainAnalog 12
+#define rainAnalog 35
 
 Adafruit_BME680 bme; // I2C
 //Adafruit_BME280 bme(BME_CS); // hardware SPI
@@ -55,12 +55,14 @@ Adafruit_BME680 bme; // I2C
 
 float temperature = 0;
 float humidity = 0;
-float pressure = 0;
+float pressure = 0; 
 float CO2 = 0;
 
 int PIR = 0;
 int tiempo3 = 0, tiempo4=0;
 int led = 0;
+int medidaLluvia = 0;
+int estadoToldo = 0;
 
 const int motorSpeed = 1200;   //variable para fijar la velocidad
 int stepCounter1 = 0;     // contador para los pasos
@@ -148,6 +150,7 @@ void callback(char* topic, byte* message, unsigned int length) {
     Serial.print("Changing output to ");
     if (messageTemp == "up") {
       Serial.println("up persiana");
+      
       for (int i = 0; i < stepsPerRev * 2; i++)
       {
         clockwise1();
@@ -155,6 +158,7 @@ void callback(char* topic, byte* message, unsigned int length) {
       }
     }
     else if (messageTemp == "down") {
+      
       Serial.println("down persiana");
       for (int i = 0; i < stepsPerRev * 2; i++)
       {
@@ -168,6 +172,7 @@ void callback(char* topic, byte* message, unsigned int length) {
     Serial.print("Changing output to ");
     if (messageTemp == "up") {
       Serial.println("up toldo");
+      estadoToldo = 1;
       for (int i = 0; i < stepsPerRev * 2; i++)
       {
         clockwise2();
@@ -176,6 +181,7 @@ void callback(char* topic, byte* message, unsigned int length) {
     }
     else if (messageTemp == "down") {
       Serial.println("down toldo");
+      estadoToldo = 0;
       for (int i = 0; i < stepsPerRev * 2; i++)
       {
         anticlockwise2();
@@ -323,9 +329,20 @@ void lluvia() {
 
   if (millis() > tiempo4 + 2000) {
 
+    medidaLluvia = analogRead(rainAnalog);
     tiempo4 = millis();
     Serial.print("LLuvia: ");
-    Serial.println(analogRead(rainAnalog));
+    Serial.println(medidaLluvia);
+    if((medidaLluvia < 1500) && (estadoToldo == 1)){
+
+      client.publish("esp32/lluvia", "1");
+      for (int i = 0; i < stepsPerRev * 2; i++)
+      {
+        anticlockwise2();
+        delayMicroseconds(motorSpeed);
+      }
+    }
+    
   }
 
   /*if ((digitalRead(rainDigital) == LOW) && (toldo == 1)) {
