@@ -46,16 +46,16 @@ socket.onmessage = function(e){
     if(djangoData.bombilla == 0)
     {
         imagenBombilla.src = 'static/bombillaapagada.png';
-        document.getElementById('TextoEntrada').innerHTML='Luz apagada';
+        document.getElementById('TextoBombilla').innerHTML='Luz apagada';
     } else if (djangoData.bombilla == 1)
     {
         imagenBombilla.src = 'static/bombillaencendida.png';
-        document.getElementById('TextoEntrada').innerHTML='Presencia detectada. Luz encendida';
+        document.getElementById('TextoBombilla').innerHTML='Presencia detectada. Luz encendida';
 
     }
     else {
         imagenBombilla.src = 'static/bombillaapagada.png';
-        document.getElementById('TextoEntrada').innerHTML='Luz apagada';
+        document.getElementById('TextoBombilla').innerHTML='Luz apagada';
     }
     /*print("djangoData.bombilla");*/
 

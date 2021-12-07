@@ -1,107 +1,92 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-    <!--<meta http-equiv="refresh" content="2" />-->
     <head>
         <meta charset="utf-8" />
         <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js></script>
         <title>Sistema dómotico</title>
         <link rel="stylesheet" href="{% static 'inicio.css' %}" />
 
-        </head>
-        <body>
-       
+        <meta name="viewport" content="width=device-width"/>
+
+    </head>
+    <body>
 
         <div id="container">
-            
-            <header>
-                <h1>Sistema domótico</h1>
-                <!--<img id="casa" src="images/controlador-de-la-tableta.png">-->
-                <!--<img src="images/controlador-de-la-tableta.png"
-                    alt="Imagen casa domótica"
-                    widht="100"
-                    height="100"> -->
-                
-                    <!--<img id="casa" src="images/controlador-de-la-tableta.png">-->
-                
-                </header>
 
-            
-                <section id="entrada">       
-                    <h1>Entrada</h1>  
+            <header>  
+                <h1>Sistema domótico</h1> 
+            </header>
+
+            <section id="entrada">
+
+                <h1>Entrada</h1>
+                
+                <div id="bombilla">
                     <img id="imagenBombilla"></img>
-                    <div id="TextoEntrada"></div>
-                    
-                   <!-- {% if bombilla == "1" %}
 
-                    
-                        <img id="bombilla" src="{% static 'bombillaencendida.png' %}">
-                        <p>Presencia detectada, luz encendida</p>
+                    <div id="TextoBombilla"></div>
+                </div>
+                
+            </section>
 
-                    {% elif bombilla == "0" %}   
-                        
-                        <img id="bombilla" src="{% static 'bombillaapagada.png' %}">
-                        <h5>Luz apagada</h5>
-                        
-                    {% else %}-->
-                    <!-- Este caso es por si la variable bombilla esta vacia porque aun no ha mandado nada el ESP32-->
-                     <!--   <img id="bombilla" src="{% static 'bombillaapagada.png' %}">
-                        <h5>Luz apagada</h5>
-
-                    {% endif %} -->
-                    
-                </section>
-            
             <section id="salon">
-                <!--<img id="bombillaencendida" src="images/bombilla encendida.png">-->
+
                 <h1>Salón</h1>
-                <div id="Datos">
-                    <class id="Icono">
+
+                <div id="datos">
+
+                    <div id="cajaTemperatura">
+
                         <img id="termometro" src="{% static 'Termometro.png' %}">
                         <div id="textoTemperatura"></div>
-                    </class>
-                    <class id="Icono"> <!-- ESTOS CLASS CREO QUE SE PUEDEN QUITAR-->
+                    
+                    </div>
+
+                    <div id="cajaHumedad">
+
                         <img id="humedad" src="{% static 'gota-agua.png' %}">
                         <div id="textoHumedad"></div>
-                    </class>
-                    <class id="Icono"> <!-- ESTOS CLASS CREO QUE SE PUEDEN QUITAR-->
+
+                    </div>
+
+                    <div id="cajaCo2">
+
                         <img id="co2" src="{% static 'co2.png' %}">
                         <div id="textoCo2">
-                            <p>xxx ppm</p>
+                            <p>xxxx ppm</p>
                         </div>
-                    </class>
 
-                    <div id="textoPersiana">
-
-                        <h3>Control persiana: </h3>
-                    </div>
-                    <div class="switch-button">
-                        
-                        <div id="boton1">
-                            <!-- Checkbox -->
-                            <input type="checkbox" name="switch-button" id="switch-label1" class="switch-button__checkbox"  value="Persiana " onclick="Persiana()">
-                            <!-- Botón -->
-                            <label for="switch-label1" class="switch-button__label"></label>
-                        </div>
                     </div>
 
-                 </div>
-                <div id="grafica"> 
+                    <div id="cajaPersiana">
+                        <div id="textoPersiana">
+                            <h3>Control persiana:</h3>
+                        </div>
+                        <!-- SWITCH TEMPERATURA-->
+                        <div class="switch-button">  
+                            <div id="boton1">
+                                <!-- Checkbox -->
+                                <input type="checkbox" name="switch-button" id="switch-label1" class="switch-button__checkbox"  value="Persiana " onclick="Persiana()">
+                                <!-- Botón -->
+                                <label for="switch-label1" class="switch-button__label"></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="grafica">
                     <canvas id="myChart"></canvas>
                 </div>
-    
+
             </section>
-            <section id="terraza">
-        
-                <h1>Terraza</h1>
-                <div id="textoLluvia"></div>
-                <div id="textoViento"></div>
-                <div id="textoRafaga"></div>
 
-                <div id="textoToldo">
+            <section id="jardin">
 
-                    <h3>Control toldo: </h3>
-                </div>
+                <h1>Jardín</h1>
+
+                <div id="textoToldo"></div>
+                <!-- SWITCH TOLDO-->
                 <div class="switch-button">
                     <div id="boton2">
                         <!-- Checkbox -->
@@ -110,16 +95,20 @@
                         <label for="switch-label2" class="switch-button__label"></label>
                     </div>
                 </div>
+
+
             </section>
-            
+
             <footer>
                 Roberto Jiménez &copy; 2021
             </footer>
+
         </div>
 
         <script src="{% static 'main.js' %}"></script>
 
         <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
 
         <script>
             function Persiana(){
@@ -142,35 +131,35 @@
             }
         </script>
 
-<script>
-    function Toldo(){
-        check = document.getElementById("switch-label2");
-        
-        
-        if(check.checked){
-            $.ajax({
-            url: "/subirToldo",
-            context: document.body
-            }).done(function() {
-            alert('{{mensajeViento}}');;
-            if('{{mensajeViento}}' == "Hace mucho viento, peligro de que se rompa el toldo")
-            {
-                check.checked = 0;
+        <script>
+            function Toldo(){
+                check = document.getElementById("switch-label2");
+                
+                
+                if(check.checked){
+                    $.ajax({
+                    url: "/subirToldo",
+                    context: document.body
+                    }).done(function() {
+                    alert('{{mensajeViento}}');;
+                    if('{{mensajeViento}}' == "Hace mucho viento, peligro de que se rompa el toldo")
+                    {
+                        check.checked = 0;
+                    }
+                    /*'{{estadoToldo}}' = 1;*/
+                    });
+                } else{
+                    $.ajax({
+                    url: "/bajarToldo",
+                    context: document.body
+                    }).done(function() {
+                    alert('Bajando toldo');;
+                    /*'{{estadoToldo}}' = 0;*/
+                    });
+                }
             }
-            /*'{{estadoToldo}}' = 1;*/
-            });
-    } else{
-        $.ajax({
-        url: "/bajarToldo",
-        context: document.body
-        }).done(function() {
-        alert('Bajando toldo');;
-        /*'{{estadoToldo}}' = 0;*/
-        });
-    }
+        </script>
 
-    }
-</script>
-       
     </body>
+
 </html>

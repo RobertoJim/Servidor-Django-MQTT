@@ -31,8 +31,8 @@ class SensoresConsumer(AsyncWebsocketConsumer):
                 ProyectoMQTT.mqtt.estadoToldo = 0 #Cambio el estado aqui en vez de en weather para que ambas variables cambien a la vez
                                                     #Si cambiaba el estado en weather, nunca llegaban a estar ambas a 1
 
-            print("mi estado toldo es: " + str(ProyectoMQTT.mqtt.estadoToldo))
-            print("mi mensaje lluvia es: " + str(ProyectoMQTT.mqtt.mensajeLluvia))
+            #print("mi estado toldo es: " + str(ProyectoMQTT.mqtt.estadoToldo))
+            #print("mi mensaje lluvia es: " + str(ProyectoMQTT.mqtt.mensajeLluvia))
             if(ProyectoMQTT.mqtt.mensajeLluvia == 1):
                 
                 ProyectoMQTT.mqtt.mensajeLluvia = 0

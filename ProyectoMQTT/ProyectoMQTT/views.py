@@ -48,4 +48,3 @@ def bajarToldo(request):
     bajarToldo()
 
     return HttpResponse()
-    

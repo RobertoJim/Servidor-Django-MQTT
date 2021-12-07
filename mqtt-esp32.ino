@@ -149,16 +149,14 @@ void callback(char* topic, byte* message, unsigned int length) {
   if (String(topic) == "esp32/persiana") {
     Serial.print("Changing output to ");
     if (messageTemp == "up") {
-      Serial.println("up persiana");
-      
+      Serial.println("up persiana");  
       for (int i = 0; i < stepsPerRev * 2; i++)
       {
         clockwise1();
         delayMicroseconds(motorSpeed);
       }
     }
-    else if (messageTemp == "down") {
-      
+    else if (messageTemp == "down") {    
       Serial.println("down persiana");
       for (int i = 0; i < stepsPerRev * 2; i++)
       {
