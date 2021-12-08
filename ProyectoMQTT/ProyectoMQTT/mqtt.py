@@ -11,6 +11,8 @@ mensajeLluvia= 0
 arrayTemperatura = ['', '', '', '', '', '', '', '', '', '', '', '']
 arrayHora = ['', '', '', '', '', '', '', '', '', '', '', '']
 
+puestaSol = 0 ; salidaSol = 0; abrirPersiana = 0
+
 
 #def comprobarLluvia():
 
@@ -28,6 +30,8 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("esp32/LED")
     client.subscribe("esp32/toldo")
     client.subscribe("esp32/lluvia")
+    client.subscribe("esp32/LDR_persiana")
+    
     
 
 def on_message(client, userdata, msg):
@@ -36,6 +40,8 @@ def on_message(client, userdata, msg):
     global bajaToldoLluvia; global alertaBajarToldoLluvia; global estadoToldo; global mensajeLluvia
     
     global arrayTemperatura; global arrayHora
+
+    global salidaSol; global puestaSol; global abrirPersiana
     
     if str(msg.topic) == "esp32/sensor":
 
@@ -70,6 +76,15 @@ def on_message(client, userdata, msg):
     if str(msg.topic) == "esp32/lluvia": 
         mensajeLluvia= 1
 
+    if str(msg.topic) == "esp32/LDR_persiana": 
+
+        global salidaSol, puestaSol
+        
+        hora = float((str(datetime.now().hour) + "." + str(datetime.now().minute)))
+        if((hora > salidaSol) and (hora < puestaSol)):
+            client.publish("esp32/persiana","up")
+            abrirPersiana = 1
+
 
 
 
@@ -77,6 +92,6 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("192.168.1.35", 1883, 60)
+client.connect("192.168.1.34", 1883, 60)
 #client.loop_start()
 #client.loop_start()

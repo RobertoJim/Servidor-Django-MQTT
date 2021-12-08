@@ -12,7 +12,7 @@ const char* ssid = "PUTODIGI";
 const char* password = "123tunometescabra!";
 
 // Add your MQTT Broker IP address, example:
-const char* mqtt_server = "192.168.1.35";
+const char* mqtt_server = "192.168.1.34";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -28,10 +28,11 @@ char out[256];
 #define BME_MOSI 17 //SDA
 #define BME_CS 4 //CS*/
 
-#define pinLDR 34
+#define pinLDR_LED 34
 #define pinLED 13
 #define sensorPIR 18
 
+#define pinLDR_persiana 32
 //Persiana
 #define motor1Pin1 23    // 28BYJ48 In1
 #define motor1Pin2 15    // 28BYJ48 In2
@@ -59,10 +60,11 @@ float pressure = 0;
 float CO2 = 0;
 
 int PIR = 0;
-int tiempo3 = 0, tiempo4=0;
+int tiempo3 = 0, tiempo4=0, tiempo5 = 0;
 int led = 0;
 int medidaLluvia = 0;
 int estadoToldo = 0;
+int estadoPersiana = 0;
 
 const int motorSpeed = 1200;   //variable para fijar la velocidad
 int stepCounter1 = 0;     // contador para los pasos
@@ -149,7 +151,8 @@ void callback(char* topic, byte* message, unsigned int length) {
   if (String(topic) == "esp32/persiana") {
     Serial.print("Changing output to ");
     if (messageTemp == "up") {
-      Serial.println("up persiana");  
+      Serial.println("up persiana"); 
+      estadoPersiana = 1; 
       for (int i = 0; i < stepsPerRev * 2; i++)
       {
         clockwise1();
@@ -158,6 +161,7 @@ void callback(char* topic, byte* message, unsigned int length) {
     }
     else if (messageTemp == "down") {    
       Serial.println("down persiana");
+      estadoPersiana = 0;
       for (int i = 0; i < stepsPerRev * 2; i++)
       {
         anticlockwise1();
@@ -296,7 +300,7 @@ void LED() {
 
   PIR = digitalRead(sensorPIR);//Leemos el estado del del sensor PIR
   if(led==0){ //Este if hace que no se mande el topic led = 1 todas las veces que entra en el bucle durante los 10s
-    if ((PIR == 1) && (analogRead(pinLDR) < 600))
+    if ((PIR == 1) && (analogRead(pinLDR_LED) < 600))
     {
       digitalWrite(pinLED, HIGH);//Encendemos la luz
       client.publish("esp32/LED", "1");
@@ -308,8 +312,8 @@ void LED() {
     tiempo3 = millis();
     Serial.print("Luz: ");
     Serial.println(digitalRead(pinLED));
-    Serial.print("LDR: ");
-    Serial.println(analogRead(pinLDR));
+    Serial.print("LDR LED: ");
+    Serial.println(analogRead(pinLDR_LED));
     if (digitalRead(pinLED) == 1) {
       digitalWrite(pinLED, LOW);//Luego la apagamos
 
@@ -355,6 +359,26 @@ void lluvia() {
     }*/
 }
 
+void LDR_persiana(){
+
+    if (millis() > tiempo5 + 2000) {
+    tiempo5 = millis();
+    Serial.print("LDR persiana: ");
+    Serial.println(analogRead(pinLDR_persiana));
+    Serial.print("Mi estado persiana es :");
+    Serial.println(estadoPersiana);
+
+    if ((analogRead(pinLDR_persiana) < 600) and (estadoPersiana == 0) )
+    {
+        client.publish("esp32/LDR_persiana", "1");
+    }
+
+  }
+    
+}
+  
+
+
 void loop() {
   if (!client.connected()) {
     reconnect();
@@ -372,5 +396,6 @@ void loop() {
   }
   LED();
   lluvia();
+  LDR_persiana();
 
 }

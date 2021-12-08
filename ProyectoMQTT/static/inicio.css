@@ -230,6 +230,31 @@ footer{
     padding-top: 2vh;
 }
 
+#ControlToldo{
+    height: 17.75vh;
+    display:flex;
+    align-items: center;
+}
+
+
+#DatosMeteorologicos{
+
+    border-top: 0.1vh dashed gray;
+    height: 17.75vh;
+    /*display:flex;
+    align-items: center;*/
+}
+
+#titulo{
+    margin-top: 2vh;
+
+}
+
+#datosMet{
+    margin-top: 2vh;
+}
+
+
 
 
 /* CODIGO BOTON PERSIANA */

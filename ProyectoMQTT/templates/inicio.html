@@ -25,7 +25,7 @@
                 <div id="bombilla">
                     <img id="imagenBombilla"></img>
 
-                    <div id="TextoBombilla"></div>
+                    <h4 id="TextoBombilla"></h4>
                 </div>
                 
             </section>
@@ -39,23 +39,23 @@
                     <div id="cajaTemperatura">
 
                         <img id="termometro" src="{% static 'Termometro.png' %}">
-                        <div id="textoTemperatura"></div>
+                        <h4 id="textoTemperatura"></h4>
                     
                     </div>
 
                     <div id="cajaHumedad">
 
                         <img id="humedad" src="{% static 'gota-agua.png' %}">
-                        <div id="textoHumedad"></div>
+                        <h4 id="textoHumedad"></h4>
 
                     </div>
 
                     <div id="cajaCo2">
 
                         <img id="co2" src="{% static 'co2.png' %}">
-                        <div id="textoCo2">
+                        <h4 id="textoCo2">
                             <p>xxxx ppm</p>
-                        </div>
+                        </h4>
 
                     </div>
 
@@ -85,15 +85,34 @@
 
                 <h1>Jardín</h1>
 
-                <div id="textoToldo"></div>
-                <!-- SWITCH TOLDO-->
-                <div class="switch-button">
-                    <div id="boton2">
-                        <!-- Checkbox -->
-                        <input type="checkbox" name="switch-button" id="switch-label2" class="switch-button__checkbox"  value="Toldo " onclick="Toldo()">
-                        <!-- Botón -->
-                        <label for="switch-label2" class="switch-button__label"></label>
+                <div id="ControlToldo">
+                    <div id="textoToldo">
+                        <h3>Control toldo: </h3>
                     </div>
+                    <!-- SWITCH TOLDO-->
+                    <div class="switch-button">
+                        <div id="boton2">
+                            <!-- Checkbox -->
+                            <input type="checkbox" name="switch-button" id="switch-label2" class="switch-button__checkbox"  value="Toldo " onclick="Toldo()">
+                            <!-- Botón -->
+                            <label for="switch-label2" class="switch-button__label"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="DatosMeteorologicos">
+
+                    <div id="titulo">
+                        <h3>Los datos meteorológicos esperados para las </h3>
+                        <h3 id="hora"></h3>
+                    </div>
+                   
+                    <div id="datosMet">
+                        <h4 id="textoLluvia"></h4>
+                        <h4 id="textoViento"></h4>
+                        <h4 id="textoRafaga"></h4>
+                    </div>
+                    
                 </div>
 
 

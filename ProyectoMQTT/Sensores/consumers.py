@@ -5,7 +5,7 @@ from asyncio import sleep
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 import ProyectoMQTT
-from ProyectoMQTT.mqtt import arrayHora, arrayTemperatura, mensajeLed, temperatura, humedad, alertaBajarToldoLluvia, estadoToldo, mensajeLluvia
+from ProyectoMQTT.mqtt import arrayHora, arrayTemperatura, mensajeLed, temperatura, humedad, alertaBajarToldoLluvia, estadoToldo, abrirPersiana,  mensajeLluvia
 from ProyectoMQTT.weather import precipitacion, velocidadViento, rafagaViento, hora
 
 from datetime import datetime
@@ -21,7 +21,8 @@ class SensoresConsumer(AsyncWebsocketConsumer):
             'bombilla': ProyectoMQTT.mqtt.mensajeLed, 'temperatura': ProyectoMQTT.mqtt.temperatura,  'humedad': ProyectoMQTT.mqtt.humedad,
             'lluvia': ProyectoMQTT.weather.precipitacion,'velocidadViento': ProyectoMQTT.weather.velocidadViento,'rafagaViento': ProyectoMQTT.weather.rafagaViento,
             'horaLluvia': ProyectoMQTT.weather.hora, 'estadoToldo' :ProyectoMQTT.mqtt.estadoToldo,
-            'alertaToldo' :ProyectoMQTT.mqtt.alertaBajarToldoLluvia, 'mensajeLluvia' :ProyectoMQTT.mqtt.mensajeLluvia}))
+            'alertaToldo' :ProyectoMQTT.mqtt.alertaBajarToldoLluvia, 'mensajeLluvia' :ProyectoMQTT.mqtt.mensajeLluvia, 
+            'abrirPersiana' : ProyectoMQTT.mqtt.abrirPersiana}))
 
             #print("Mi estado toldo ess" + str(ProyectoMQTT.weather.estadoToldo))
             #print("Mi alerta lluvia es " + str(ProyectoMQTT.mqtt.alertaBajarToldoLluvia))
@@ -38,6 +39,10 @@ class SensoresConsumer(AsyncWebsocketConsumer):
                 ProyectoMQTT.mqtt.mensajeLluvia = 0
                 ProyectoMQTT.mqtt.estadoToldo = 0 #Cambio el estado aqui en vez de en weather para que ambas variables cambien a la vez
                                                     #Si cambiaba el estado en weather, nunca llegaban a estar ambas a 1
+
+            print("Abrir persiana " + str(ProyectoMQTT.mqtt.abrirPersiana))
+            if(ProyectoMQTT.mqtt.abrirPersiana == 1):
+                ProyectoMQTT.mqtt.abrirPersiana = 0
                 
 
 

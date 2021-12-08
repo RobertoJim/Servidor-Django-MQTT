@@ -73,14 +73,23 @@ socket.onmessage = function(e){
         }
     }
 
+    if(djangoData.abrirPersiana == "1")
+    {
+        alert("Hay poca luz y el sol esta fuera, abriendo persiana");
+        document.getElementById("switch-label1").checked = 1;
+    }
+
 
 
     document.getElementById('textoTemperatura').innerHTML= String(djangoData.temperatura) + " ºC";
     document.getElementById('textoHumedad').innerHTML= String(djangoData.humedad) + " %";
     //document.getElementById('textoCo2').innerHTML= String(djangoData.co2) + " ppm";
-    document.getElementById('textoLluvia').innerHTML= "Lluvia a las " + String(djangoData.horaLluvia) + ": " + String(djangoData.lluvia) + " %";
-    document.getElementById('textoViento').innerHTML= "Velocidad viento a las " + String(djangoData.horaLluvia) + ": " + + String(djangoData.velocidadViento) + " m/s";
-    document.getElementById('textoRafaga').innerHTML= "Rafaga viento a las " + String(djangoData.horaLluvia) + ": " + String(djangoData.rafagaViento) + " m/s";
+
+    document.getElementById('hora').innerHTML = String(djangoData.horaLluvia) + " son:";
+
+    document.getElementById('textoLluvia').innerHTML= "Lluvia: " + String(djangoData.lluvia) + " %";
+    document.getElementById('textoViento').innerHTML= "Velocidad viento: " + String(djangoData.velocidadViento) + " m/s";
+    document.getElementById('textoRafaga').innerHTML= "Rafaga viento: " + String(djangoData.rafagaViento) + " m/s";
    
     
     
