@@ -61,7 +61,7 @@ socket.onmessage = function(e){
 
     if(djangoData.estadoToldo == "0"){
         document.getElementById("switch-label2").checked = 0;
-    } else if (djangoData.estadoToldo == "1"){
+    } else  if (djangoData.estadoToldo == "1"){
         document.getElementById("switch-label2").checked = 1;
         if(djangoData.alertaToldo == 1)
         {
@@ -76,6 +76,24 @@ socket.onmessage = function(e){
     if(djangoData.abrirPersiana == "1")
     {
         alert("Hay poca luz y el sol esta fuera, abriendo persiana");
+        document.getElementById("letterE").checked = 1;
+    }
+
+    //Para que se actualice el slider en 2 navegadores si estan 2 abiertos a la vez
+    if(djangoData.estadoPersiana == "1")
+    {
+        document.getElementById("letterA").checked = 1;
+    } else if (djangoData.estadoPersiana == "2")
+    {
+        document.getElementById("letterB").checked = 1;
+    } else if (djangoData.estadoPersiana == "3")
+    {
+        document.getElementById("letterC").checked = 1;
+    }else if(djangoData.estadoPersiana == "4")
+    {
+        document.getElementById("letterD").checked = 1;
+    }else if(djangoData.estadoPersiana == "5")
+    {
         document.getElementById("letterE").checked = 1;
     }
 

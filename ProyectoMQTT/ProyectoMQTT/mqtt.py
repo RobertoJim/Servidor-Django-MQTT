@@ -11,7 +11,7 @@ mensajeLluvia= 0
 arrayTemperatura = ['', '', '', '', '', '', '', '', '', '', '', '']
 arrayHora = ['', '', '', '', '', '', '', '', '', '', '', '']
 
-puestaSol = 0 ; salidaSol = 0; abrirPersiana = 0
+puestaSol = 0 ; salidaSol = 0; abrirPersiana = 0; estadoPersiana = 1
 
 
 #def comprobarLluvia():
@@ -31,13 +31,15 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("esp32/toldo")
     client.subscribe("esp32/lluvia")
     client.subscribe("esp32/LDR_persiana")
+    client.subscribe("esp32/estados")
     
     
 
 def on_message(client, userdata, msg):
 
     global SensorJson; global mensajeLed; global temperatura; global humedad ; global presion 
-    global bajaToldoLluvia; global alertaBajarToldoLluvia; global estadoToldo; global mensajeLluvia
+    global bajaToldoLluvia; global alertaBajarToldoLluvia; global mensajeLluvia
+    global estadoPersiana; global estadoToldo
     
     global arrayTemperatura; global arrayHora
 
@@ -83,8 +85,17 @@ def on_message(client, userdata, msg):
         hora = float((str(datetime.now().hour) + "." + str(datetime.now().minute)))
         if((hora > salidaSol) and (hora < puestaSol)):
             client.publish("esp32/persiana","5")
+            estadoPersiana = 5
             abrirPersiana = 1
+    
+    if str(msg.topic) == "esp32/estados":
+        if(str(msg.payload)[2:][:-1] != "solicitud"):
+            estadoToldo = json.loads(msg.payload)['estadoToldo']
+            estadoPersiana = json.loads(msg.payload)['estadoPersiana']
 
+
+def iniciarEstados():
+    client.publish("esp32/estados", "solicitud")
 
 
 

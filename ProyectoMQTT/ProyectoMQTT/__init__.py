@@ -5,6 +5,7 @@ from . import weather
 
 weather.openWeatherMap()  
 weather.comprobarMes()
+mqtt.iniciarEstados()
 mqtt.client.loop_start()
 
 #aqui deberia de haber una funcion que sincronize los estados toldo y persiana con el esp32, para que cuando visites la interfaz

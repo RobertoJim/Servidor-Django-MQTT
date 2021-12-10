@@ -330,7 +330,7 @@ footer{
   .letter-slider label {
     color: #bebebe; 
     float: left;
-    width: 16.6666666667%;
+    width: 20%;
     text-align: center;
     cursor: pointer;
     transition: color .5s;
@@ -360,21 +360,21 @@ footer{
     left: 8.333333333333332%;
   }
   .letter-slider input:checked:nth-of-type(2) ~ label:last-of-type::after {
-    left: 25%;
+    left: 28.33333333333333%;
   }
   .letter-slider input:checked:nth-of-type(3) ~ label:last-of-type::after {
-    left: 41.66666666666667%;
+    left: 48.66666666666667%;
   }
   .letter-slider input:checked:nth-of-type(4) ~ label:last-of-type::after {
-    left: 58.333333333333336%;
+    left: 68.333333333333339%;
   }
   .letter-slider input:checked:nth-of-type(5) ~ label:last-of-type::after {
-    left: 75%;
+    left: 88.333333333333339%;
   }
-  .letter-slider input:checked:nth-of-type(6) ~ label:last-of-type::after {
+ 
+  /*.letter-slider input:checked:nth-of-type(6) ~ label:last-of-type::after {
     left: 91.66666666666666%;
-  }
-  
+  }*/
 
 
 

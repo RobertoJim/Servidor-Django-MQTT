@@ -18,6 +18,7 @@ api_key = "6159431fde89157c2c7bb8ff8a7e841a"
 lat = "36.720969"
 lon = "-4.474427"
 
+
 velocidadViento = 0; rafagaViento = 0; precipitacion = 0 #Cuando arranca el sistema el toldo esta cerrado
 mensajeViento = ""
 
@@ -80,10 +81,12 @@ def recogerDatos():
 
 def comprobarViento():
 
-    
+
+
     if (velocidadViento < 7) and (rafagaViento < 12):
 
         ProyectoMQTT.mqtt.estadoToldo = 1
+        print("He entrado donde deberia de cambiar estado toldo")
         client.publish("esp32/toldo","up")
 
 

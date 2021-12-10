@@ -5,7 +5,7 @@ from asyncio import sleep
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 import ProyectoMQTT
-from ProyectoMQTT.mqtt import arrayHora, arrayTemperatura, mensajeLed, temperatura, humedad, alertaBajarToldoLluvia, estadoToldo, abrirPersiana,  mensajeLluvia
+from ProyectoMQTT.mqtt import arrayHora, arrayTemperatura, mensajeLed, temperatura, humedad, alertaBajarToldoLluvia, estadoPersiana, abrirPersiana,  mensajeLluvia, estadoToldo
 from ProyectoMQTT.weather import precipitacion, velocidadViento, rafagaViento, hora
 
 from datetime import datetime
@@ -22,10 +22,12 @@ class SensoresConsumer(AsyncWebsocketConsumer):
             'lluvia': ProyectoMQTT.weather.precipitacion,'velocidadViento': ProyectoMQTT.weather.velocidadViento,'rafagaViento': ProyectoMQTT.weather.rafagaViento,
             'horaLluvia': ProyectoMQTT.weather.hora, 'estadoToldo' :ProyectoMQTT.mqtt.estadoToldo,
             'alertaToldo' :ProyectoMQTT.mqtt.alertaBajarToldoLluvia, 'mensajeLluvia' :ProyectoMQTT.mqtt.mensajeLluvia, 
-            'abrirPersiana' : ProyectoMQTT.mqtt.abrirPersiana}))
+            'abrirPersiana' : ProyectoMQTT.mqtt.abrirPersiana, 'estadoPersiana' : ProyectoMQTT.mqtt.estadoPersiana}))
 
-            #print("Mi estado toldo ess" + str(ProyectoMQTT.weather.estadoToldo))
+            #print("Mi estado toldo ess" + str(ProyectoMQTT.mqtt.estadoToldo))
             #print("Mi alerta lluvia es " + str(ProyectoMQTT.mqtt.alertaBajarToldoLluvia))
+
+            print("Mi estado persiana es  " + str(ProyectoMQTT.mqtt.estadoPersiana))
 
             if(ProyectoMQTT.mqtt.alertaBajarToldoLluvia == 1):
                 ProyectoMQTT.mqtt.alertaBajarToldoLluvia = 0

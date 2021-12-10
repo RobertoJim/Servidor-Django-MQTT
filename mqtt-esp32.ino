@@ -19,8 +19,8 @@ PubSubClient client(espClient);
 long lastMsg = 0;
 char msg[50];
 int value = 0;
-StaticJsonDocument <256> doc;
-char out[256];
+StaticJsonDocument <256> doc, doc2;
+char out[256], out2[256];
 
 //uncomment the following lines if you're using SPI
 /*#define BME_SCK 5 //SCL
@@ -64,7 +64,7 @@ int tiempo3 = 0, tiempo4=0, tiempo5 = 0;
 int led = 0;
 int medidaLluvia = 0;
 int estadoToldo = 0;
-int estadoPersiana = 0;
+int estadoPersiana = 0; //Variable para ver si persiana esta subida o no, si esta a posicion4 o menos se considera bajada
 
 const int motorSpeed = 1200;   //variable para fijar la velocidad
 int stepCounter1 = 0;     // contador para los pasos
@@ -279,6 +279,14 @@ void callback(char* topic, byte* message, unsigned int length) {
       }
     }
   }
+  if (String(topic) == "esp32/estados") {
+    if (messageTemp == "solicitud") {
+      doc2["estadoToldo"] = estadoToldo;
+      doc2["estadoPersiana"] = posPersianaActual;
+      serializeJson(doc2, out2);
+      client.publish("esp32/estados", out2);
+    }
+  }
 }
 
 void reconnect() {
@@ -291,6 +299,7 @@ void reconnect() {
       // Subscribe
       client.subscribe("esp32/persiana");
       client.subscribe("esp32/toldo");
+      client.subscribe("esp32/estados");
       //Mando primer mensaje que para el led aparezca en la inerfaz apagado
       client.publish("esp32/LED", "0"); //Para que aparezca la imagen de bombilla apagada en la interfaz al iniciar la aplicacion
       Serial.println("Mando este primre mensaje");

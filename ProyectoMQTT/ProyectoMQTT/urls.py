@@ -22,8 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('Grafica/', include('Sensores.urls')),
     path('', MQTT),
-    path('subirPersiana', subirPersiana),
-    path('bajarPersiana', bajarPersiana),
     path('subirToldo', subirToldo),
     path('bajarToldo', bajarToldo),
     path('Persiana1', Persiana1),
