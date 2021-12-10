@@ -257,7 +257,7 @@ footer{
 
 
 
-/* CODIGO BOTON PERSIANA */
+/* CODIGO BOTON TOLDO */
 
 :root {
     --color-green: #00a878;
@@ -296,3 +296,87 @@ footer{
 .switch-button .switch-button__checkbox:checked + .switch-button__label:before {
     transform: translateX(2rem);
 }
+
+
+
+
+
+/*CODIGO BOTON PERSIANA */
+
+
+   h1 {
+     text-align: center;
+     font-weight: 300;
+     text-transform: uppercase;
+     color: #ccc;
+     text-shadow: -1px -1px 0 black;
+     letter-spacing: .05em;
+   }
+  .letter-slider {
+    border-bottom: 4px solid #000;
+    box-shadow: 0 1px 0 0 rgba(255,255,255,0.15);
+    padding-bottom: 0.25em;
+    margin: 1em auto;
+    position: relative;
+    width: 20em;
+  }
+  .letter-slider::after{
+    content: '';
+    display: table; width: 100%; clear: both;
+  }
+  .letter-slider input[type="radio"] {
+    display: none;
+  }
+  .letter-slider label {
+    color: #bebebe; 
+    float: left;
+    width: 16.6666666667%;
+    text-align: center;
+    cursor: pointer;
+    transition: color .5s;
+    text-shadow: -1px -1px 0 black;
+  }
+  .letter-slider label:hover {
+    text-decoration: underline;
+  }
+  .letter-slider input:checked + label {
+    color: white;
+  }
+  .letter-slider label:last-of-type::after {
+    display: block;
+    width: 0;
+    height: 0;
+    content: "";
+    border: 0.6em solid transparent;
+    border-top-width: 0;
+    border-bottom-color: #1CA2FF;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    margin-left: -0.6em;
+    transition: left 0.5s;
+  }
+  .letter-slider input:checked:nth-of-type(1) ~ label:last-of-type::after {
+    left: 8.333333333333332%;
+  }
+  .letter-slider input:checked:nth-of-type(2) ~ label:last-of-type::after {
+    left: 25%;
+  }
+  .letter-slider input:checked:nth-of-type(3) ~ label:last-of-type::after {
+    left: 41.66666666666667%;
+  }
+  .letter-slider input:checked:nth-of-type(4) ~ label:last-of-type::after {
+    left: 58.333333333333336%;
+  }
+  .letter-slider input:checked:nth-of-type(5) ~ label:last-of-type::after {
+    left: 75%;
+  }
+  .letter-slider input:checked:nth-of-type(6) ~ label:last-of-type::after {
+    left: 91.66666666666666%;
+  }
+  
+
+
+
+
+

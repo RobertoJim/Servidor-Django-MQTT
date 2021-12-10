@@ -8,11 +8,11 @@
 
 
 // Replace the next variables with your SSID/Password combination
-const char* ssid = "PUTODIGI";
-const char* password = "123tunometescabra!";
+const char* ssid = "MIWIFI_RHpA";
+const char* password = "etJ476Pu";
 
 // Add your MQTT Broker IP address, example:
-const char* mqtt_server = "192.168.1.34";
+const char* mqtt_server = "192.168.1.146";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -70,6 +70,9 @@ const int motorSpeed = 1200;   //variable para fijar la velocidad
 int stepCounter1 = 0;     // contador para los pasos
 int stepCounter2 = 0;     // contador para los pasos
 const int stepsPerRev = 2048;  // pasos para una vuelta completa
+
+int posPersianaActual = 1;
+int posPersianaAnterior = 1;
 
 //secuencia media fase
 const int numSteps = 8;
@@ -150,22 +153,107 @@ void callback(char* topic, byte* message, unsigned int length) {
   // Changes the output state according to the message
   if (String(topic) == "esp32/persiana") {
     Serial.print("Changing output to ");
-    if (messageTemp == "up") {
-      Serial.println("up persiana"); 
-      estadoPersiana = 1; 
-      for (int i = 0; i < stepsPerRev * 2; i++)
-      {
-        clockwise1();
-        delayMicroseconds(motorSpeed);
-      }
-    }
-    else if (messageTemp == "down") {    
-      Serial.println("down persiana");
+    if (messageTemp == "1") {
+      Serial.println(" persiana 1"); 
       estadoPersiana = 0;
-      for (int i = 0; i < stepsPerRev * 2; i++)
+      posPersianaAnterior = posPersianaActual; 
+      posPersianaActual = 1;
+      if(posPersianaAnterior < posPersianaActual)
       {
-        anticlockwise1();
-        delayMicroseconds(motorSpeed);
+        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaActual-posPersianaAnterior)) * 2; i++)
+        {
+          clockwise1();
+          delayMicroseconds(motorSpeed);
+        }
+      } else if(posPersianaAnterior > posPersianaActual)
+      {
+        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaAnterior-posPersianaActual)) * 2; i++)
+        {
+          anticlockwise1();
+          delayMicroseconds(motorSpeed);
+        }
+      }
+      
+    }
+    else if (messageTemp == "2") {    
+      Serial.println("persiana 2");
+      estadoPersiana = 0;
+      posPersianaAnterior = posPersianaActual; 
+      posPersianaActual = 2;
+      if(posPersianaAnterior < posPersianaActual)
+      {
+        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaActual-posPersianaAnterior)) * 2; i++)
+        {
+          clockwise1();
+          delayMicroseconds(motorSpeed);
+        }
+      } else if(posPersianaAnterior > posPersianaActual)
+      {
+        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaAnterior-posPersianaActual)) * 2; i++)
+        {
+          anticlockwise1();
+          delayMicroseconds(motorSpeed);
+        }
+      }
+    }else if (messageTemp == "3") {    
+      Serial.println("persiana 3");
+      estadoPersiana = 0;
+      posPersianaAnterior = posPersianaActual; 
+      posPersianaActual = 3;
+       if(posPersianaAnterior < posPersianaActual)
+      {
+        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaActual-posPersianaAnterior)) * 2; i++)
+        {
+          clockwise1();
+          delayMicroseconds(motorSpeed);
+        }
+      } else if(posPersianaAnterior > posPersianaActual)
+      {
+        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaAnterior-posPersianaActual)) * 2; i++)
+        {
+          anticlockwise1();
+          delayMicroseconds(motorSpeed);
+        }
+      }
+    }else if (messageTemp == "4") {    
+      Serial.println("persiana 4");
+      estadoPersiana = 0;
+      posPersianaAnterior = posPersianaActual; 
+      posPersianaActual = 4;
+       if(posPersianaAnterior < posPersianaActual)
+      {
+        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaActual-posPersianaAnterior)) * 2; i++)
+        {
+          clockwise1();
+          delayMicroseconds(motorSpeed);
+        }
+      } else if(posPersianaAnterior > posPersianaActual)
+      {
+        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaAnterior-posPersianaActual)) * 2; i++)
+        {
+          anticlockwise1();
+          delayMicroseconds(motorSpeed);
+        }
+      }
+    }else if (messageTemp == "5") {    
+      Serial.println("persiana 5");
+      estadoPersiana = 1;
+      posPersianaAnterior = posPersianaActual; 
+      posPersianaActual = 5;
+      if(posPersianaAnterior < posPersianaActual)
+      {
+        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaActual-posPersianaAnterior)) * 2; i++)
+        {
+          clockwise1();
+          delayMicroseconds(motorSpeed);
+        }
+      } else if(posPersianaAnterior > posPersianaActual)
+      {
+        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaAnterior-posPersianaActual)) * 2; i++)
+        {
+          anticlockwise1();
+          delayMicroseconds(motorSpeed);
+        }
       }
     }
   }

@@ -56,7 +56,7 @@ def recogerDatos():
         velocidadViento = data["hourly"][1]["wind_speed"] # Estoy comprobando la velocidad del viento dentro de una hora, quizas seria mejor comprobar la actual
         rafagaViento = data["hourly"][1]["wind_gust"]
 
-        if (velocidadViento < 7) and (rafagaViento < 11): #Guardo el mensaje para que aparezca en la alerta al pulsar el boton
+        if (velocidadViento < 7) and (rafagaViento < 12): #Guardo el mensaje para que aparezca en la alerta al pulsar el boton
             mensajeViento = "Subiendo toldo"
             
         else:          
@@ -81,7 +81,7 @@ def recogerDatos():
 def comprobarViento():
 
     
-    if (velocidadViento < 7) and (rafagaViento < 11):
+    if (velocidadViento < 7) and (rafagaViento < 12):
 
         ProyectoMQTT.mqtt.estadoToldo = 1
         client.publish("esp32/toldo","up")

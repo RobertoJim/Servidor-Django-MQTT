@@ -76,7 +76,7 @@ socket.onmessage = function(e){
     if(djangoData.abrirPersiana == "1")
     {
         alert("Hay poca luz y el sol esta fuera, abriendo persiana");
-        document.getElementById("switch-label1").checked = 1;
+        document.getElementById("letterE").checked = 1;
     }
 
 

@@ -49,3 +49,34 @@ def bajarToldo(request):
     client.publish("esp32/toldo","down")  
 
     return HttpResponse()
+
+
+def Persiana1(request):
+
+    client.publish("esp32/persiana", "1")
+
+    return HttpResponse()
+
+def Persiana2(request):
+
+    client.publish("esp32/persiana", "2")
+
+    return HttpResponse()
+
+def Persiana3(request):
+
+    client.publish("esp32/persiana", "3")
+
+    return HttpResponse()
+
+def Persiana4(request):
+
+    client.publish("esp32/persiana", "4")
+
+    return HttpResponse()
+
+def Persiana5(request):
+
+    client.publish("esp32/persiana", "5")
+
+    return HttpResponse()

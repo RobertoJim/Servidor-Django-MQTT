@@ -26,4 +26,9 @@ urlpatterns = [
     path('bajarPersiana', bajarPersiana),
     path('subirToldo', subirToldo),
     path('bajarToldo', bajarToldo),
+    path('Persiana1', Persiana1),
+    path('Persiana2', Persiana2),
+    path('Persiana3', Persiana3),
+    path('Persiana4', Persiana4),
+    path('Persiana5', Persiana5),
 ]

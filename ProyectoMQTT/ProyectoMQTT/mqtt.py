@@ -82,7 +82,7 @@ def on_message(client, userdata, msg):
         
         hora = float((str(datetime.now().hour) + "." + str(datetime.now().minute)))
         if((hora > salidaSol) and (hora < puestaSol)):
-            client.publish("esp32/persiana","up")
+            client.publish("esp32/persiana","5")
             abrirPersiana = 1
 
 
@@ -92,6 +92,6 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("192.168.1.34", 1883, 60)
+client.connect("192.168.1.146", 1883, 60)
 #client.loop_start()
 #client.loop_start()

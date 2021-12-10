@@ -64,14 +64,30 @@
                             <h3>Control persiana:</h3>
                         </div>
                         <!-- SWITCH TEMPERATURA-->
+                        <!--
                         <div class="switch-button">  
-                            <div id="boton1">
+                            <div id="boton1">-->
                                 <!-- Checkbox -->
-                                <input type="checkbox" name="switch-button" id="switch-label1" class="switch-button__checkbox"  value="Persiana " onclick="Persiana()">
+                               <!-- <input type="checkbox" name="switch-button" id="switch-label1" class="switch-button__checkbox"  value="Persiana " onclick="Persiana()">-->
                                 <!-- Botón -->
-                                <label for="switch-label1" class="switch-button__label"></label>
+                               <!-- <label for="switch-label1" class="switch-button__label"></label>
                             </div>
-                        </div>
+                        </div>-->
+
+                        <div class="letter-slider">
+                            <input id="letterA" type="radio" name="letter" onclick="Persiana1()">
+                            <label for="letterA">1</label>
+                            <input id="letterB" type="radio" name="letter" onclick="Persiana2()">
+                            <label for="letterB">2</label>
+                            <input id="letterC" type="radio" name="letter" onclick="Persiana3()">
+                            <label for="letterC">3</label>
+                            <input id="letterD" type="radio" name="letter" onclick="Persiana4()">
+                            <label for="letterD">4</label>
+                            <input id="letterE" type="radio" name="letter" onclick="Persiana5()">
+                            <label for="letterE">5</label>
+                            
+                          </div> 
+
                     </div>
                 </div>
 
@@ -129,7 +145,7 @@
         <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
 
-        <script>
+        <!--<script>
             function Persiana(){
                 check = document.getElementById("switch-label1");
                 if(check.checked){
@@ -148,7 +164,64 @@
                 });
             }
             }
+        </script>-->
+
+        <script>
+            function Persiana1(){
+                $.ajax({
+                url: "/Persiana1",
+                context: document.body
+                }).done(function() {
+                alert('Moviendo persiana a posicion 1');;
+                });
+            }
         </script>
+
+        <script>
+            function Persiana2(){
+                $.ajax({
+                url: "/Persiana2",
+                context: document.body
+                }).done(function() {
+                alert('Moviendo persiana a posicion 2');;
+                });
+            }
+        </script>
+
+        <script>
+            function Persiana3(){
+                $.ajax({
+                url: "/Persiana3",
+                context: document.body
+                }).done(function() {
+                alert('Moviendo persiana a posicion 3');;
+                });
+            }
+        </script>
+
+        <script>
+            function Persiana4(){
+                $.ajax({
+                url: "/Persiana4",
+                context: document.body
+                }).done(function() {
+                alert('Moviendo persiana a posicion 4');;
+                });
+            }
+        </script>
+
+        <script>
+            function Persiana5(){
+                $.ajax({
+                url: "/Persiana5",
+                context: document.body
+                }).done(function() {
+                alert('Moviendo persiana a posicion 5');;
+                });
+            }
+        </script>
+
+
 
         <script>
             function Toldo(){
