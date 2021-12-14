@@ -4,7 +4,7 @@ from . import weather
 
 
 weather.openWeatherMap()  
-weather.comprobarMes()
+weather.comprobarSalidaPuestaSol()
 mqtt.iniciarEstados()
 mqtt.client.loop_start()
 

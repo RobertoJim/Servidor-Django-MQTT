@@ -82,9 +82,11 @@ def on_message(client, userdata, msg):
 
         global salidaSol, puestaSol
         
+        
         hora = float((str(datetime.now().hour) + "." + str(datetime.now().minute)))
         if((hora > salidaSol) and (hora < puestaSol)):
             client.publish("esp32/persiana","5")
+            print("Entro aqui")
             estadoPersiana = 5
             abrirPersiana = 1
     

@@ -27,7 +27,7 @@ class SensoresConsumer(AsyncWebsocketConsumer):
             #print("Mi estado toldo ess" + str(ProyectoMQTT.mqtt.estadoToldo))
             #print("Mi alerta lluvia es " + str(ProyectoMQTT.mqtt.alertaBajarToldoLluvia))
 
-            print("Mi estado persiana es  " + str(ProyectoMQTT.mqtt.estadoPersiana))
+            #print("Mi estado persiana es  " + str(ProyectoMQTT.mqtt.estadoPersiana))
 
             if(ProyectoMQTT.mqtt.alertaBajarToldoLluvia == 1):
                 ProyectoMQTT.mqtt.alertaBajarToldoLluvia = 0

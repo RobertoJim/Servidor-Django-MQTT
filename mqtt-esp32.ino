@@ -30,14 +30,14 @@ char out[256], out2[256];
 
 #define pinLDR_LED 34
 #define pinLED 13
-#define sensorPIR 18
+#define sensorPIR 15
 
 #define pinLDR_persiana 32
 //Persiana
-#define motor1Pin1 23    // 28BYJ48 In1
-#define motor1Pin2 15    // 28BYJ48 In2
-#define motor1Pin3 19   // 28BYJ48 In3
-#define motor1Pin4 5   // 28BYJ48 In4
+#define motor1Pin1 19    // 28BYJ48 In1
+#define motor1Pin2 18    // 28BYJ48 In2
+#define motor1Pin3 5   // 28BYJ48 In3W
+#define motor1Pin4 17   // 28BYJ48 In4
 
 //Toldo
 #define motor2Pin1 16    // 28BYJ48 In1

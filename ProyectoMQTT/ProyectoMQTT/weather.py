@@ -1,12 +1,14 @@
 import json
 import requests
-from datetime import date, datetime
+from datetime import datetime, date
 from time import sleep
 
 import threading
 
 import ProyectoMQTT
 from ProyectoMQTT.mqtt import *
+
+from suntime import Sun
 
 #Quiero comprobar si dentro de una hora va a llover, si va a llover recojo toldo
 #Tendria que ejecutar esa funcion cada hora(funcion recogerdatos)
@@ -59,6 +61,11 @@ def recogerDatos():
 
         if (velocidadViento < 7) and (rafagaViento < 12): #Guardo el mensaje para que aparezca en la alerta al pulsar el boton
             mensajeViento = "Subiendo toldo"
+            if(ProyectoMQTT.mqtt.estadoToldo == 1):
+                client.publish("esp32/toldo","down")
+                ProyectoMQTT.mqtt.estadoToldo = 0
+
+                
             
         else:          
             mensajeViento = "Hace mucho viento, peligro de que se rompa el toldo"
@@ -72,9 +79,13 @@ def recogerDatos():
             client.publish("esp32/toldo","down") #Cambio la variable estadoToldo en consumers.py, alli explicacion
             ##estadoToldo = 0
             ProyectoMQTT.mqtt.bajaToldoLluvia = 1 #Quizas pueda ahorrarme esta variable utilizando la variable precipitacion
+
+        
+        #Compruebo hora salida y puesta sol todos los dias a las 1 de la madrugada
+        if(str(datetime.now())[11:][:-10] == "01:00"):
+            comprobarSalidaPuestaSol()
             
 
-        #current = data["hourly"][0]["pressure"]
         
 
         sleep(18)
@@ -90,11 +101,22 @@ def comprobarViento():
         client.publish("esp32/toldo","up")
 
 
-def comprobarMes():
+def comprobarSalidaPuestaSol():
     #Mirar como hacr para descargar horario
 
 
-    if(date.today().month == 1):
+    sun = Sun(float(lat),float(lon))
+
+    ProyectoMQTT.mqtt.salidaSol = float(str(sun.get_local_sunrise_time())[11:][:-9].replace(':', '.')) #Cambio ':' por '.' para poder convertirlo en float y poder comporar en mqtt.py (LDR persiana)
+    print(str(ProyectoMQTT.mqtt.salidaSol))
+    ProyectoMQTT.mqtt.puestaSol = float(str(sun.get_local_sunset_time())[11:][:-9].replace(':', '.'))
+    print(str(ProyectoMQTT.mqtt.puestaSol))
+
+    
+
+
+
+    '''if(date.today().month == 1):
 
        ProyectoMQTT.mqtt.salidaSol = 8.20
        ProyectoMQTT.mqtt.puestaSol = 18.40
@@ -133,7 +155,7 @@ def comprobarMes():
         ProyectoMQTT.mqtt.puestaSol = 18.12
     
     print("En el mes " + str(date.today().month) + " SALIDA : " + str(ProyectoMQTT.mqtt.salidaSol) + " y PUESTA: " + str(ProyectoMQTT.mqtt.puestaSol))
-
+'''
 
 
 
