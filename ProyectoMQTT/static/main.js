@@ -22,8 +22,7 @@ var myChart = new Chart(ctx, graphData);
 
 
 
-
-var socket = new WebSocket('ws://localhost:8000/ws/Sensores/')
+var socket = new WebSocket('ws://192.168.1.37:8000/ws/Sensores/')
 
 socket.onmessage = function(e){
     var djangoData = JSON.parse(e.data);
@@ -45,16 +44,16 @@ socket.onmessage = function(e){
 
     if(djangoData.bombilla == 0)
     {
-        imagenBombilla.src = 'static/bombillaapagada.png';
+        imagenBombilla.src = 'static/imagenes/bombillaapagada.png';
         document.getElementById('TextoBombilla').innerHTML='Luz apagada';
     } else if (djangoData.bombilla == 1)
     {
-        imagenBombilla.src = 'static/bombillaencendida.png';
+        imagenBombilla.src = 'static/imagenes/bombillaencendida.png';
         document.getElementById('TextoBombilla').innerHTML='Presencia detectada. Luz encendida';
 
     }
     else {
-        imagenBombilla.src = 'static/bombillaapagada.png';
+        imagenBombilla.src = 'static/imagenes/bombillaapagada.png';
         document.getElementById('TextoBombilla').innerHTML='Luz apagada';
     }
     /*print("djangoData.bombilla");*/
@@ -79,6 +78,15 @@ socket.onmessage = function(e){
         document.getElementById("letterE").checked = 1;
     }
 
+    if(djangoData.persianaAutomatica == "1")
+     {
+        document.getElementById("DeshabPersiana").checked = 0;
+        
+     } else if(djangoData.persianaAutomatica == "0")
+     {
+        document.getElementById("DeshabPersiana").checked = 1;
+     }
+
     //Para que se actualice el slider en 2 navegadores si estan 2 abiertos a la vez
     if(djangoData.estadoPersiana == "1")
     {
@@ -101,7 +109,7 @@ socket.onmessage = function(e){
 
     document.getElementById('textoTemperatura').innerHTML= String(djangoData.temperatura) + " ºC";
     document.getElementById('textoHumedad').innerHTML= String(djangoData.humedad) + " %";
-    //document.getElementById('textoCo2').innerHTML= String(djangoData.co2) + " ppm";
+    document.getElementById('textoCo2').innerHTML= String(djangoData.co2) + " ppm";
 
     document.getElementById('hora').innerHTML = String(djangoData.horaLluvia) + " son:";
 

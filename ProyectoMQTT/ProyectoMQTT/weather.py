@@ -27,6 +27,7 @@ mensajeViento = ""
 
 def openWeatherMap():
 
+    comprobarSalidaPuestaSol()
     thread = threading.Thread(target=recogerDatos, daemon=True) #Hilo demonio para que finalice al pulsar Ctrl-C??
     thread.start()
     
@@ -88,11 +89,9 @@ def recogerDatos():
 
         
 
-        sleep(18)
+        sleep(1800)
 
 def comprobarViento():
-
-
 
     if (velocidadViento < 7) and (rafagaViento < 12):
 
@@ -102,8 +101,6 @@ def comprobarViento():
 
 
 def comprobarSalidaPuestaSol():
-    #Mirar como hacr para descargar horario
-
 
     sun = Sun(float(lat),float(lon))
 
@@ -111,59 +108,3 @@ def comprobarSalidaPuestaSol():
     print(str(ProyectoMQTT.mqtt.salidaSol))
     ProyectoMQTT.mqtt.puestaSol = float(str(sun.get_local_sunset_time())[11:][:-9].replace(':', '.'))
     print(str(ProyectoMQTT.mqtt.puestaSol))
-
-    
-
-
-
-    '''if(date.today().month == 1):
-
-       ProyectoMQTT.mqtt.salidaSol = 8.20
-       ProyectoMQTT.mqtt.puestaSol = 18.40
-    elif(date.today().month == 2):
-        ProyectoMQTT.mqtt.salidaSol = 7.50
-        ProyectoMQTT.mqtt.puestaSol = 19.10
-    elif(date.today().month == 3):  #En marzo cambia a horario verano, habria que comprobar tambien el dia que es, ya que la hora cambia
-        ProyectoMQTT.mqtt.salidaSol = 7.50
-        ProyectoMQTT.mqtt.puestaSol = 20.40
-    elif(date.today().month == 4):
-        ProyectoMQTT.mqtt.salidaSol = 7.25
-        ProyectoMQTT.mqtt.puestaSol = 21.05
-    elif(date.today().month == 5):
-        ProyectoMQTT.mqtt.salidaSol = 7.00
-        ProyectoMQTT.mqtt.puestaSol = 21.30
-    elif(date.today().month == 6):
-        ProyectoMQTT.mqtt.salidaSol = 7.00
-        ProyectoMQTT.mqtt.puestaSol = 21.40
-    elif(date.today().month == 7):
-        ProyectoMQTT.mqtt.salidaSol = 7.03
-        ProyectoMQTT.mqtt.puestaSol = 21.40
-    elif(date.today().month == 8):
-        ProyectoMQTT.mqtt.salidaSol = 7.24
-        ProyectoMQTT.mqtt.puestaSol = 21.25
-    elif(date.today().month == 9):
-        ProyectoMQTT.mqtt.salidaSol = 7.50
-        ProyectoMQTT.mqtt.puestaSol = 20.46
-    elif(date.today().month == 10): #Aqui vuelvo a cambiar el horario
-        ProyectoMQTT.mqtt.salidaSol = 7.40
-        ProyectoMQTT.mqtt.puestaSol = 20.00
-    elif(date.today().month == 11):
-        ProyectoMQTT.mqtt.salidaSol = 7.41
-        ProyectoMQTT.mqtt.puestaSol = 18.21
-    elif(date.today().month == 12):
-        ProyectoMQTT.mqtt.salidaSol = 8.12
-        ProyectoMQTT.mqtt.puestaSol = 18.12
-    
-    print("En el mes " + str(date.today().month) + " SALIDA : " + str(ProyectoMQTT.mqtt.salidaSol) + " y PUESTA: " + str(ProyectoMQTT.mqtt.puestaSol))
-'''
-
-
-
-
-
-#def bajarToldo():
-
-    #ProyectoMQTT.mqtt.estadoToldo = 0
-    #client.publish("esp32/toldo","down")        
-    
-       

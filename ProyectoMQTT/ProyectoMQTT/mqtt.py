@@ -5,13 +5,13 @@ import json
 from datetime import datetime
 
 
-SensorJson={};temperatura="";humedad="";presion="";mensajeLed=""; bajaToldoLluvia = 0; alertaBajarToldoLluvia = 0; estadoToldo = 0
+SensorJson={};temperatura="";humedad="";presion=""; CO2="";mensajeLed=""; bajaToldoLluvia = 0; alertaBajarToldoLluvia = 0; estadoToldo = 0
 mensajeLluvia= 0
 
 arrayTemperatura = ['', '', '', '', '', '', '', '', '', '', '', '']
 arrayHora = ['', '', '', '', '', '', '', '', '', '', '', '']
 
-puestaSol = 0 ; salidaSol = 0; abrirPersiana = 0; estadoPersiana = 1
+puestaSol = 0 ; salidaSol = 0; abrirPersiana = 0; estadoPersiana = 1; persianaAutomatica = 1
 
 
 #def comprobarLluvia():
@@ -37,7 +37,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
 
-    global SensorJson; global mensajeLed; global temperatura; global humedad ; global presion 
+    global SensorJson; global mensajeLed; global temperatura; global humedad ; global presion ; global CO2
     global bajaToldoLluvia; global alertaBajarToldoLluvia; global mensajeLluvia
     global estadoPersiana; global estadoToldo
     
@@ -51,6 +51,7 @@ def on_message(client, userdata, msg):
         temperatura = SensorJson['temperature']
         humedad = SensorJson['humidity']
         presion = SensorJson['pressure']
+        CO2 = SensorJson['co2']
         
 
         #Monto array de temperatura y hora para la gráfica
@@ -80,15 +81,15 @@ def on_message(client, userdata, msg):
 
     if str(msg.topic) == "esp32/LDR_persiana": 
 
-        global salidaSol, puestaSol
+        global salidaSol, puestaSol, persianaAutomatica
         
-        
-        hora = float((str(datetime.now().hour) + "." + str(datetime.now().minute)))
-        if((hora > salidaSol) and (hora < puestaSol)):
-            client.publish("esp32/persiana","5")
-            print("Entro aqui")
-            estadoPersiana = 5
-            abrirPersiana = 1
+        if persianaAutomatica == 1:
+            hora = float((str(datetime.now().hour) + "." + str(datetime.now().minute)))
+            if((hora > salidaSol) and (hora < puestaSol)):
+                client.publish("esp32/persiana","5")
+                print("Entro aqui")
+                estadoPersiana = 5
+                abrirPersiana = 1
     
     if str(msg.topic) == "esp32/estados":
         if(str(msg.payload)[2:][:-1] != "solicitud"):
@@ -105,6 +106,6 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("192.168.1.146", 1883, 60)
+client.connect("192.168.1.35", 1883, 60)
 #client.loop_start()
 #client.loop_start()

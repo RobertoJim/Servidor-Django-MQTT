@@ -6,13 +6,15 @@
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 
+#include "Adafruit_CCS811.h"
+
 
 // Replace the next variables with your SSID/Password combination
-const char* ssid = "MIWIFI_RHpA";
-const char* password = "etJ476Pu";
+const char* ssid = "PUTODIGI";
+const char* password = "123tunometescabra!";
 
 // Add your MQTT Broker IP address, example:
-const char* mqtt_server = "192.168.1.146";
+const char* mqtt_server = "192.168.1.35";
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -52,12 +54,14 @@ Adafruit_BME680 bme; // I2C
 //Adafruit_BME280 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK); // software SPI
 //Adafruit_BME680 bme(BME_CS, BME_MOSI, BME_MISO, BME_SCK);
 
+Adafruit_CCS811 ccs;
+
 
 
 float temperature = 0;
 float humidity = 0;
 float pressure = 0; 
-float CO2 = 0;
+int CO2;
 
 int PIR = 0;
 int tiempo3 = 0, tiempo4=0, tiempo5 = 0;
@@ -86,6 +90,11 @@ void setup() {
   if (!bme.begin()) {
     Serial.println("Could not find a valid BME680 sensor, check wiring!");
     while (1);
+  }
+
+  if(!ccs.begin()){
+    Serial.println("Failed to start sensor! Please check your wiring.");
+    while(1);
   }
   
   setup_wifi();
@@ -263,11 +272,11 @@ void callback(char* topic, byte* message, unsigned int length) {
     if (messageTemp == "up") {
       Serial.println("up toldo");
       estadoToldo = 1;
-      for (int i = 0; i < stepsPerRev * 2; i++)
-      {
+      //for (int i = 0; i < stepsPerRev * 2; i++)
+     // {
         clockwise2();
-        delayMicroseconds(motorSpeed);
-      }
+       // delayMicroseconds(motorSpeed);
+     // }
     }
     else if (messageTemp == "down") {
       Serial.println("down toldo");
@@ -358,35 +367,25 @@ void setOutput2(int step)
   digitalWrite(motor2Pin4, bitRead(stepsLookup[step], 3));
 }
 
-void Sensores() {
+void datosSensores() {
 
-  // Temperature in Celsius
-  temperature = bme.readTemperature();
-  // Convert the value to a char array
-  char tempString[8];
-  dtostrf(temperature, 1, 2, tempString);
-  /*Serial.print("Temperature: ");
-    Serial.println(tempString);
-    client.publish("esp32/temperature", tempString);*/
-  doc["temperature"] = temperature;
+  doc["temperature"] = bme.readTemperature();
 
-  humidity = bme.readHumidity();
-  // Convert the value to a char array
-  char humString[8];
-  dtostrf(humidity, 1, 2, humString);
-  /*Serial.print("Humidity: ");
-    Serial.println(humString);
-    client.publish("esp32/humidity", humString);*/
-  doc["humidity"] = humidity;
+  doc["humidity"] = bme.readHumidity();
 
-  pressure = bme.readPressure() / 100.0;
-  // Convert the value to a char array
-  char presString[8];
-  dtostrf(pressure, 1, 2, presString);
-  /*Serial.print("Pressure: ");
-    Serial.println(presString);
-    client.publish("esp32/pressure", presString);*/
-  doc["pressure"] = pressure;
+  doc["pressure"] = bme.readPressure() / 100.0;
+
+if(ccs.available()){
+    if(!ccs.readData()){
+      CO2 = ccs.geteCO2();
+      char co2String[8];
+      dtostrf(CO2, 1, 2, co2String);
+      doc["co2"] = ccs.geteCO2();
+      Serial.print("ppm, TVOC: ");
+      Serial.println(ccs.getTVOC());
+      Serial.println();
+  }
+}
 
   serializeJson(doc, out);
   client.publish("esp32/sensor", out);
@@ -477,6 +476,7 @@ void LDR_persiana(){
 
 
 void loop() {
+  
   if (!client.connected()) {
     reconnect();
   }
@@ -486,10 +486,7 @@ void loop() {
   long now = millis();
   if (now - lastMsg > 5000) {
     lastMsg = now;
-    Sensores();
-
-    
-
+    datosSensores();
   }
   LED();
   lluvia();

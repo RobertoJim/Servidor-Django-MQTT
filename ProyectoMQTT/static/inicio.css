@@ -2,6 +2,22 @@
     margin: 0px auto;
 }
 
+p{
+    font-size: 0.8vh;  
+}
+h1{
+    font-size: 4vh;    
+}
+h2{
+    font-size: 3vh;    
+}
+h3{
+    font-size: 2vh;  
+}
+h4{
+    font-size: 1.5vh;  
+}
+
 #container{
    
     height: 100vh;
@@ -22,7 +38,7 @@ header{
     
     /*padding-top: 3vh;
     padding-bottom: 3vh;*/
-    background-image: url(controlador-de-la-tableta.png);
+    background-image: url(imagenes/controlador-de-la-tableta.png);
     background-repeat: no-repeat;
     background-position-x: right;
     background-size: 11vh;
@@ -57,6 +73,7 @@ footer{
 }
 
 #bombilla{
+    
     height: 80%;
     display:flex;
     align-items: center;
@@ -64,12 +81,11 @@ footer{
 
 
 
-/*#imagenBombilla{
-    position:static;
-
+#imagenBombilla{
     
-    
-}*/
+    height: 20.5vh;
+    width: 12vh;
+}
 
 
 #TextoBombilla{    
@@ -106,21 +122,17 @@ footer{
 }
 
 #cajaTemperatura{
-
     display:flex;
     align-items: center;
     height: 20.75vh;
-    
 }
 
 #termometro{
-    width: 10rem; 
-    height: 10rem; 
-    /*float:left;
-    margin-top: 1rem;
-    */
-    
+    width: 15vh; 
+    height: 15vh; 
 }
+
+
 /*
 #textoTemperatura{
     float: left;
@@ -137,8 +149,8 @@ footer{
 
 #humedad{
     
-    width: 10rem; 
-    height: 10rem; 
+    width: 15vh; 
+    height: 15vh;
   /*  float:left;
     margin-top: 1rem;*/
     
@@ -162,8 +174,8 @@ footer{
 
 #co2{
     
-    width: 10rem; 
-    height: 10rem; 
+    width: 15vh; 
+    height: 15vh; 
     
     
 }
@@ -183,7 +195,10 @@ footer{
     height: 17.75vh;
     display:flex;
     align-items: center;
-    
+    width: 230%;
+}
+#DeshabPersiana{
+    float: left;
 }
 
 /*#textoPersiana{
@@ -202,10 +217,10 @@ footer{
 #grafica{
 
     float:right;
-    height: 83vh;
+    height: 60vh;
     width: 75%;
-
 }
+
 #myChart{
     float:left;
     padding-top: 4rem;
@@ -273,9 +288,9 @@ footer{
 }
 .switch-button .switch-button__label {
     background-color: var(--color-red);
-    width: 5rem;
-    height: 3rem;
-    border-radius: 3rem;
+    width: 8.2vh;
+    height: 4.9vh;
+    border-radius: 4.9vh;
     display: inline-block;
     position: relative;
 }
@@ -283,8 +298,8 @@ footer{
     transition: .2s;
     display: block;
     position: absolute;
-    width: 3rem;
-    height: 3rem;
+    width: 4.9vh;
+    height: 4.9vh;
     background-color: var(--color-button);
     content: '';
     border-radius: 50%;

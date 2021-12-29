@@ -11,15 +11,8 @@ import ProyectoMQTT
 from ProyectoMQTT.mqtt import *
 from ProyectoMQTT.weather import comprobarViento,  mensajeViento, estadoToldo
 
-'''def MQTT(request):
-    
-    return render(request, 'inicioAntiguo.html',
-     context={'temperatura' : ProyectoMQTT.mqtt.temperatura, 
-     'humedad' : ProyectoMQTT.mqtt.humedad, 'presion' : ProyectoMQTT.mqtt.presion, 'toldo' : ProyectoMQTT.mqtt.mensaje5})'''
-
 def MQTT(request):
-
-    
+  
     return render(request, 'inicio.html', context={'bombilla': ProyectoMQTT.mqtt.mensajeLed,
       'mensajeViento' : ProyectoMQTT.weather.mensajeViento})
 
@@ -71,5 +64,17 @@ def Persiana5(request):
 
     client.publish("esp32/persiana", "5")
     ProyectoMQTT.mqtt.estadoPersiana = 5
+
+    return HttpResponse()
+
+def deshabilitar(request):
+
+    ProyectoMQTT.mqtt.persianaAutomatica = 0
+
+    return HttpResponse()
+
+def habilitar(request):
+
+    ProyectoMQTT.mqtt.persianaAutomatica = 1
 
     return HttpResponse()

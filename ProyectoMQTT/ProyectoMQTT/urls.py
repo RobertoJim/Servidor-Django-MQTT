@@ -20,7 +20,6 @@ from ProyectoMQTT.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('Grafica/', include('Sensores.urls')),
     path('', MQTT),
     path('subirToldo', subirToldo),
     path('bajarToldo', bajarToldo),
@@ -29,4 +28,6 @@ urlpatterns = [
     path('Persiana3', Persiana3),
     path('Persiana4', Persiana4),
     path('Persiana5', Persiana5),
+    path('deshabilitar', deshabilitar),
+    path('habilitar', habilitar),
 ]

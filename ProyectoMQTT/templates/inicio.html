@@ -38,23 +38,23 @@
 
                     <div id="cajaTemperatura">
 
-                        <img id="termometro" src="{% static 'Termometro.png' %}">
+                        <img id="termometro" src="{% static 'imagenes/Termometro.png' %}">
                         <h4 id="textoTemperatura"></h4>
                     
                     </div>
 
                     <div id="cajaHumedad">
 
-                        <img id="humedad" src="{% static 'gota-agua.png' %}">
+                        <img id="humedad" src="{% static 'imagenes/gota-agua.png' %}">
                         <h4 id="textoHumedad"></h4>
 
                     </div>
 
                     <div id="cajaCo2">
 
-                        <img id="co2" src="{% static 'co2.png' %}">
+                        <img id="co2" src="{% static 'imagenes/co2.png' %}">
                         <h4 id="textoCo2">
-                            <p>xxxx ppm</p>
+                            
                         </h4>
 
                     </div>
@@ -86,9 +86,12 @@
                             <input id="letterE" type="radio" name="letter" onclick="Persiana5()">
                             <label for="letterE">5</label>
                             
-                          </div> 
-
-                    </div>
+                        </div> 
+                        <div id="textoHabilitarPersiana">    
+                            <h3>Deshabilitar persiana automática:</h3>
+                        </div>
+                            <input type="checkbox"  id="DeshabPersiana" onclick="DeshabPersiana()">
+                        </div>
                 </div>
 
                 <div id="grafica">
@@ -221,6 +224,23 @@
             }
         </script>
 
+        <script>
+            function DeshabPersiana(){
+                check = document.getElementById("DeshabPersiana");  
+                if(check.checked){
+                    $.ajax({
+                    url: "/deshabilitar",
+                    context: document.body
+                    })
+                } else{
+                    $.ajax({
+                    url: "/habilitar",
+                    context: document.body                   
+                    })
+                 }
+            }
+        </script>
+
 
 
         <script>
@@ -238,7 +258,6 @@
                     {
                         check.checked = 0;
                     }
-                    /*'{{estadoToldo}}' = 1;*/
                     });
                 } else{
                     $.ajax({
@@ -246,7 +265,6 @@
                     context: document.body
                     }).done(function() {
                     alert('Bajando toldo');;
-                    /*'{{estadoToldo}}' = 0;*/
                     });
                 }
             }
