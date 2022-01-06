@@ -6,23 +6,25 @@ p{
     font-size: 0.8vh;  
 }
 h1{
-    font-size: 4vh;    
+    font-size: 4vh;
+    text-transform: uppercase;
+    color: #ccc;
+    text-shadow: -1px -1px 0 black;
+    letter-spacing: .1vh;
 }
 h2{
     font-size: 3vh;    
 }
 h3{
-    font-size: 2vh;  
+    font-size: 2.25vh;  
 }
 h4{
-    font-size: 1.5vh;  
+    font-size: 1.9vh;  
 }
 
 #container{
    
     height: 100vh;
-    /*display:flex;
-    flex-direction: column;*/
 }
 
 header{
@@ -31,13 +33,10 @@ header{
 
     height: 11vh;
     width: 100%;
-   /* text-align: center;*/
 
     display:flex;
     align-items: center;
-    
-    /*padding-top: 3vh;
-    padding-bottom: 3vh;*/
+
     background-image: url(imagenes/controlador-de-la-tableta.png);
     background-repeat: no-repeat;
     background-position-x: right;
@@ -156,14 +155,6 @@ footer{
     
 }
 
-/*#textoHumedad{
-    float: left;
-    margin-top: 5rem;
-    margin-left: 1.5rem;
-    
-}*/
-
-
 #cajaCo2{
 
     display:flex;
@@ -179,19 +170,9 @@ footer{
     
     
 }
-/*
-#textoCo2{
-    float: left;
-    margin-top: 5rem;
-    margin-left: 1rem;
-    
-    
-}*/
-
 
 #cajaPersiana{
 
-   /* background: red;*/
     height: 17.75vh;
     display:flex;
     align-items: center;
@@ -200,19 +181,6 @@ footer{
 #DeshabPersiana{
     float: left;
 }
-
-/*#textoPersiana{
-
-    margin-top: 5rem;
-    margin-left: 1rem;
-    float:left;
-}
-
-#boton1 {
-
-    margin-top: 4rem;
-}*/
-
 
 #grafica{
 
@@ -246,7 +214,7 @@ footer{
 }
 
 #ControlToldo{
-    height: 17.75vh;
+    height: 15vh;
     display:flex;
     align-items: center;
 }
@@ -255,9 +223,7 @@ footer{
 #DatosMeteorologicos{
 
     border-top: 0.1vh dashed gray;
-    height: 17.75vh;
-    /*display:flex;
-    align-items: center;*/
+    height: 20.5vh;
 }
 
 #titulo{
@@ -317,16 +283,6 @@ footer{
 
 
 /*CODIGO BOTON PERSIANA */
-
-
-   h1 {
-     text-align: center;
-     font-weight: 300;
-     text-transform: uppercase;
-     color: #ccc;
-     text-shadow: -1px -1px 0 black;
-     letter-spacing: .05em;
-   }
   .letter-slider {
     border-bottom: 4px solid #000;
     box-shadow: 0 1px 0 0 rgba(255,255,255,0.15);
@@ -386,12 +342,3 @@ footer{
   .letter-slider input:checked:nth-of-type(5) ~ label:last-of-type::after {
     left: 88.333333333333339%;
   }
- 
-  /*.letter-slider input:checked:nth-of-type(6) ~ label:last-of-type::after {
-    left: 91.66666666666666%;
-  }*/
-
-
-
-
-

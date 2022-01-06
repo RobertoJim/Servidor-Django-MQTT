@@ -1,6 +1,6 @@
 import paho.mqtt.client as mqtt
 import json
-
+import socket
 
 from datetime import datetime
 
@@ -106,6 +106,9 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("192.168.1.35", 1883, 60)
+global IP
+IP = socket.gethostbyname(socket.gethostname())
+
+client.connect(IP, 1883, 60)
 #client.loop_start()
 #client.loop_start()

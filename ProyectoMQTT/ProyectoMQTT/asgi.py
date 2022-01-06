@@ -14,7 +14,7 @@ from django.core.asgi import get_asgi_application
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 
-from Sensores.routing import ws_urlspatterns 
+from Channels.routing import ws_urlspatterns 
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ProyectoMQTT.settings')
 

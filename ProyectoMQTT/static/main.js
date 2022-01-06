@@ -20,26 +20,17 @@ var graphData = {
 
 var myChart = new Chart(ctx, graphData);
 
+var ip_addr = document.location.hostname; //Obtengo IP del servidor
 
+var argumento = 'ws://' + String(ip_addr) + ':8000/ws/Channels/';
 
-var socket = new WebSocket('ws://192.168.1.37:8000/ws/Sensores/')
+var socket = new WebSocket(argumento);
 
 socket.onmessage = function(e){
     var djangoData = JSON.parse(e.data);
     console.log(djangoData);
-
-    //var newGraphData = graphData.data.datasets[0].data;
-    //newGraphData = djangoData.value;
-    //newGraphData.shift(); // Elimina primera posicion del array ( valor mas antiguo de temperatura)
-    //newGraphData.push(djangoData.value); //Añado el valor ¿en ultima posicion?
     graphData.data.datasets[0].data = djangoData.value;
-    //myChart.update();
-
-    //var newGraphLabel = graphData.data.labels;
-    //newGraphLabel.shift();
-    //newGraphLabel.push(djangoData.hora);
     graphData.data.labels = djangoData.hora;
-    //graphData.data.labels = newGraphLabel;
     myChart.update();
 
     if(djangoData.bombilla == 0)

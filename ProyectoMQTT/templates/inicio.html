@@ -25,7 +25,7 @@
                 <div id="bombilla">
                     <img id="imagenBombilla"></img>
 
-                    <h4 id="TextoBombilla"></h4>
+                    <h3 id="TextoBombilla"></h3>
                 </div>
                 
             </section>
@@ -39,40 +39,28 @@
                     <div id="cajaTemperatura">
 
                         <img id="termometro" src="{% static 'imagenes/Termometro.png' %}">
-                        <h4 id="textoTemperatura"></h4>
+                        <h3 id="textoTemperatura"></h3>
                     
                     </div>
 
                     <div id="cajaHumedad">
 
                         <img id="humedad" src="{% static 'imagenes/gota-agua.png' %}">
-                        <h4 id="textoHumedad"></h4>
+                        <h3 id="textoHumedad"></h3>
 
                     </div>
 
                     <div id="cajaCo2">
 
                         <img id="co2" src="{% static 'imagenes/co2.png' %}">
-                        <h4 id="textoCo2">
-                            
-                        </h4>
+                        <h3 id="textoCo2"></h3>
 
                     </div>
 
                     <div id="cajaPersiana">
                         <div id="textoPersiana">
-                            <h3>Control persiana:</h3>
+                            <h2>Control persiana:</h2>
                         </div>
-                        <!-- SWITCH TEMPERATURA-->
-                        <!--
-                        <div class="switch-button">  
-                            <div id="boton1">-->
-                                <!-- Checkbox -->
-                               <!-- <input type="checkbox" name="switch-button" id="switch-label1" class="switch-button__checkbox"  value="Persiana " onclick="Persiana()">-->
-                                <!-- Botón -->
-                               <!-- <label for="switch-label1" class="switch-button__label"></label>
-                            </div>
-                        </div>-->
 
                         <div class="letter-slider">
                             <input id="letterA" type="radio" name="letter" onclick="Persiana1()">
@@ -88,7 +76,7 @@
                             
                         </div> 
                         <div id="textoHabilitarPersiana">    
-                            <h3>Deshabilitar persiana automática:</h3>
+                            <h2>Deshabilitar persiana automática:</h2>
                         </div>
                             <input type="checkbox"  id="DeshabPersiana" onclick="DeshabPersiana()">
                         </div>
@@ -106,7 +94,7 @@
 
                 <div id="ControlToldo">
                     <div id="textoToldo">
-                        <h3>Control toldo: </h3>
+                        <h2>Control toldo: </h2>
                     </div>
                     <!-- SWITCH TOLDO-->
                     <div class="switch-button">
@@ -146,28 +134,6 @@
         <script src="{% static 'main.js' %}"></script>
 
         <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-
-
-        <!--<script>
-            function Persiana(){
-                check = document.getElementById("switch-label1");
-                if(check.checked){
-                    $.ajax({
-                    url: "/subirPersiana",
-                    context: document.body
-                    }).done(function() {
-                    alert('Subiendo persiana');;
-                    });
-            } else{
-                $.ajax({
-                url: "/bajarPersiana",
-                context: document.body
-                }).done(function() {
-                alert('Bajando persiana');;
-                });
-            }
-            }
-        </script>-->
 
         <script>
             function Persiana1(){
