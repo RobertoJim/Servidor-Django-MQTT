@@ -4,10 +4,10 @@ var ctx = document.getElementById('myChart').getContext('2d');
 var graphData = {
     type: 'line',
     data: {
-        labels: ['', '', '', '', '', '', '', '', '', '', '', ''],
+        labels: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
         datasets: [{
             label: 'Temperatura',
-            data: [ , , , , , , , , , , , ],
+            data: [ , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ],
             backgroundColor: [
                 'rgba(73, 198, 230, 0.5)',
             ],
