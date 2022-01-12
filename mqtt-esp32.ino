@@ -5,7 +5,7 @@
 #include "Adafruit_BME680.h"
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
-#include "SoftwareSerial.h"
+#include "HardwareSerial.h"
 
 // Replace the next variables with your SSID/Password combination
 const char* ssid = "PUTODIGI";
@@ -68,8 +68,7 @@ const int numSteps = 8;
 const int stepsLookup[8] = { B1000, B1100, B0100, B0110, B0010, B0011, B0001, B1001 };
 
 //Senseair S8
-SoftwareSerial K_30_Serial(16,17);  //Sets up a virtual serial port
-                                    //Using pin 16 for Rx and pin 17 for Tx
+HardwareSerial K_30_Serial(2); 
 
 byte readCO2[] = {0xFE, 0X44, 0X00, 0X08, 0X02, 0X9F, 0X25};  //Command packet to read Co2 (see app note)
 byte response[] = {0,0,0,0,0,0,0};  //create an array to store the response
@@ -110,7 +109,6 @@ void setup() {
   pinMode(motor2Pin2, OUTPUT);
   pinMode(motor2Pin3, OUTPUT);
   pinMode(motor2Pin4, OUTPUT);
-
 
   //pinMode(rainDigital, INPUT);
 }
@@ -312,6 +310,10 @@ void reconnect() {
       delay(5000);
     }
   }
+  //Envio aqui primer dato de la grafica, ya que si lo pongo en el setup se intenta enviar antes de que este conectado al broker MQTT
+  //Se envia este dato para que apaarezca un primer valor en la grafica al iniciar el sistema
+  dtostrf(bme.readTemperature(), 4, 2, tempString); 
+  client.publish("esp32/grafica", tempString);
 }
 
 void clockwise1()
