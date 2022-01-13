@@ -47,6 +47,7 @@ float humidity = 0;
 float pressure = 0; 
 int CO2;
 
+int primerDatoGrafica = 0;
 int PIR = 0;
 unsigned long tiempo1 = 0, tiempo2=0, tiempo3 = 0, lastMsg = 0, lastMsg2 = 0;
 char tempString[8];
@@ -156,16 +157,16 @@ void callback(char* topic, byte* message, unsigned int length) {
       estadoPersiana = 0;
       posPersianaAnterior = posPersianaActual; 
       posPersianaActual = 1;
-      if(posPersianaAnterior < posPersianaActual)
+      /*if(posPersianaAnterior < posPersianaActual)
       {
-        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaActual-posPersianaAnterior+1)); i++)
+        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaActual-posPersianaAnterior)); i++)
         {
           clockwise1();
           delayMicroseconds(motorSpeed);
         }
-      } else if(posPersianaAnterior > posPersianaActual)
+      } else*/ if(posPersianaAnterior > posPersianaActual)
       {
-        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaAnterior-posPersianaActual+1)); i++)
+        for (int i = 0; i < ((stepsPerRev/4)*(posPersianaAnterior-posPersianaActual)); i++)
         {
           anticlockwise1();
           delayMicroseconds(motorSpeed);
@@ -180,14 +181,14 @@ void callback(char* topic, byte* message, unsigned int length) {
       posPersianaActual = 2;
       if(posPersianaAnterior < posPersianaActual)
       {
-        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaActual-posPersianaAnterior+1)); i++)
+        for (int i = 0; i < ((stepsPerRev/4)*(posPersianaActual-posPersianaAnterior)); i++)
         {
           clockwise1();
           delayMicroseconds(motorSpeed);
         }
       } else if(posPersianaAnterior > posPersianaActual)
       {
-        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaAnterior-posPersianaActual+1)); i++)
+        for (int i = 0; i < ((stepsPerRev/4)*(posPersianaAnterior-posPersianaActual)); i++)
         {
           anticlockwise1();
           delayMicroseconds(motorSpeed);
@@ -200,14 +201,14 @@ void callback(char* topic, byte* message, unsigned int length) {
       posPersianaActual = 3;
        if(posPersianaAnterior < posPersianaActual)
       {
-        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaActual-posPersianaAnterior+1)); i++)
+        for (int i = 0; i < ((stepsPerRev/4)*(posPersianaActual-posPersianaAnterior)); i++)
         {
           clockwise1();
           delayMicroseconds(motorSpeed);
         }
       } else if(posPersianaAnterior > posPersianaActual)
       {
-        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaAnterior-posPersianaActual+1)); i++)
+        for (int i = 0; i < ((stepsPerRev/4)*(posPersianaAnterior-posPersianaActual)); i++)
         {
           anticlockwise1();
           delayMicroseconds(motorSpeed);
@@ -220,14 +221,14 @@ void callback(char* topic, byte* message, unsigned int length) {
       posPersianaActual = 4;
        if(posPersianaAnterior < posPersianaActual)
       {
-        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaActual-posPersianaAnterior+1)); i++)
+        for (int i = 0; i < ((stepsPerRev/4)*(posPersianaActual-posPersianaAnterior)); i++)
         {
           clockwise1();
           delayMicroseconds(motorSpeed);
         }
       } else if(posPersianaAnterior > posPersianaActual)
       {
-        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaAnterior-posPersianaActual+1)); i++)
+        for (int i = 0; i < ((stepsPerRev/4)*(posPersianaAnterior-posPersianaActual)); i++)
         {
           anticlockwise1();
           delayMicroseconds(motorSpeed);
@@ -240,19 +241,19 @@ void callback(char* topic, byte* message, unsigned int length) {
       posPersianaActual = 5;
       if(posPersianaAnterior < posPersianaActual)
       {
-        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaActual-posPersianaAnterior+1)); i++)
+        for (int i = 0; i < ((stepsPerRev/4)*(posPersianaActual-posPersianaAnterior)); i++)
         {
           clockwise1();
           delayMicroseconds(motorSpeed);
         }
-      } else if(posPersianaAnterior > posPersianaActual)
+      } /*else if(posPersianaAnterior > posPersianaActual)
       {
-        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaAnterior-posPersianaActual+1)); i++)
+        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaAnterior-posPersianaActual)); i++)
         {
           anticlockwise1();
           delayMicroseconds(motorSpeed);
         }
-      }
+      }*/
     }
   }
 
@@ -312,8 +313,6 @@ void reconnect() {
   }
   //Envio aqui primer dato de la grafica, ya que si lo pongo en el setup se intenta enviar antes de que este conectado al broker MQTT
   //Se envia este dato para que apaarezca un primer valor en la grafica al iniciar el sistema
-  dtostrf(bme.readTemperature(), 4, 2, tempString); 
-  client.publish("esp32/grafica", tempString);
 }
 
 void clockwise1()
@@ -419,7 +418,7 @@ void LED() {
 
   PIR = digitalRead(sensorPIR);//Leemos el estado del del sensor PIR
   if(led==0){ //Este if hace que no se mande el topic led = 1 todas las veces que entra en el bucle durante los 10s
-    if ((PIR == 1) && (analogRead(pinLDR_LED) < 600))
+    if ((PIR == 1) && (analogRead(pinLDR_LED) < 00))
     {
       digitalWrite(pinLED, HIGH);//Encendemos la luz
       client.publish("esp32/LED", "1");
@@ -454,6 +453,8 @@ void lluvia() {
     tiempo2 = millis();
     Serial.print("LLuvia: ");
     Serial.println(medidaLluvia);
+    Serial.print("El estado toldo es: ");
+    Serial.println(estadoToldo);
     if((medidaLluvia < 1500) && (estadoToldo == 1)){
 
       client.publish("esp32/lluvia", "1");
@@ -462,6 +463,7 @@ void lluvia() {
         anticlockwise2();
         delayMicroseconds(motorSpeed);
       }
+      estadoToldo = 0;
     }
     
   }
@@ -487,7 +489,7 @@ void LDR_persiana(){
     Serial.print("Mi estado persiana es :");
     Serial.println(estadoPersiana);
 
-    if ((analogRead(pinLDR_persiana) < 600) and (estadoPersiana == 0) )
+    if ((analogRead(pinLDR_persiana) < 200) and (estadoPersiana == 0) )
     {
         client.publish("esp32/LDR_persiana", "1");
     }
@@ -509,6 +511,13 @@ void loop() {
   if (millis() - lastMsg > 5000) {
     lastMsg = millis();
     datosSensores();
+    //Envio el primer dato dentro de este if para que cuando se envia el topic el bme haya leido algun dato, sino envia un 0
+    if(primerDatoGrafica == 0){
+      dtostrf(bme.readTemperature(), 4, 2, tempString); 
+      client.publish("esp32/grafica", tempString);
+      lastMsg2 = millis();
+      primerDatoGrafica++;
+  }
   }
   if (millis() - lastMsg2 > 1800000) {
     lastMsg2 = millis();

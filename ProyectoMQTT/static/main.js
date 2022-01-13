@@ -53,9 +53,13 @@ socket.onmessage = function(e){
         document.getElementById("switch-label2").checked = 0;
     } else  if (djangoData.estadoToldo == "1"){
         document.getElementById("switch-label2").checked = 1;
-        if(djangoData.alertaToldo == 1)
+        if(djangoData.alertaToldoLluvia == 1)
         {
-            alert("Se espera lluvia, bajando toldo");
+            alert("Se esperan lluvias dentro de poco, bajando toldo");
+        }
+        if(djangoData.alertaToldoViento == 1)
+        {
+            alert("Hace mucho viento, peligro de que se rompa el toldo");
         }
         if(djangoData.mensajeLluvia == 1)
         {
@@ -98,7 +102,7 @@ socket.onmessage = function(e){
 
 
 
-    document.getElementById('textoTemperatura').innerHTML= String(djangoData.temperatura) + " ºC";
+    document.getElementById('textoTemperatura').innerHTML= String(djangoData.temperatura) + " ยบC";
     document.getElementById('textoHumedad').innerHTML= String(djangoData.humedad) + " %";
     document.getElementById('textoCo2').innerHTML= String(djangoData.co2) + " ppm";
 

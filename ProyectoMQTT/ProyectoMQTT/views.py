@@ -11,6 +11,7 @@ import ProyectoMQTT
 from ProyectoMQTT.mqtt import *
 from ProyectoMQTT.weather import comprobarViento,  mensajeViento, estadoToldo
 
+
 def MQTT(request):
   
     return render(request, 'inicio.html', context={'bombilla': ProyectoMQTT.mqtt.mensajeLed,

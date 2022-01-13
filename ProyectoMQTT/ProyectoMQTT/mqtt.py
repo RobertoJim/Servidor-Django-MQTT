@@ -5,7 +5,7 @@ import socket
 from datetime import datetime
 
 
-SensorJson={};temperatura="";humedad="";presion=""; CO2="";mensajeLed=""; bajaToldoLluvia = 0; alertaBajarToldoLluvia = 0; estadoToldo = 0
+SensorJson={};temperatura="";humedad="";presion=""; CO2="";mensajeLed=""; bajaToldoViento = 0; alertaBajarToldoViento = 0; bajaToldoLluvia = 0; alertaBajarToldoLluvia = 0; estadoToldo = 0
 mensajeLluvia= 0
 
 arrayTemperatura = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
@@ -25,7 +25,6 @@ puestaSol = 0 ; salidaSol = 0; abrirPersiana = 0; estadoPersiana = 1; persianaAu
     # Compruebo si el viento es mayor a X, no dejo extender toldo y muestro en pagina mensaje
 
 def on_connect(client, userdata, flags, rc):
-    print("Se conecto con mqtt" + str(rc))
     client.subscribe("esp32/sensor")
     client.subscribe("esp32/LED")
     client.subscribe("esp32/toldo")
@@ -39,7 +38,7 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
 
     global SensorJson; global mensajeLed; global temperatura; global humedad ; global presion ; global CO2
-    global bajaToldoLluvia; global alertaBajarToldoLluvia; global mensajeLluvia
+    global bajaToldoLluvia; global alertaBajarToldoLluvia; global mensajeLluvia; global bajaToldoViento; global alertaBajarToldoViento
     global estadoPersiana; global estadoToldo
     
     global arrayTemperatura; global arrayHora
@@ -63,9 +62,13 @@ def on_message(client, userdata, msg):
     if str(msg.topic) == "esp32/toldo":
         if((str(msg.payload)[2:][:-1] == "down") and (bajaToldoLluvia == 1)): #elimino los dos primeros caracteres y el ultimo (mensaje original: b'22.22')
             bajaToldoLluvia = 0
-            print("Aqui deberia cambiar la alerta")
+            print("Aqui deberia cambiar la alerta lluvia ")
             alertaBajarToldoLluvia = 1
-
+        if((str(msg.payload)[2:][:-1] == "down") and (bajaToldoViento == 1)): #elimino los dos primeros caracteres y el ultimo (mensaje original: b'22.22')
+            bajaToldoViento = 0
+            print("Aqui deberia cambiar la alerta viento ")
+            alertaBajarToldoViento = 1
+        
     if str(msg.topic) == "esp32/lluvia": 
         mensajeLluvia= 1
 
