@@ -1,5 +1,4 @@
 import json
-from turtle import delay
 import requests
 from datetime import datetime, date
 from time import sleep
@@ -61,7 +60,7 @@ def recogerDatos():
         velocidadViento = data["hourly"][1]["wind_speed"] # Estoy comprobando la velocidad del viento dentro de una hora, quizas seria mejor comprobar la actual
         rafagaViento = data["hourly"][1]["wind_gust"]
 
-        if (velocidadViento < 70) and (rafagaViento < 120): #Guardo el mensaje para que aparezca en la alerta al pulsar el boton
+        if (velocidadViento < 7) and (rafagaViento < 12): #Guardo el mensaje para que aparezca en la alerta al pulsar el boton
             mensajeViento = "Subiendo toldo"           
         else:          
             mensajeViento = "Hace mucho viento, peligro de que se rompa el toldo"
@@ -92,7 +91,7 @@ def recogerDatos():
 
 def comprobarViento():
 
-    if (velocidadViento < 70) and (rafagaViento < 120):
+    if (velocidadViento < 7) and (rafagaViento < 12):
 
         ProyectoMQTT.mqtt.estadoToldo = 1
         print("He entrado donde deberia de cambiar estado toldo")

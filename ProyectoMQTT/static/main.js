@@ -102,7 +102,7 @@ socket.onmessage = function(e){
 
 
 
-    document.getElementById('textoTemperatura').innerHTML= String(djangoData.temperatura) + " ยบC";
+    document.getElementById('textoTemperatura').innerHTML= String(djangoData.temperatura) + " ºC";
     document.getElementById('textoHumedad').innerHTML= String(djangoData.humedad) + " %";
     document.getElementById('textoCo2').innerHTML= String(djangoData.co2) + " ppm";
 

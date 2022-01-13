@@ -3,6 +3,7 @@ import json
 import socket
 
 from datetime import datetime
+import pytz
 
 
 SensorJson={};temperatura="";humedad="";presion=""; CO2="";mensajeLed=""; bajaToldoViento = 0; alertaBajarToldoViento = 0; bajaToldoLluvia = 0; alertaBajarToldoLluvia = 0; estadoToldo = 0
@@ -77,7 +78,7 @@ def on_message(client, userdata, msg):
         global salidaSol, puestaSol, persianaAutomatica
         
         if persianaAutomatica == 1:
-            hora = float((str(datetime.now().hour) + "." + str(datetime.now().minute)))
+            hora = float((str(datetime.now(pytz.timezone('Europe/Madrid')).hour) + "." + str(datetime.now().minute)))
             if((hora > salidaSol) and (hora < puestaSol)):
                 client.publish("esp32/persiana","5")
                 print("Entro aqui")
@@ -95,7 +96,7 @@ def on_message(client, userdata, msg):
         arrayTemperatura.append(temperatura) # Similar a push en javascript
 
         arrayHora.pop(0) # Similar a shift en javascript 
-        arrayHora.append((str(datetime.now().hour) + ":" + str(datetime.now().minute) + ":" + str(datetime.now().second))) # Similar a push en javascript
+        arrayHora.append((str(datetime.now(pytz.timezone('Europe/Madrid')).hour) + ":" + str(datetime.now().minute) + ":" + str(datetime.now().second))) # Similar a push en javascript
 
 def iniciarEstados():
     client.publish("esp32/estados", "solicitud")
