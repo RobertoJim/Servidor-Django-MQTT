@@ -1,3 +1,4 @@
+from glob import glob
 import json
 import requests
 from datetime import datetime, date
@@ -16,18 +17,18 @@ from suntime import Sun
 
 #Ademas, tendria que ejecutar la funcion recogerdatos y el sensor detecta agua para comprobar el viento
 
-api_key = "6159431fde89157c2c7bb8ff8a7e841a"
-lat = "36.720969"
-lon = "-4.474427"
 
 
-velocidadViento = 0; rafagaViento = 0; precipitacion = 0 #Cuando arranca el sistema el toldo esta cerrado
-mensajeViento = ""
+
+velocidadViento = 0; rafagaViento = 0; precipitacion = 0 ; vientoMax = 0
+mensajeViento = ""; api_key = ""; lat = ""; lon = ""
 
 
 def openWeatherMap():
 
+    conf()
     comprobarSalidaPuestaSol()
+    ProyectoMQTT.mqtt.estadoToldo = 1
     thread = threading.Thread(target=recogerDatos, daemon=True) #Hilo demonio para que finalice al pulsar Ctrl-C
     thread.start()
     
@@ -54,19 +55,17 @@ def recogerDatos():
 
         #precipitacion = data["minutely"][60]["precipitation"] #Prevision precipitacion para dentro de una hora desde el momento en el que se mira
         precipitacion = data["hourly"][1]["pop"]
-        #precipitacion = 10
-        #print("La prevision para las " + hora + " es " + str(precipitacion))
 
         velocidadViento = data["hourly"][1]["wind_speed"] # Estoy comprobando la velocidad del viento dentro de una hora, quizas seria mejor comprobar la actual
         rafagaViento = data["hourly"][1]["wind_gust"]
 
-        if (velocidadViento < 7) and (rafagaViento < 12): #Guardo el mensaje para que aparezca en la alerta al pulsar el boton
+
+        if rafagaViento < vientoMax: #Guardo el mensaje para que aparezca en la alerta al pulsar el boton
             mensajeViento = "Subiendo toldo"           
         else:          
             mensajeViento = "Hace mucho viento, peligro de que se rompa el toldo"
             if(ProyectoMQTT.mqtt.estadoToldo == 1):
                 client.publish("esp32/toldo","down")
-                #ProyectoMQTT.mqtt.estadoToldo = 0  
                 ProyectoMQTT.mqtt.bajaToldoViento = 1
             
         
@@ -81,20 +80,16 @@ def recogerDatos():
 
         
         #Compruebo hora salida y puesta sol todos los dias a las 1 de la madrugada
-        if(str(datetime.now())[11:][:-10] == "01:00"):
+        if(str(datetime.now(pytz.timezone('Europe/Madrid')))[11:][:-19] == "01"):
             comprobarSalidaPuestaSol()
             
-
-        
-
         sleep(1800)
 
 def comprobarViento():
 
-    if (velocidadViento < 7) and (rafagaViento < 12):
+    if rafagaViento < vientoMax:
 
         ProyectoMQTT.mqtt.estadoToldo = 1
-        print("He entrado donde deberia de cambiar estado toldo")
         client.publish("esp32/toldo","up")
 
 
@@ -106,3 +101,14 @@ def comprobarSalidaPuestaSol():
     print("La hora de la salida del sol para el día " + str(sun.get_local_sunrise_time())[:-15] + " son las " + str(sun.get_local_sunrise_time())[11:][:-9])
     ProyectoMQTT.mqtt.puestaSol = float(str(sun.get_local_sunset_time())[11:][:-9].replace(':', '.'))
     print("La hora de la puesta del sol para el día " +  str(sun.get_local_sunset_time())[:-15] + " son las " + str(sun.get_local_sunset_time())[11:][:-9])
+
+def conf():
+
+    global vientoMax; global api_key; global lat; global lon
+
+    f = open("conf.txt", "r")
+    vientoMax = int(f.readline()[:-1])
+    lat = f.readline()[:-1] #[:-1] para quitar \n
+    lon = f.readline()[:-1] #[:-1] para quitar \n
+    api_key = f.readline()
+    f.close()

@@ -59,7 +59,7 @@ socket.onmessage = function(e){
         }
         if(djangoData.alertaToldoViento == 1)
         {
-            alert("Hace mucho viento, peligro de que se rompa el toldo");
+            alert("Hace mucho viento, bajando toldo");
         }
         if(djangoData.mensajeLluvia == 1)
         {
@@ -82,7 +82,7 @@ socket.onmessage = function(e){
         document.getElementById("DeshabPersiana").checked = 1;
      }
 
-    //Para que se actualice el slider en 2 navegadores si estan 2 abiertos a la vez
+    //Para que se actualice el slider en 2 o mas navegadores si estan 2 o mas abiertos a la vez
     if(djangoData.estadoPersiana == "1")
     {
         document.getElementById("letterA").checked = 1;

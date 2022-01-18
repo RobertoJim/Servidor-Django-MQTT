@@ -5,7 +5,7 @@
 #include "Adafruit_BME680.h"
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
-#include "HardwareSerial.h"
+#include "Adafruit_CCS811.h"
 
 // Replace the next variables with your SSID/Password combination
 const char* ssid = "PUTODIGI";
@@ -41,11 +41,11 @@ char out[256], out2[256];
 #define rainAnalog 35
 
 Adafruit_BME680 bme; // I2C
+Adafruit_CCS811 ccs;
 
 float temperature = 0;
 float humidity = 0;
-float pressure = 0; 
-int CO2;
+int CO2 = 0;
 
 int primerDatoGrafica = 0;
 int PIR = 0;
@@ -54,7 +54,6 @@ char tempString[8];
 int led = 0;
 int medidaLluvia = 0;
 int estadoToldo = 0;
-int estadoPersiana = 0; //Variable para ver si persiana esta subida o no, si esta a posicion4 o menos se considera bajada
 
 const int motorSpeed = 1200;   //variable para fijar la velocidad
 int stepCounter1 = 0;     // contador para los pasos
@@ -68,25 +67,8 @@ int posPersianaAnterior = 1;
 const int numSteps = 8;
 const int stepsLookup[8] = { B1000, B1100, B0100, B0110, B0010, B0011, B0001, B1001 };
 
-//Senseair S8
-HardwareSerial K_30_Serial(2); 
-
-byte readCO2[] = {0xFE, 0X44, 0X00, 0X08, 0X02, 0X9F, 0X25};  //Command packet to read Co2 (see app note)
-byte response[] = {0,0,0,0,0,0,0};  //create an array to store the response
-
-//multiplier for value. default is 1. set to 3 for K-30 3% and 10 for K-33 ICB
-int valMultiplier = 1;
-
 void setup() {
   Serial.begin(115200);
-  K_30_Serial.begin(9600);    //Opens the virtual serial port with a baud of 9600
-  // default settings
-  // (you can also pass in a Wire library object like &Wire2)
-  //status = bme.begin();
-  if (!bme.begin()) {
-    Serial.println("Could not find a valid BME680 sensor, check wiring!");
-    while (1);
-  }
   
   setup_wifi();
   client.setServer(mqtt_server, 1883);
@@ -112,6 +94,14 @@ void setup() {
   pinMode(motor2Pin4, OUTPUT);
 
   //pinMode(rainDigital, INPUT);
+
+  if (!bme.begin()) {
+    Serial.println("Could not find a valid BME680 sensor, check wiring!");
+  }
+
+  if(!ccs.begin()){
+    Serial.println("Failed to start sensor! Please check your wiring.");
+  }
 }
 
 void setup_wifi() {
@@ -154,7 +144,6 @@ void callback(char* topic, byte* message, unsigned int length) {
     Serial.print("Changing output to ");
     if (messageTemp == "1") {
       Serial.println(" persiana 1"); 
-      estadoPersiana = 0;
       posPersianaAnterior = posPersianaActual; 
       posPersianaActual = 1;
       /*if(posPersianaAnterior < posPersianaActual)
@@ -176,7 +165,6 @@ void callback(char* topic, byte* message, unsigned int length) {
     }
     else if (messageTemp == "2") {    
       Serial.println("persiana 2");
-      estadoPersiana = 0;
       posPersianaAnterior = posPersianaActual; 
       posPersianaActual = 2;
       if(posPersianaAnterior < posPersianaActual)
@@ -196,7 +184,6 @@ void callback(char* topic, byte* message, unsigned int length) {
       }
     }else if (messageTemp == "3") {    
       Serial.println("persiana 3");
-      estadoPersiana = 0;
       posPersianaAnterior = posPersianaActual; 
       posPersianaActual = 3;
        if(posPersianaAnterior < posPersianaActual)
@@ -216,7 +203,7 @@ void callback(char* topic, byte* message, unsigned int length) {
       }
     }else if (messageTemp == "4") {    
       Serial.println("persiana 4");
-      estadoPersiana = 0;
+
       posPersianaAnterior = posPersianaActual; 
       posPersianaActual = 4;
        if(posPersianaAnterior < posPersianaActual)
@@ -236,7 +223,6 @@ void callback(char* topic, byte* message, unsigned int length) {
       }
     }else if (messageTemp == "5") {    
       Serial.println("persiana 5");
-      estadoPersiana = 1;
       posPersianaAnterior = posPersianaActual; 
       posPersianaActual = 5;
       if(posPersianaAnterior < posPersianaActual)
@@ -359,55 +345,20 @@ void setOutput2(int step)
   digitalWrite(motor2Pin4, bitRead(stepsLookup[step], 3));
 }
 
-void sendRequest(byte packet[])
-{
-  while(!K_30_Serial.available())  //keep sending request until we start to get a response
-  {
-    K_30_Serial.write(readCO2,7);
-    delay(50);
-  }
-  
-  int timeout=0;  //set a timeoute counter
-  while(K_30_Serial.available() < 7 ) //Wait to get a 7 byte response
-  {
-    timeout++;  
-    if(timeout > 10)    //if it takes to long there was probably an error
-      {
-        while(K_30_Serial.available())  //flush whatever we have
-          K_30_Serial.read();
-          
-          break;                        //exit and try again
-      }
-      delay(50);
-  }
-  
-  for (int i=0; i < 7; i++)
-  {
-    response[i] = K_30_Serial.read();
-  }  
-}
-
-unsigned long getValue(byte packet[])
-{
-    int high = packet[3];                        //high byte for value is 4th byte in packet in the packet
-    int low = packet[4];                         //low byte for value is 5th byte in the packet
-
-  
-    unsigned long val = high*256 + low;                //Combine high byte and low byte with this formula to get value
-    return val* valMultiplier;
-}
-
 void datosSensores() {
 
   doc["temperature"] = bme.readTemperature();
 
   doc["humidity"] = bme.readHumidity();
 
-  doc["pressure"] = bme.readPressure() / 100.0;
-
-  sendRequest(readCO2);
-  unsigned long valCO2 = getValue(response);
-  doc["co2"] = valCO2;
+  if(ccs.available()){
+    if(!ccs.readData()){
+      ccs.setEnvironmentalData(bme.readHumidity(), bme.readTemperature());
+      Serial.print("CO2: ");
+      Serial.print(ccs.geteCO2());
+      doc["co2"] = ccs.geteCO2();
+    }
+  }
 
   serializeJson(doc, out);
   client.publish("esp32/sensor", out);
@@ -487,11 +438,11 @@ void LDR_persiana(){
     Serial.print("LDR persiana: ");
     Serial.println(analogRead(pinLDR_persiana));
     Serial.print("Mi estado persiana es :");
-    Serial.println(estadoPersiana);
+    Serial.println(posPersianaActual);
 
-    if ((analogRead(pinLDR_persiana) < 200) and (estadoPersiana == 0) )
+    if ((analogRead(pinLDR_persiana) > 200) and (posPersianaActual != 5) )
     {
-        client.publish("esp32/LDR_persiana", "1");
+        client.publish("esp32/LDR_persiana", "5");
     }
 
   }

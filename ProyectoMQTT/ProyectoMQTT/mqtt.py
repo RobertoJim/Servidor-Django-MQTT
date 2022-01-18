@@ -6,7 +6,7 @@ from datetime import datetime
 import pytz
 
 
-SensorJson={};temperatura="";humedad="";presion=""; CO2="";mensajeLed=""; bajaToldoViento = 0; alertaBajarToldoViento = 0; bajaToldoLluvia = 0; alertaBajarToldoLluvia = 0; estadoToldo = 0
+SensorJson={};temperatura="";humedad=""; CO2="";mensajeLed=""; bajaToldoViento = 0; alertaBajarToldoViento = 0; bajaToldoLluvia = 0; alertaBajarToldoLluvia = 0; estadoToldo = 0
 mensajeLluvia= 0
 
 arrayTemperatura = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
@@ -38,7 +38,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
 
-    global SensorJson; global mensajeLed; global temperatura; global humedad ; global presion ; global CO2
+    global SensorJson; global mensajeLed; global temperatura; global humedad ; global CO2
     global bajaToldoLluvia; global alertaBajarToldoLluvia; global mensajeLluvia; global bajaToldoViento; global alertaBajarToldoViento
     global estadoPersiana; global estadoToldo
     
@@ -51,7 +51,6 @@ def on_message(client, userdata, msg):
         SensorJson = json.loads(msg.payload)
         temperatura = SensorJson['temperature']
         humedad = SensorJson['humidity']
-        presion = SensorJson['pressure']
         CO2 = SensorJson['co2']
 
     if str(msg.topic) == "esp32/LED":
@@ -98,6 +97,7 @@ def on_message(client, userdata, msg):
         arrayHora.pop(0) # Similar a shift en javascript 
         arrayHora.append((str(datetime.now(pytz.timezone('Europe/Madrid')).hour) + ":" + str(datetime.now().minute) + ":" + str(datetime.now().second))) # Similar a push en javascript
 
+        
 def iniciarEstados():
     client.publish("esp32/estados", "solicitud")
 
@@ -110,6 +110,6 @@ client.on_message = on_message
 global IP
 IP = socket.gethostbyname(socket.gethostname())
 
-client.connect(IP, 1883, 60)
+client.connect('192.168.1.45', 1883, 60)
 #client.loop_start()
 #client.loop_start()
