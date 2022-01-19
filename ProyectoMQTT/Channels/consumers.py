@@ -25,17 +25,10 @@ class ChannelsConsumer(AsyncWebsocketConsumer):
             'abrirPersiana' : ProyectoMQTT.mqtt.abrirPersiana, 'estadoPersiana' : ProyectoMQTT.mqtt.estadoPersiana,
             'persianaAutomatica': ProyectoMQTT.mqtt.persianaAutomatica,'alertaToldoViento': ProyectoMQTT.mqtt.alertaBajarToldoViento}))
 
-
-            #print("AlertaBajoLLvuia " + str(ProyectoMQTT.mqtt.alertaBajarToldoLluvia))
-            #print("El estado toldo es " + str(ProyectoMQTT.mqtt.estadoToldo))
-
             if(ProyectoMQTT.mqtt.alertaBajarToldoLluvia == 1):
                 ProyectoMQTT.mqtt.alertaBajarToldoLluvia = 0
                 ProyectoMQTT.mqtt.estadoToldo = 0 #Cambio el estado aqui en vez de en weather para que ambas variables cambien a la vez
                                                     #Si cambiaba el estado en weather, nunca llegaban a estar ambas a 1
-         
-            #print("AlertaBajoViento " + str(ProyectoMQTT.mqtt.alertaBajarToldoViento))
-            #print("El estado toldo es " + str(ProyectoMQTT.mqtt.estadoToldo))
 
             if(ProyectoMQTT.mqtt.alertaBajarToldoViento == 1):
                 ProyectoMQTT.mqtt.alertaBajarToldoViento = 0
@@ -45,7 +38,7 @@ class ChannelsConsumer(AsyncWebsocketConsumer):
                 ProyectoMQTT.mqtt.mensajeLluvia = 0
                 ProyectoMQTT.mqtt.estadoToldo = 0 #Cambio el estado aqui en vez de en weather para que ambas variables cambien a la vez
                                                     #Si cambiaba el estado en weather, nunca llegaban a estar ambas a 1
-           # print("mensajelluvia " + str(ProyectoMQTT.mqtt.mensajeLluvia))
+                                                    
             if(ProyectoMQTT.mqtt.abrirPersiana == 1):
                 ProyectoMQTT.mqtt.abrirPersiana = 0
 

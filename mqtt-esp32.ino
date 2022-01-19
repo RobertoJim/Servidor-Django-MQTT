@@ -145,15 +145,7 @@ void callback(char* topic, byte* message, unsigned int length) {
     if (messageTemp == "1") {
       Serial.println(" persiana 1"); 
       posPersianaAnterior = posPersianaActual; 
-      posPersianaActual = 1;
-      /*if(posPersianaAnterior < posPersianaActual)
-      {
-        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaActual-posPersianaAnterior)); i++)
-        {
-          clockwise1();
-          delayMicroseconds(motorSpeed);
-        }
-      } else*/ if(posPersianaAnterior > posPersianaActual)
+      posPersianaActual = 1;if(posPersianaAnterior > posPersianaActual)
       {
         for (int i = 0; i < ((stepsPerRev/4)*(posPersianaAnterior-posPersianaActual)); i++)
         {
@@ -232,14 +224,7 @@ void callback(char* topic, byte* message, unsigned int length) {
           clockwise1();
           delayMicroseconds(motorSpeed);
         }
-      } /*else if(posPersianaAnterior > posPersianaActual)
-      {
-        for (int i = 0; i < ((stepsPerRev/5)*(posPersianaAnterior-posPersianaActual)); i++)
-        {
-          anticlockwise1();
-          delayMicroseconds(motorSpeed);
-        }
-      }*/
+      }
     }
   }
 
@@ -285,10 +270,6 @@ void reconnect() {
       client.subscribe("esp32/persiana");
       client.subscribe("esp32/toldo");
       client.subscribe("esp32/estados");
-      //Mando primer mensaje que para el led aparezca en la inerfaz apagado
-      client.publish("esp32/LED", "0"); //Para que aparezca la imagen de bombilla apagada en la interfaz al iniciar la aplicacion
-      Serial.println("Mando este primre mensaje");
-      led = 0; //Quizas innecesario, ya que el led se inicializa a 0
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -297,8 +278,6 @@ void reconnect() {
       delay(5000);
     }
   }
-  //Envio aqui primer dato de la grafica, ya que si lo pongo en el setup se intenta enviar antes de que este conectado al broker MQTT
-  //Se envia este dato para que apaarezca un primer valor en la grafica al iniciar el sistema
 }
 
 void clockwise1()
@@ -369,7 +348,7 @@ void LED() {
 
   PIR = digitalRead(sensorPIR);//Leemos el estado del del sensor PIR
   if(led==0){ //Este if hace que no se mande el topic led = 1 todas las veces que entra en el bucle durante los 10s
-    if ((PIR == 1) && (analogRead(pinLDR_LED) < 00))
+    if ((PIR == 1) && (analogRead(pinLDR_LED) < 200))
     {
       digitalWrite(pinLED, HIGH);//Encendemos la luz
       client.publish("esp32/LED", "1");
@@ -409,7 +388,7 @@ void lluvia() {
     if((medidaLluvia < 1500) && (estadoToldo == 1)){
 
       client.publish("esp32/lluvia", "1");
-      for (int i = 0; i < stepsPerRev * 2; i++)
+      for (int i = 0; i < stepsPerRev; i++)
       {
         anticlockwise2();
         delayMicroseconds(motorSpeed);
@@ -418,17 +397,6 @@ void lluvia() {
     }
     
   }
-
-  /*if ((digitalRead(rainDigital) == LOW) && (toldo == 1)) {
-    Serial.println("Detectada lluvia");
-    client.publish("esp32/toldo", "Toldo recogido");
-    toldo = 0;
-    for (int i = 0; i < stepsPerRev * 2; i++)
-    {
-      clockwise();
-      delayMicroseconds(motorSpeed);
-    }
-    }*/
 }
 
 void LDR_persiana(){
@@ -440,16 +408,13 @@ void LDR_persiana(){
     Serial.print("Mi estado persiana es :");
     Serial.println(posPersianaActual);
 
-    if ((analogRead(pinLDR_persiana) > 200) and (posPersianaActual != 5) )
+    if ((analogRead(pinLDR_persiana) < 200) and (posPersianaActual != 5) )
     {
         client.publish("esp32/LDR_persiana", "5");
     }
-
-  }
-    
+  }  
 }
   
-
 
 void loop() {
   

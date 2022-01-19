@@ -14,17 +14,6 @@ arrayHora = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
 
 puestaSol = 0 ; salidaSol = 0; abrirPersiana = 0; estadoPersiana = 1; persianaAutomatica = 1
 
-
-#def comprobarLluvia():
-
-    #Si la presion es mayor  a X(se esperan lluvias) o  sensor detecta agua, recojo toldo y muestro mensaje en pantalla
-    
-#def comprobarViento():
-
-    #Si me llega peticion MQTT de extender toldo:
-
-    # Compruebo si el viento es mayor a X, no dejo extender toldo y muestro en pagina mensaje
-
 def on_connect(client, userdata, flags, rc):
     client.subscribe("esp32/sensor")
     client.subscribe("esp32/LED")
@@ -44,11 +33,11 @@ def on_message(client, userdata, msg):
     
     global arrayTemperatura; global arrayHora
 
-    global salidaSol; global puestaSol; global abrirPersiana
+    global salidaSol; global puestaSol; global abrirPersiana; global persianaAutomatica
     
     if str(msg.topic) == "esp32/sensor":
 
-        SensorJson = json.loads(msg.payload)
+        SensorJson = json.loads(msg.payload) #Convierte mensaje json en un diccionario python
         temperatura = SensorJson['temperature']
         humedad = SensorJson['humidity']
         CO2 = SensorJson['co2']
@@ -56,31 +45,24 @@ def on_message(client, userdata, msg):
     if str(msg.topic) == "esp32/LED":
         mensajeLed = str(msg.payload)[2:][:-1] #elimino los dos primeros caracteres y el ultimo (mensaje original: b'22.22')
         print("Mi mensaje led es: " + mensajeLed)
-        #print(mensaje4)       
-        #print(msg.topic+ " "+str(msg.payload))
 
     if str(msg.topic) == "esp32/toldo":
         if((str(msg.payload)[2:][:-1] == "down") and (bajaToldoLluvia == 1)): #elimino los dos primeros caracteres y el ultimo (mensaje original: b'22.22')
             bajaToldoLluvia = 0
-            print("Aqui deberia cambiar la alerta lluvia ")
             alertaBajarToldoLluvia = 1
         if((str(msg.payload)[2:][:-1] == "down") and (bajaToldoViento == 1)): #elimino los dos primeros caracteres y el ultimo (mensaje original: b'22.22')
             bajaToldoViento = 0
-            print("Aqui deberia cambiar la alerta viento ")
             alertaBajarToldoViento = 1
         
     if str(msg.topic) == "esp32/lluvia": 
         mensajeLluvia= 1
 
     if str(msg.topic) == "esp32/LDR_persiana": 
-
-        global salidaSol, puestaSol, persianaAutomatica
         
         if persianaAutomatica == 1:
-            hora = float((str(datetime.now(pytz.timezone('Europe/Madrid')).hour) + "." + str(datetime.now().minute)))
+            hora = float((str(datetime.now(pytz.timezone('Europe/Madrid')).hour) + "." + str(datetime.now().minute))) #Convierte la hora en una variable tipo float para comparar facilmente con las variables salidaSol y puestaSol
             if((hora > salidaSol) and (hora < puestaSol)):
                 client.publish("esp32/persiana","5")
-                print("Entro aqui")
                 estadoPersiana = 5
                 abrirPersiana = 1
     
@@ -108,8 +90,6 @@ client.on_connect = on_connect
 client.on_message = on_message
 
 global IP
-IP = socket.gethostbyname(socket.gethostname())
+IP = socket.gethostbyname(socket.gethostname()) #Obtengo IP del dispositivo donde se este ejecutando el servidor, que en caso de ser la raspberry, es la misma IP que el broker MQTT
 
-client.connect('192.168.1.45', 1883, 60)
-#client.loop_start()
-#client.loop_start()
+client.connect(IP, 1883, 60)

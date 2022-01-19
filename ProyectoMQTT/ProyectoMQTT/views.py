@@ -19,17 +19,13 @@ def MQTT(request):
 
 def subirToldo(request):
 
-    #ProyectoMQTT.mqtt.estadoToldo = 1
     comprobarViento()
-    #client.publish("esp32/toldo","up")
-
     return HttpResponse()
 
 def bajarToldo(request):
 
     ProyectoMQTT.mqtt.estadoToldo = 0
     client.publish("esp32/toldo","down")  
-
     return HttpResponse()
 
 
@@ -37,45 +33,38 @@ def Persiana1(request):
 
     client.publish("esp32/persiana", "1")
     ProyectoMQTT.mqtt.estadoPersiana = 1
-
     return HttpResponse()
 
 def Persiana2(request):
 
     client.publish("esp32/persiana", "2")
     ProyectoMQTT.mqtt.estadoPersiana = 2
-
     return HttpResponse()
 
 def Persiana3(request):
 
     client.publish("esp32/persiana", "3")
     ProyectoMQTT.mqtt.estadoPersiana = 3
-
     return HttpResponse()
 
 def Persiana4(request):
 
     client.publish("esp32/persiana", "4")
     ProyectoMQTT.mqtt.estadoPersiana = 4
-
     return HttpResponse()
 
 def Persiana5(request):
 
     client.publish("esp32/persiana", "5")
     ProyectoMQTT.mqtt.estadoPersiana = 5
-
     return HttpResponse()
 
 def deshabilitar(request):
 
     ProyectoMQTT.mqtt.persianaAutomatica = 0
-
     return HttpResponse()
 
 def habilitar(request):
 
     ProyectoMQTT.mqtt.persianaAutomatica = 1
-
     return HttpResponse()
