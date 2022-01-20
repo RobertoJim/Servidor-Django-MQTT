@@ -337,6 +337,9 @@ void datosSensores() {
       Serial.print(ccs.geteCO2());
       doc["co2"] = ccs.geteCO2();
     }
+  } else
+  {
+    doc["co2"] = 0;
   }
 
   serializeJson(doc, out);
