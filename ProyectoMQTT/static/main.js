@@ -33,89 +33,9 @@ socket.onmessage = function(e){
     graphData.data.labels = djangoData.hora;
     myChart.update();
 
-    if(djangoData.bombilla == 0)
-    {
-        imagenBombilla.src = 'static/imagenes/bombillaapagada.png';
-        document.getElementById('TextoBombilla').innerHTML='Luz apagada';
-    } else if (djangoData.bombilla == 1)
-    {
-        imagenBombilla.src = 'static/imagenes/bombillaencendida.png';
-        document.getElementById('TextoBombilla').innerHTML='Presencia detectada. Luz encendida';
-
-    }
-    else {
-        imagenBombilla.src = 'static/imagenes/bombillaapagada.png';
-        document.getElementById('TextoBombilla').innerHTML='Luz apagada';
-    }
-    /*print("djangoData.bombilla");*/
-
-    if(djangoData.estadoToldo == "0"){
-        document.getElementById("switch-label2").checked = 0;
-    } else  if (djangoData.estadoToldo == "1"){
-        document.getElementById("switch-label2").checked = 1;
-        if(djangoData.alertaToldoLluvia == 1)
-        {
-            alert("Se esperan lluvias dentro de poco, bajando toldo");
-        }
-        if(djangoData.alertaToldoViento == 1)
-        {
-            alert("Hace mucho viento, bajando toldo");
-        }
-        if(djangoData.mensajeLluvia == 1)
-        {
-            alert("Ha empezado a llover, bajando toldo");
-        }
-    }
-
-    if(djangoData.abrirPersiana == "1")
-    {
-        alert("Hay poca luz y el sol esta fuera, abriendo persiana");
-        document.getElementById("letterE").checked = 1;
-    }
-
-    if(djangoData.persianaAutomatica == "1")
-     {
-        document.getElementById("DeshabPersiana").checked = 0;
-        
-     } else if(djangoData.persianaAutomatica == "0")
-     {
-        document.getElementById("DeshabPersiana").checked = 1;
-     }
-
-    //Para que se actualice el slider en 2 o mas navegadores si estan 2 o mas abiertos a la vez
-    if(djangoData.estadoPersiana == "1")
-    {
-        document.getElementById("letterA").checked = 1;
-    } else if (djangoData.estadoPersiana == "2")
-    {
-        document.getElementById("letterB").checked = 1;
-    } else if (djangoData.estadoPersiana == "3")
-    {
-        document.getElementById("letterC").checked = 1;
-    }else if(djangoData.estadoPersiana == "4")
-    {
-        document.getElementById("letterD").checked = 1;
-    }else if(djangoData.estadoPersiana == "5")
-    {
-        document.getElementById("letterE").checked = 1;
-    }
-
-
-
     document.getElementById('textoTemperatura').innerHTML= String(djangoData.temperatura) + " ºC";
     document.getElementById('textoHumedad').innerHTML= String(djangoData.humedad) + " %";
     document.getElementById('textoCo2').innerHTML= String(djangoData.co2) + " ppm";
 
-    document.getElementById('hora').innerHTML = String(djangoData.horaLluvia) + " son:";
-
-    document.getElementById('textoLluvia').innerHTML= "Lluvia: " + String(djangoData.lluvia) + " %";
-    document.getElementById('textoViento').innerHTML= "Velocidad viento: " + String(djangoData.velocidadViento) + " m/s";
-    document.getElementById('textoRafaga').innerHTML= "Rafaga viento: " + String(djangoData.rafagaViento) + " m/s";
-   
-    
-    
-
-    console.log(imagenBombilla);
-    imagenBombilla.update();
 
 }

@@ -18,18 +18,6 @@
                 <h1>Sistema domótico</h1> 
             </header>
 
-            <section id="entrada">
-
-                <h1>Entrada</h1>
-                
-                <div id="bombilla">
-                    <img id="imagenBombilla"></img>
-
-                    <h3 id="TextoBombilla"></h3>
-                </div>
-                
-            </section>
-
             <section id="salon">
 
                 <h1>Salón</h1>
@@ -56,72 +44,11 @@
                         <h3 id="textoCo2"></h3>
 
                     </div>
-
-                    <div id="cajaPersiana">
-                        <div id="textoPersiana">
-                            <h2>Control persiana:</h2>
-                        </div>
-
-                        <div class="letter-slider">
-                            <input id="letterA" type="radio" name="letter" onclick="Persiana1()">
-                            <label for="letterA">1</label>
-                            <input id="letterB" type="radio" name="letter" onclick="Persiana2()">
-                            <label for="letterB">2</label>
-                            <input id="letterC" type="radio" name="letter" onclick="Persiana3()">
-                            <label for="letterC">3</label>
-                            <input id="letterD" type="radio" name="letter" onclick="Persiana4()">
-                            <label for="letterD">4</label>
-                            <input id="letterE" type="radio" name="letter" onclick="Persiana5()">
-                            <label for="letterE">5</label>
-                            
-                        </div> 
-                        <div id="textoHabilitarPersiana">    
-                            <h2>Deshabilitar persiana automática:</h2>
-                        </div>
-                            <input type="checkbox"  id="DeshabPersiana" onclick="DeshabPersiana()">
-                        </div>
                 </div>
 
                 <div id="grafica">
                     <canvas id="myChart"></canvas>
                 </div>
-
-            </section>
-
-            <section id="jardin">
-
-                <h1>Jardín</h1>
-
-                <div id="ControlToldo">
-                    <div id="textoToldo">
-                        <h2>Control toldo: </h2>
-                    </div>
-                    <!-- SWITCH TOLDO-->
-                    <div class="switch-button">
-                        <div id="boton2">
-                            <!-- Checkbox -->
-                            <input type="checkbox" name="switch-button" id="switch-label2" class="switch-button__checkbox"  value="Toldo " onclick="Toldo()">
-                            <!-- Botón -->
-                            <label for="switch-label2" class="switch-button__label"></label>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="DatosMeteorologicos">
-
-                    <div id="titulo">
-                        <h3>Los datos meteorológicos esperados para las </h3>
-                        <h3 id="hora"></h3>
-                    </div>
-                   
-                    <div id="datosMet">
-                        <h4 id="textoLluvia"></h4>
-                        <h4 id="textoViento"></h4>
-                        <h4 id="textoRafaga"></h4>
-                    </div>
-                    
-                </div>
-
 
             </section>
 
@@ -134,107 +61,6 @@
         <script src="{% static 'main.js' %}"></script>
 
         <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-
-        <script>
-            function Persiana1(){
-                $.ajax({
-                url: "/Persiana1",
-                context: document.body
-                }).done(function() {
-                alert('Moviendo persiana a posicion 1');;
-                });
-            }
-        </script>
-
-        <script>
-            function Persiana2(){
-                $.ajax({
-                url: "/Persiana2",
-                context: document.body
-                }).done(function() {
-                alert('Moviendo persiana a posicion 2');;
-                });
-            }
-        </script>
-
-        <script>
-            function Persiana3(){
-                $.ajax({
-                url: "/Persiana3",
-                context: document.body
-                }).done(function() {
-                alert('Moviendo persiana a posicion 3');;
-                });
-            }
-        </script>
-
-        <script>
-            function Persiana4(){
-                $.ajax({
-                url: "/Persiana4",
-                context: document.body
-                }).done(function() {
-                alert('Moviendo persiana a posicion 4');;
-                });
-            }
-        </script>
-
-        <script>
-            function Persiana5(){
-                $.ajax({
-                url: "/Persiana5",
-                context: document.body
-                }).done(function() {
-                alert('Moviendo persiana a posicion 5');;
-                });
-            }
-        </script>
-
-        <script>
-            function DeshabPersiana(){
-                check = document.getElementById("DeshabPersiana");  
-                if(check.checked){
-                    $.ajax({
-                    url: "/deshabilitar",
-                    context: document.body
-                    })
-                } else{
-                    $.ajax({
-                    url: "/habilitar",
-                    context: document.body                   
-                    })
-                 }
-            }
-        </script>
-
-
-
-        <script>
-            function Toldo(){
-                check = document.getElementById("switch-label2");
-                
-                
-                if(check.checked){
-                    $.ajax({
-                    url: "/subirToldo",
-                    context: document.body
-                    }).done(function() {
-                    alert('{{mensajeViento}}');;
-                    if('{{mensajeViento}}' == "Hace mucho viento, peligro de que se rompa el toldo")
-                    {
-                        check.checked = 0;
-                    }
-                    });
-                } else{
-                    $.ajax({
-                    url: "/bajarToldo",
-                    context: document.body
-                    }).done(function() {
-                    alert('Bajando toldo');;
-                    });
-                }
-            }
-        </script>
 
     </body>
 

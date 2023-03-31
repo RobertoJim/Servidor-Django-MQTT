@@ -7,6 +7,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 import ProyectoMQTT
 from ProyectoMQTT.mqtt import arrayHora, arrayTemperatura, mensajeLed, temperatura, humedad, alertaBajarToldoLluvia, alertaBajarToldoViento, estadoPersiana, abrirPersiana,  mensajeLluvia, estadoToldo ,persianaAutomatica
 from ProyectoMQTT.weather import precipitacion, velocidadViento, rafagaViento, hora
+from ProyectoMQTT.ccm2w import arrayPotencia, arrayHoraPotencia
 
 from datetime import datetime
 
@@ -17,30 +18,13 @@ class ChannelsConsumer(AsyncWebsocketConsumer):
         
         while 1:
             
-            await self.send(json.dumps({'value': ProyectoMQTT.mqtt.arrayTemperatura, 'hora': ProyectoMQTT.mqtt.arrayHora, 
-            'bombilla': ProyectoMQTT.mqtt.mensajeLed, 'temperatura': ProyectoMQTT.mqtt.temperatura,  'humedad': ProyectoMQTT.mqtt.humedad, 'co2' : ProyectoMQTT.mqtt.CO2,
-            'lluvia': ProyectoMQTT.weather.precipitacion,'velocidadViento': ProyectoMQTT.weather.velocidadViento,'rafagaViento': ProyectoMQTT.weather.rafagaViento,
-            'horaLluvia': ProyectoMQTT.weather.hora, 'estadoToldo' :ProyectoMQTT.mqtt.estadoToldo,
-            'alertaToldoLluvia' :ProyectoMQTT.mqtt.alertaBajarToldoLluvia, 'mensajeLluvia' :ProyectoMQTT.mqtt.mensajeLluvia, 
-            'abrirPersiana' : ProyectoMQTT.mqtt.abrirPersiana, 'estadoPersiana' : ProyectoMQTT.mqtt.estadoPersiana,
-            'persianaAutomatica': ProyectoMQTT.mqtt.persianaAutomatica,'alertaToldoViento': ProyectoMQTT.mqtt.alertaBajarToldoViento}))
-
-            if(ProyectoMQTT.mqtt.alertaBajarToldoLluvia == 1):
-                ProyectoMQTT.mqtt.alertaBajarToldoLluvia = 0
-                ProyectoMQTT.mqtt.estadoToldo = 0 #Cambio el estado aqui en vez de en weather para que ambas variables cambien a la vez
-                                                    #Si cambiaba el estado en weather, nunca llegaban a estar ambas a 1
-
-            if(ProyectoMQTT.mqtt.alertaBajarToldoViento == 1):
-                ProyectoMQTT.mqtt.alertaBajarToldoViento = 0
-                ProyectoMQTT.mqtt.estadoToldo = 0
-
-            if(ProyectoMQTT.mqtt.mensajeLluvia == 1):        
-                ProyectoMQTT.mqtt.mensajeLluvia = 0
-                ProyectoMQTT.mqtt.estadoToldo = 0 #Cambio el estado aqui en vez de en weather para que ambas variables cambien a la vez
-                                                    #Si cambiaba el estado en weather, nunca llegaban a estar ambas a 1
-                                                    
-            if(ProyectoMQTT.mqtt.abrirPersiana == 1):
-                ProyectoMQTT.mqtt.abrirPersiana = 0
+            await self.send(
+                json.dumps({
+                    'value' : ProyectoMQTT.mqtt.arrayTemperatura, 'hora': ProyectoMQTT.mqtt.arrayHora,
+                    'potencia': ProyectoMQTT.ccm2w.arrayPotencia, 'arrayHoraPotencia' : ProyectoMQTT.ccm2w.arrayHoraPotencia,
+                    'temperatura': ProyectoMQTT.mqtt.temperatura,  'humedad': ProyectoMQTT.mqtt.humedad, 'co2' : ProyectoMQTT.mqtt.CO2
+                    })
+            )
 
             await sleep(1)
 

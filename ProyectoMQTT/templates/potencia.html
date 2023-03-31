@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js></script>
+        <title>Sistema dómotico</title>
+        <link rel="stylesheet" href="{% static 'potencia.css' %}" />
+
+        <meta name="viewport" content="width=device-width"/>
+
+    </head>
+    <body>
+
+        <div id="container">
+
+            <header>  
+                <h1>Sistema domótico</h1> 
+            </header>
+
+            <section id="salon">
+
+                <div id="grafica">
+                    <canvas id="myChart"></canvas>
+                </div>
+
+            </section>
+
+            <footer>
+                Roberto Jiménez &copy; 2021
+            </footer>
+
+        </div>
+
+        <script src="{% static 'potencia.js' %}"></script>
+
+        <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    </body>
+
+</html>
