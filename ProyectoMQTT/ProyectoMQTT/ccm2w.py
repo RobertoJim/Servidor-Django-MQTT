@@ -22,7 +22,7 @@ def getData():
             print(potenciaActiva)
             T_Datos = "Power_table"
             T_Columnas = "(Fecha, Potencia)"
-            T_Valores = f"CURRENT_TIMESTAMP, '{potenciaActiva}'"
+            T_Valores = f"CURRENT_TIMESTAMP, {potenciaActiva}"
             mainquery = "INSERT INTO"
 
             __conn = mysql_db.connect(host="192.168.1.100",user="root",passwd="monsol",db="domo")

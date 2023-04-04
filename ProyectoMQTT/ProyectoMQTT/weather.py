@@ -8,7 +8,7 @@ from ProyectoMQTT.mqtt import *
 from suntime import Sun
 
 velocidadViento = 0; rafagaViento = 0; precipitacion = 0 ; vientoMax = 0
-mensajeViento = ""; api_key = ""; lat = ""; lon = ""
+mensajeViento = ""; api_key = ""; lat = ""; lon = ""; hora = 0
 
 
 def openWeatherMap():
@@ -25,40 +25,42 @@ def recogerDatos():
     global velocidadViento; global rafagaViento; global precipitacion; global hora; global mensajeViento
 
     while 1:
+        try:
+            url = "https://api.openweathermap.org/data/2.5/onecall?lat=%s&lon=%s&appid=%s&units=metric" % (lat, lon, api_key)
+            response = requests.get(url)
+            data = json.loads(response.text)
 
-        url = "https://api.openweathermap.org/data/2.5/onecall?lat=%s&lon=%s&appid=%s&units=metric" % (lat, lon, api_key)
-        response = requests.get(url)
-        data = json.loads(response.text)
-
-        dt = data["hourly"][1]["dt"]
+            dt = data["hourly"][1]["dt"]
         
-        hora = str(datetime.fromtimestamp(dt))[11:]  #Convierto la fecha a formato conocido y elimino 11 primeros caracteres (elimino fecha) 
+            hora = str(datetime.fromtimestamp(dt))[11:]  #Convierto la fecha a formato conocido y elimino 11 primeros caracteres (elimino fecha) 
                                                     #para obtener solo la hora
         
-        precipitacion = data["hourly"][1]["pop"]
+            precipitacion = data["hourly"][1]["pop"]
 
-        velocidadViento = data["hourly"][1]["wind_speed"] # Comprobando velocidad del viento en la siguiente hora
-        rafagaViento = data["hourly"][1]["wind_gust"]
+            velocidadViento = data["hourly"][1]["wind_speed"] # Comprobando velocidad del viento en la siguiente hora
+            rafagaViento = data["hourly"][1]["wind_gust"]
 
 
-        if rafagaViento < vientoMax: #Guardo el mensaje para que aparezca en la alerta al pulsar el boton
-            mensajeViento = "Subiendo toldo"           
-        else:          
-            mensajeViento = "Hace mucho viento, peligro de que se rompa el toldo"
-            if(ProyectoMQTT.mqtt.estadoToldo == 1):
-                client.publish("esp32/toldo","down")
-                ProyectoMQTT.mqtt.bajaToldoViento = 1
+            if rafagaViento < vientoMax: #Guardo el mensaje para que aparezca en la alerta al pulsar el boton
+                mensajeViento = "Subiendo toldo"           
+            else:          
+                mensajeViento = "Hace mucho viento, peligro de que se rompa el toldo"
+                if(ProyectoMQTT.mqtt.estadoToldo == 1):
+                    client.publish("esp32/toldo","down")
+                    ProyectoMQTT.mqtt.bajaToldoViento = 1
 
-        if ((precipitacion >= 15) and (ProyectoMQTT.mqtt.estadoToldo == 1)): #Bajo toldo si se espera precipitacion
-            client.publish("esp32/toldo","down") #Cambio la variable estadoToldo en consumers.py, alli explicacion
-            ProyectoMQTT.mqtt.bajaToldoLluvia = 1
+            if ((precipitacion >= 15) and (ProyectoMQTT.mqtt.estadoToldo == 1)): #Bajo toldo si se espera precipitacion
+                client.publish("esp32/toldo","down") #Cambio la variable estadoToldo en consumers.py, alli explicacion
+                ProyectoMQTT.mqtt.bajaToldoLluvia = 1
 
         
-        #Compruebo hora salida y puesta sol todos los dias a las 1 de la madrugada
-        if(str(datetime.now(pytz.timezone('Europe/Madrid')))[11:][:-19] == "01"):
-            comprobarSalidaPuestaSol()
+            #Compruebo hora salida y puesta sol todos los dias a las 1 de la madrugada
+            if(str(datetime.now(pytz.timezone('Europe/Madrid')))[11:][:-19] == "01"):
+                comprobarSalidaPuestaSol()
             
-        sleep(1800)
+            sleep(1800)
+        except:
+            sleep(1800)
 
 def comprobarViento():
 
@@ -80,10 +82,16 @@ def comprobarSalidaPuestaSol():
 def conf():
 
     global vientoMax; global api_key; global lat; global lon
-
-    f = open("conf.txt", "r")
-    vientoMax = int(f.readline()[:-1])
-    lat = f.readline()[:-1] #[:-1] para quitar \n
-    lon = f.readline()[:-1] #[:-1] para quitar \n
-    api_key = f.readline()
-    f.close()
+    
+    try:
+        f = open("conf.txt", "r")
+        vientoMax = int(f.readline()[:-1])
+        lat = f.readline()[:-1] #[:-1] para quitar \n
+        lon = f.readline()[:-1] #[:-1] para quitar \n
+        api_key = f.readline()
+        f.close()
+    except:
+        vientoMax = 0
+        lat = 0
+        lon = 0
+        api_key = 0
