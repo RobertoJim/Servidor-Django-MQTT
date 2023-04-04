@@ -12,9 +12,15 @@ arrayHoraPotencia = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
 def getData():
     global arrayPotencia
     global arrayHoraPotencia
-    client = ModbusTcpClient('192.168.1.128', port=502, framer=ModbusFramer)
-    client.connect()
-    time.sleep(5)
+    while True:
+        try:
+            client = ModbusTcpClient('192.168.1.128', port=502, framer=ModbusFramer)
+            client.connect()
+            time.sleep(5)
+            break
+        except:
+            print("No se pudo establecer la conexión. Se intentará de nuevo en 5 segundos.")
+            time.sleep(5) 
     while(1):
         try:
             data = client.read_input_registers(address=88, count=2, slave = 1)

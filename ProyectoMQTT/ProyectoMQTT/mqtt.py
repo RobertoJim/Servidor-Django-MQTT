@@ -1,10 +1,10 @@
 import paho.mqtt.client as mqtt
 import json
 import socket
-
+import time
 from datetime import datetime
 import pytz
-
+import mysql.connector as mysql_db
 
 SensorJson={};temperatura="";humedad=""; CO2="";mensajeLed=""; bajaToldoViento = 0; alertaBajarToldoViento = 0; bajaToldoLluvia = 0; alertaBajarToldoLluvia = 0; estadoToldo = 0
 mensajeLluvia= 0
@@ -41,6 +41,21 @@ def on_message(client, userdata, msg):
         temperatura = SensorJson['temperature']
         humedad = SensorJson['humidity']
         CO2 = SensorJson['co2']
+
+        T_Datos = "temp_hum_table"
+        T_Columnas = "(Fecha, Temperatura, Humedad)"
+        T_Valores = f"CURRENT_TIMESTAMP, {float(temperatura)}, {float(humedad)}"
+        mainquery = "INSERT INTO"
+
+        __conn = mysql_db.connect(host="192.168.1.100",user="root",passwd="monsol",db="domo")
+        SQL_Query = mainquery + " " + T_Datos + " " + T_Columnas + " VALUES (" + T_Valores + ")"
+        #print(SQL_Query)
+        cursor = __conn.cursor()
+        cursor.execute(SQL_Query)
+
+        __conn.commit()
+        time.sleep(1)
+        __conn.close()
 
     if str(msg.topic) == "esp32/LED":
         mensajeLed = str(msg.payload)[2:][:-1] #elimino los dos primeros caracteres y el ultimo (mensaje original: b'22.22')
