@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt
 import json
 import socket
 import time
-from datetime import datetime
+import datetime
 import pytz
 import mysql.connector as mysql_db
 
@@ -13,6 +13,8 @@ arrayTemperatura = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 
 arrayHora = ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
 
 puestaSol = 0 ; salidaSol = 0; abrirPersiana = 0; estadoPersiana = 1; persianaAutomatica = 1
+
+hora_inicio = 0
 
 def on_connect(client, userdata, flags, rc):
     client.subscribe("esp32/sensor")
@@ -34,7 +36,9 @@ def on_message(client, userdata, msg):
     global arrayTemperatura; global arrayHora
 
     global salidaSol; global puestaSol; global abrirPersiana; global persianaAutomatica
-    
+
+    global hora_inicio
+    intervalo = datetime.timedelta(minutes=1)
     if str(msg.topic) == "esp32/sensor":
 
         SensorJson = json.loads(msg.payload) #Convierte mensaje json en un diccionario python
@@ -47,15 +51,31 @@ def on_message(client, userdata, msg):
         T_Valores = f"CURRENT_TIMESTAMP, {float(temperatura)}, {float(humedad)}"
         mainquery = "INSERT INTO"
 
-        __conn = mysql_db.connect(host="192.168.1.100",user="root",passwd="monsol",db="domo")
-        SQL_Query = mainquery + " " + T_Datos + " " + T_Columnas + " VALUES (" + T_Valores + ")"
-        #print(SQL_Query)
-        cursor = __conn.cursor()
-        cursor.execute(SQL_Query)
+        hora_actual = datetime.datetime.now()
+        if hora_inicio == 0:
+            __conn = mysql_db.connect(host="192.168.1.100",user="root",passwd="monsol",db="domo")
+            SQL_Query = mainquery + " " + T_Datos + " " + T_Columnas + " VALUES (" + T_Valores + ")"
+            #print(SQL_Query)
+            cursor = __conn.cursor()
+            cursor.execute(SQL_Query)
 
-        __conn.commit()
-        time.sleep(1)
-        __conn.close()
+            __conn.commit()
+            time.sleep(1)
+            __conn.close()
+
+            hora_inicio = datetime.datetime.now()
+        elif ((hora_actual - hora_inicio) >= intervalo):
+            __conn = mysql_db.connect(host="192.168.1.100",user="root",passwd="monsol",db="domo")
+            SQL_Query = mainquery + " " + T_Datos + " " + T_Columnas + " VALUES (" + T_Valores + ")"
+            #print(SQL_Query)
+            cursor = __conn.cursor()
+            cursor.execute(SQL_Query)
+
+            __conn.commit()
+            time.sleep(1)
+            __conn.close()
+
+            hora_inicio = datetime.datetime.now()
 
     if str(msg.topic) == "esp32/LED":
         mensajeLed = str(msg.payload)[2:][:-1] #elimino los dos primeros caracteres y el ultimo (mensaje original: b'22.22')
@@ -75,7 +95,7 @@ def on_message(client, userdata, msg):
     if str(msg.topic) == "esp32/LDR_persiana": 
         
         if persianaAutomatica == 1:
-            hora = float((str(datetime.now(pytz.timezone('Europe/Madrid')).hour) + "." + str(datetime.now().minute))) #Convierte la hora en una variable tipo float para comparar facilmente con las variables salidaSol y puestaSol
+            hora = float((str(datetime.datetime.now(pytz.timezone('Europe/Madrid')).hour) + "." + str(datetime.datetime.now().minute))) #Convierte la hora en una variable tipo float para comparar facilmente con las variables salidaSol y puestaSol
             if((hora > salidaSol) and (hora < puestaSol)):
                 client.publish("esp32/persiana","5")
                 estadoPersiana = 5
@@ -92,7 +112,7 @@ def on_message(client, userdata, msg):
         arrayTemperatura.append(temperatura) # Similar a push en javascript
 
         arrayHora.pop(0) # Similar a shift en javascript 
-        arrayHora.append((str(datetime.now(pytz.timezone('Europe/Madrid')).hour) + ":" + str(datetime.now().minute) + ":" + str(datetime.now().second))) # Similar a push en javascript
+        arrayHora.append((str(datetime.datetime.now(pytz.timezone('Europe/Madrid')).hour) + ":" + str(datetime.datetime.now().minute) + ":" + str(datetime.datetime.now().second))) # Similar a push en javascript
 
         
 def iniciarEstados():
